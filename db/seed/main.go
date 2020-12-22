@@ -64,8 +64,10 @@ func loadOfficersFromCSV(inputFile string) []*officer {
 	for scanner.Scan() {
 		parts := strings.Split(scanner.Text(), ",")
 
+		// to deal with title descriptions with commas
 		if len(parts) == 9 {
-			parts[1] += parts[2]
+			parts[1] += "," + parts[2]
+			parts[1] = parts[1][1 : len(parts[1])-1]
 			for i := 2; i < 8; i++ {
 				parts[i] = parts[i+1]
 			}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -9,20 +10,37 @@ import (
 )
 
 func main() {
-	h := &handler{}
+	h := &handler{
+		db: newDBClient(),
+	}
 
 	router := mux.NewRouter()
-	router.HandleFunc("/hello", h.hello).Methods("GET")
+	router.HandleFunc("/ping", h.ping).Methods("GET")
+	router.HandleFunc("/officer/{badge}", h.getOfficerByBadge).Methods("GET")
 
 	port := os.Getenv("PORT")
 	fmt.Println("starting server on port", port)
 	http.ListenAndServe(":"+port, router)
 }
 
-type handler struct{}
+type handler struct {
+	db databaseInterface
+}
 
-func (h *handler) hello(w http.ResponseWriter, r *http.Request) {
+func (h *handler) ping(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("🏓 P O N G 🏓"))
+}
+
+func (h *handler) getOfficerByBadge(w http.ResponseWriter, r *http.Request) {
+	ofc, err := h.db.getOfficerByBadge(mux.Vars(r)["badge"])
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
-	message := "hello " + r.URL.Query().Get("name")
-	w.Write([]byte(message))
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(ofc)
 }
