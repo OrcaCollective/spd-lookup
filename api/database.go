@@ -21,6 +21,7 @@ type officer struct {
 
 type databaseInterface interface {
 	getOfficerByBadge(badge string) (*officer, error)
+	searchOfficerByName(firstName, lastName string) ([]*officer, error)
 }
 
 type dbClient struct {
@@ -88,4 +89,42 @@ func (db *dbClient) getOfficerByBadge(badge string) (*officer, error) {
 	)
 
 	return &ofc, err
+}
+
+func (db *dbClient) searchOfficerByName(firstName, lastName string) ([]*officer, error) {
+	rows, err := db.pool.Query(context.Background(), `
+	SELECT
+		badge_number,
+		first_name,
+		middle_name,
+		last_name,
+		title,
+		unit,
+		unit_description
+	FROM search_officer_by_name_p(first_name := $1, last_name := $2);`, firstName, lastName,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	officers := []*officer{}
+	for rows.Next() {
+		ofc := officer{}
+		err := rows.Scan(
+			&ofc.BadgeNumber,
+			&ofc.FirstName,
+			&ofc.MiddleName,
+			&ofc.LastName,
+			&ofc.Title,
+			&ofc.Unit,
+			&ofc.UnitDescription,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+		officers = append(officers, &ofc)
+	}
+	return officers, nil
 }
