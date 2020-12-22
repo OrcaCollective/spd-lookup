@@ -1,5 +1,5 @@
 # SPD Lookup
-Project that allows for searching for SPD police officers by badge, first_name, or last_name. Currently, API and database are hosted on heroku; API is avialable at `https://spd-lookup.herokuapp.com`
+Project that allows for searching for SPD police officers by badge, first_name, or last_name. Currently, API and database are hosted on heroku; API is avialable at [https://spd-lookup.herokuapp.com](https://spd-lookup.herokuapp.com)
 
 ## Resources
 - `/officers` - expects `badge`, `first_name` and/or `last_name` to be provided as query parameters. An array of officers will be returned
@@ -22,7 +22,7 @@ DB_USERNAME=your_username \
 DB_PASSWORD=your_password \
 DB_NAME=your_db_name \
 DB_HOST=your_db_host \
-go run main.go
+go run *.go
 ```
 
 ## Database
