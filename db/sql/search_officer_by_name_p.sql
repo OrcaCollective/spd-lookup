@@ -6,8 +6,8 @@ CREATE OR REPLACE FUNCTION search_officer_by_name_p(
 BEGIN
     RETURN QUERY SELECT *
     FROM officers o
-    WHERE lower(o.first_name) like lower(search_officer_by_name_p.first_name)
-    AND lower(o.last_name) like lower(search_officer_by_name_p.last_name);
+    WHERE LOWER(o.first_name) LIKE LOWER(search_officer_by_name_p.first_name)
+    AND LOWER(o.last_name) LIKE LOWER(search_officer_by_name_p.last_name);
 
     RETURN;
 END; $$

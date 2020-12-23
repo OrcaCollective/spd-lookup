@@ -2,9 +2,10 @@
 Project that allows for searching for SPD police officers by badge, first_name, or last_name. Currently, API and database are hosted on heroku; API is avialable at [https://spd-lookup.herokuapp.com](https://spd-lookup.herokuapp.com)
 
 ## Resources
-- `/officers` - expects `badge`, `first_name` and/or `last_name` to be provided as query parameters. An array of officers will be returned
+- `/officer` - expects `badge`, `first_name` and/or `last_name` to be provided as query parameters. An array of officers will be returned
   - if `badge` is provided, will look up officer in database by badge
   - else if either `first_name` or `last_name`, a name search will be performed on the database. Due to URL encoding, `*` will be treated as a wildcard
+- `/officer/search` - expects `first_name` and/or `last_name` to be provided as query parameters. Invokes a fuzzy match based on name, array of officers returned are in descending match score
 
 ## API
 ### Running Locally
