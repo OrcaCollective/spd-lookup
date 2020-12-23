@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
@@ -22,6 +23,9 @@ type officer struct {
 type databaseInterface interface {
 	getOfficerByBadge(badge string) (*officer, error)
 	searchOfficerByName(firstName, lastName string) ([]*officer, error)
+	fuzzySearchByName(name string) ([]*officer, error)
+	fuzzySearchByFirstName(firstName string) ([]*officer, error)
+	fuzzySearchByLastName(lastName string) ([]*officer, error)
 }
 
 type dbClient struct {
@@ -108,6 +112,70 @@ func (db *dbClient) searchOfficerByName(firstName, lastName string) ([]*officer,
 	}
 	defer rows.Close()
 
+	return marshalOfficerRows(rows)
+}
+
+func (db *dbClient) fuzzySearchByName(name string) ([]*officer, error) {
+	rows, err := db.pool.Query(context.Background(), `
+	SELECT
+		badge_number,
+		first_name,
+		middle_name,
+		last_name,
+		title,
+		unit,
+		unit_description
+	FROM fuzzy_search_officer_by_name_p(full_name := $1);`, name,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return marshalOfficerRows(rows)
+}
+
+func (db *dbClient) fuzzySearchByFirstName(firstName string) ([]*officer, error) {
+	rows, err := db.pool.Query(context.Background(), `
+	SELECT
+		badge_number,
+		first_name,
+		middle_name,
+		last_name,
+		title,
+		unit,
+		unit_description
+	FROM fuzzy_search_officer_by_first_name_p(first_name := $1);`, firstName,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return marshalOfficerRows(rows)
+}
+
+func (db *dbClient) fuzzySearchByLastName(lastName string) ([]*officer, error) {
+	rows, err := db.pool.Query(context.Background(), `
+	SELECT
+		badge_number,
+		first_name,
+		middle_name,
+		last_name,
+		title,
+		unit,
+		unit_description
+	FROM fuzzy_search_officer_by_last_name_p(last_name := $1);`, lastName,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return marshalOfficerRows(rows)
+}
+
+func marshalOfficerRows(rows pgx.Rows) ([]*officer, error) {
 	officers := []*officer{}
 	for rows.Next() {
 		ofc := officer{}
