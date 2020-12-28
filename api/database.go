@@ -6,18 +6,19 @@ import (
 	"log"
 	"os"
 
+	"github.com/gobuffalo/nulls"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type officer struct {
-	BadgeNumber     string `json:"badge_number,omitempty"`
-	FirstName       string `json:"first_name,omitempty"`
-	MiddleName      string `json:"middle_name,omitempty"`
-	LastName        string `json:"last_name,omitempty"`
-	Title           string `json:"title,omitempty"`
-	Unit            string `json:"unit,omitempty"`
-	UnitDescription string `json:"unit_description,omitempty"`
+	BadgeNumber     string       `json:"badge_number,omitempty"`
+	FirstName       string       `json:"first_name,omitempty"`
+	MiddleName      nulls.String `json:"middle_name,omitempty"`
+	LastName        string       `json:"last_name,omitempty"`
+	Title           string       `json:"title,omitempty"`
+	Unit            string       `json:"unit,omitempty"`
+	UnitDescription nulls.String `json:"unit_description,omitempty"`
 }
 
 type databaseInterface interface {
