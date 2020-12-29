@@ -3,7 +3,7 @@ version: '3.9'
 services:
   db:
     build: ./db
-    container_name: postgres
+    container_name: spd_lookup_db
     restart: always
     environment:
       - POSTGRES_USER=${DB_USERNAME}
@@ -14,12 +14,12 @@ services:
       - ./data:/var/lib/postgresql/data
   api:
     build: ./api
-    container_name: api
+    container_name: spd_lookup_api
     restart: always
     ports:
-      - 5000:5000
+      - 4000:4000
     environment:
-      - PORT=5000
+      - PORT=4000
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=ACAB_DB
