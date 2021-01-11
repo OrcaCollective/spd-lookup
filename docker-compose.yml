@@ -17,9 +17,9 @@ services:
     container_name: spd_lookup_api
     restart: always
     ports:
-      - 4000:4000
+      - 1312:1312
     environment:
-      - PORT=4000
+      - PORT=1312
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=ACAB_DB
