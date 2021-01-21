@@ -69,3 +69,17 @@ END; $$
 LANGUAGE 'plpgsql'
 SECURITY DEFINER
 SET search_path =public, pg_temp;
+
+CREATE OR REPLACE FUNCTION fuzzy_search_officer_by_badge_p(badge_number  VARCHAR(10))
+    RETURNS SETOF officers AS $$
+BEGIN
+    RETURN QUERY SELECT *
+    FROM officers o
+    WHERE LOWER(o.badge_number) % LOWER(fuzzy_search_officer_by_badge_p.badge_number)
+    ORDER BY SIMILARITY(LOWER(o.badge_number), LOWER(fuzzy_search_officer_by_badge_p.badge_number)) DESC;
+
+    RETURN;
+END; $$
+    LANGUAGE 'plpgsql'
+    SECURITY DEFINER
+    SET search_path =public, pg_temp;

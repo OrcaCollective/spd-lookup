@@ -23,6 +23,7 @@ type officer struct {
 
 type databaseInterface interface {
 	getOfficerByBadge(badge string) (*officer, error)
+	fuzzySearchByBadge(badge string) ([]*officer, error)
 	searchOfficerByName(firstName, lastName string) ([]*officer, error)
 	fuzzySearchByName(name string) ([]*officer, error)
 	fuzzySearchByFirstName(firstName string) ([]*officer, error)
@@ -94,6 +95,26 @@ func (db *dbClient) getOfficerByBadge(badge string) (*officer, error) {
 	)
 
 	return &ofc, err
+}
+
+func (db *dbClient) fuzzySearchByBadge(badge string) ([]*officer, error) {
+	rows, err := db.pool.Query(context.Background(), `
+	SELECT
+		badge_number,
+		first_name,
+		middle_name,
+		last_name,
+		title,
+		unit,
+		unit_description
+	FROM fuzzy_search_officer_by_badge_p(badge_number := $1);`, badge,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return marshalOfficerRows(rows)
 }
 
 func (db *dbClient) searchOfficerByName(firstName, lastName string) ([]*officer, error) {

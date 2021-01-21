@@ -98,21 +98,28 @@ func (h *handler) getOfficersByName(firstName, lastName string, w http.ResponseW
 }
 
 func (h *handler) fuzzySearch(w http.ResponseWriter, r *http.Request) {
-	firstName, lastName := strings.TrimSpace(r.URL.Query().Get("first_name")), strings.TrimSpace(r.URL.Query().Get("last_name"))
+	firstName, lastName, badge := strings.TrimSpace(r.URL.Query().Get("first_name")), strings.TrimSpace(r.URL.Query().Get("last_name")), strings.TrimSpace(r.URL.Query().Get("badge"))
 
-	officers := []*officer{}
+	var officers []*officer
 	var err error
 
-	if firstName == "" && lastName == "" {
+	if firstName == "" && lastName == "" && badge == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name")))
+		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name, badge")))
 		return
-	} else if firstName == "" {
-		officers, err = h.db.fuzzySearchByLastName(lastName)
-	} else if lastName == "" {
+	}
+	if firstName != "" && lastName != "" {
+		officers, err = h.db.fuzzySearchByName(strings.Trim(firstName + " " + lastName, " "))
+	} else if firstName != "" {
 		officers, err = h.db.fuzzySearchByFirstName(firstName)
+	} else if lastName != "" {
+		officers, err = h.db.fuzzySearchByLastName(lastName)
+	} else if badge != "" {
+		officers, err = h.db.fuzzySearchByBadge(badge)
 	} else {
-		officers, err = h.db.fuzzySearchByName(firstName + " " + lastName)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		return
 	}
 
 	if err != nil {
