@@ -54,7 +54,7 @@ func (h *handler) getOfficerByBadge(badge string, w http.ResponseWriter) {
 
 	if err != nil {
 		if err.Error() == "no rows in result set" {
-			w.WriteHeader(http.StatusNotFound)
+			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode([]*officer{})
 			return
