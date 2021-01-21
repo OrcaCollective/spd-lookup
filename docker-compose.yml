@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  db:
+    build: ./db
+    container_name: spd_lookup_db
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=ACAB_DB
+    volumes:
+      - ./seed:/seed
+      - db_data:/var/lib/postgresql/data
+  api:
+    build: ./api
+    container_name: spd_lookup_api
+    restart: always
+    ports:
+      - 1312:1312
+    environment:
+      - PORT=1312
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=ACAB_DB
+      - DB_HOST=db
+    depends_on:
+      - db
+
+volumes:
+  db_data:

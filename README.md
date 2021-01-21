@@ -1,7 +1,7 @@
 # SPD Lookup
 Project that allows for searching for SPD police officers by badge, first_name, or last_name. Currently, API and database are hosted on heroku; API is avialable at [https://spd-lookup.herokuapp.com](https://spd-lookup.herokuapp.com)
 
-## Resources
+## Endpoints
 - `/officer` - expects `badge`, `first_name` and/or `last_name` to be provided as query parameters. An array of officers will be returned
   - if `badge` is provided, will look up officer in database by badge
   - else if either `first_name` or `last_name`, a name search will be performed on the database. Due to URL encoding, `*` will be treated as a wildcard
@@ -27,7 +27,7 @@ go run *.go
 ```
 
 ## Database
-### DB Seed Script
+### Data Upload Script
 
 Quick script to read from a CSV file and load data into an officers table in a postgres database. Assumes seed csv file contains current SPD roster, as the script first clears the table before inserting values.
 
