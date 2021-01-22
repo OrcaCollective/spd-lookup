@@ -103,11 +103,6 @@ func (h *handler) fuzzySearch(w http.ResponseWriter, r *http.Request) {
 	var officers []*officer
 	var err error
 
-	if firstName == "" && lastName == "" && badge == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name, badge")))
-		return
-	}
 	if firstName != "" && lastName != "" {
 		officers, err = h.db.fuzzySearchByName(strings.Trim(firstName + " " + lastName, " "))
 	} else if firstName != "" {
@@ -117,8 +112,8 @@ func (h *handler) fuzzySearch(w http.ResponseWriter, r *http.Request) {
 	} else if badge != "" {
 		officers, err = h.db.fuzzySearchByBadge(badge)
 	} else {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name, badge")))
 		return
 	}
 
