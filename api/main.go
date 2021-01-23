@@ -54,7 +54,7 @@ func (h *handler) getOfficerByBadge(badge string, w http.ResponseWriter) {
 
 	if err != nil {
 		if err.Error() == "no rows in result set" {
-			w.WriteHeader(http.StatusNotFound)
+			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode([]*officer{})
 			return
@@ -103,16 +103,18 @@ func (h *handler) fuzzySearch(w http.ResponseWriter, r *http.Request) {
 	officers := []*officer{}
 	var err error
 
-	if firstName == "" && lastName == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name")))
-		return
-	} else if firstName == "" {
+	if firstName != "" && lastName != "" {
+		officers, err = h.db.fuzzySearchByName(strings.Trim(firstName + " " + lastName, " "))
+	} else if firstName != "" {
+		officers, err = h.db.fuzzySearchByFirstName(firstName)
+	} else if lastName != "" {
 		officers, err = h.db.fuzzySearchByLastName(lastName)
 	} else if lastName == "" {
 		officers, err = h.db.fuzzySearchByFirstName(firstName)
 	} else {
-		officers, err = h.db.fuzzySearchByName(firstName + " " + lastName)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name, badge")))
+		return
 	}
 
 	if err != nil {
