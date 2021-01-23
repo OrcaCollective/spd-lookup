@@ -28,55 +28,17 @@ LANGUAGE 'plpgsql'
 SECURITY DEFINER
 SET search_path =public, pg_temp;
 
-CREATE OR REPLACE FUNCTION fuzzy_search_officer_by_first_name_p(first_name  VARCHAR(100))
+CREATE OR REPLACE FUNCTION fuzzy_search_officer_p(badge_number  VARCHAR(10), last_name  VARCHAR(100), first_name  VARCHAR(100))
     RETURNS SETOF officers AS $$
 BEGIN
     RETURN QUERY SELECT *
-    FROM officers o
-    WHERE LOWER(o.first_name) % LOWER(fuzzy_search_officer_by_first_name_p.first_name)
-    ORDER BY SIMILARITY(LOWER(o.first_name), LOWER(fuzzy_search_officer_by_first_name_p.first_name)) DESC;
-
-    RETURN;
-END; $$
-LANGUAGE 'plpgsql'
-SECURITY DEFINER
-SET search_path =public, pg_temp;
-
-CREATE OR REPLACE FUNCTION fuzzy_search_officer_by_last_name_p(last_name  VARCHAR(100))
-    RETURNS SETOF officers AS $$
-BEGIN
-    RETURN QUERY SELECT *
-    FROM officers o
-    WHERE LOWER(o.last_name) % LOWER(fuzzy_search_officer_by_last_name_p.last_name)
-    ORDER BY SIMILARITY(LOWER(o.last_name), LOWER(fuzzy_search_officer_by_last_name_p.last_name)) DESC;
-
-    RETURN;
-END; $$
-LANGUAGE 'plpgsql'
-SECURITY DEFINER
-SET search_path =public, pg_temp;
-
-CREATE OR REPLACE FUNCTION fuzzy_search_officer_by_name_p(full_name  VARCHAR(100))
-    RETURNS SETOF officers AS $$
-BEGIN
-    RETURN QUERY SELECT *
-    FROM officers o
-    WHERE LOWER(o.first_name || ' ' || o.last_name) % LOWER(fuzzy_search_officer_by_name_p.full_name)
-    ORDER BY SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER(fuzzy_search_officer_by_name_p.full_name)) DESC;
-
-    RETURN;
-END; $$
-LANGUAGE 'plpgsql'
-SECURITY DEFINER
-SET search_path =public, pg_temp;
-
-CREATE OR REPLACE FUNCTION fuzzy_search_officer_by_badge_p(badge_number  VARCHAR(10))
-    RETURNS SETOF officers AS $$
-BEGIN
-    RETURN QUERY SELECT *
-    FROM officers o
-    WHERE LOWER(o.badge_number) % LOWER(fuzzy_search_officer_by_badge_p.badge_number)
-    ORDER BY SIMILARITY(LOWER(o.badge_number), LOWER(fuzzy_search_officer_by_badge_p.badge_number)) DESC;
+                 FROM officers o
+                 WHERE LOWER(o.badge_number) % LOWER(fuzzy_search_officer_p.badge_number)
+                 OR LOWER(o.last_name) % LOWER(fuzzy_search_officer_p.last_name)
+                 OR LOWER(o.first_name) % LOWER(fuzzy_search_officer_p.first_name)
+                 ORDER BY SIMILARITY(LOWER(o.badge_number), LOWER(fuzzy_search_officer_p.badge_number)) DESC,
+                          (.5 * SIMILARITY(LOWER(o.last_name), LOWER(fuzzy_search_officer_p.last_name))) DESC,
+                          SIMILARITY(LOWER(o.first_name), LOWER(fuzzy_search_officer_p.first_name)) DESC;
 
     RETURN;
 END; $$
