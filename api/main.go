@@ -109,8 +109,8 @@ func (h *handler) fuzzySearch(w http.ResponseWriter, r *http.Request) {
 		officers, err = h.db.fuzzySearchByFirstName(firstName)
 	} else if lastName != "" {
 		officers, err = h.db.fuzzySearchByLastName(lastName)
-	} else if badge != "" {
-		officers, err = h.db.fuzzySearchByBadge(badge)
+	} else if lastName == "" {
+		officers, err = h.db.fuzzySearchByFirstName(firstName)
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name, badge")))
