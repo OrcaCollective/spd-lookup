@@ -23,11 +23,8 @@ type officer struct {
 
 type databaseInterface interface {
 	getOfficerByBadge(badge string) (*officer, error)
-	fuzzySearchByBadge(badge string) ([]*officer, error)
 	searchOfficerByName(firstName, lastName string) ([]*officer, error)
-	fuzzySearchByName(name string) ([]*officer, error)
-	fuzzySearchByFirstName(firstName string) ([]*officer, error)
-	fuzzySearchByLastName(lastName string) ([]*officer, error)
+	fuzzySearchOfficer(badge string, lastName string, firstName string) ([]*officer, error)
 }
 
 type dbClient struct {
@@ -97,26 +94,6 @@ func (db *dbClient) getOfficerByBadge(badge string) (*officer, error) {
 	return &ofc, err
 }
 
-func (db *dbClient) fuzzySearchByBadge(badge string) ([]*officer, error) {
-	rows, err := db.pool.Query(context.Background(), `
-	SELECT
-		badge_number,
-		first_name,
-		middle_name,
-		last_name,
-		title,
-		unit,
-		unit_description
-	FROM fuzzy_search_officer_by_badge_p(badge_number := $1);`, badge,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	return marshalOfficerRows(rows)
-}
-
 func (db *dbClient) searchOfficerByName(firstName, lastName string) ([]*officer, error) {
 	rows, err := db.pool.Query(context.Background(), `
 	SELECT
@@ -137,7 +114,8 @@ func (db *dbClient) searchOfficerByName(firstName, lastName string) ([]*officer,
 	return marshalOfficerRows(rows)
 }
 
-func (db *dbClient) fuzzySearchByName(name string) ([]*officer, error) {
+func (db *dbClient) fuzzySearchOfficer(badge string, lastName string, firstName string) ([]*officer, error) {
+	fmt.Println("Testing new search function")
 	rows, err := db.pool.Query(context.Background(), `
 	SELECT
 		badge_number,
@@ -147,47 +125,10 @@ func (db *dbClient) fuzzySearchByName(name string) ([]*officer, error) {
 		title,
 		unit,
 		unit_description
-	FROM fuzzy_search_officer_by_name_p(full_name := $1);`, name,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	return marshalOfficerRows(rows)
-}
-
-func (db *dbClient) fuzzySearchByFirstName(firstName string) ([]*officer, error) {
-	rows, err := db.pool.Query(context.Background(), `
-	SELECT
-		badge_number,
-		first_name,
-		middle_name,
-		last_name,
-		title,
-		unit,
-		unit_description
-	FROM fuzzy_search_officer_by_first_name_p(first_name := $1);`, firstName,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	return marshalOfficerRows(rows)
-}
-
-func (db *dbClient) fuzzySearchByLastName(lastName string) ([]*officer, error) {
-	rows, err := db.pool.Query(context.Background(), `
-	SELECT
-		badge_number,
-		first_name,
-		middle_name,
-		last_name,
-		title,
-		unit,
-		unit_description
-	FROM fuzzy_search_officer_by_last_name_p(last_name := $1);`, lastName,
+	FROM fuzzy_search_officer_p(badge_number := $1, last_name := $2, first_name := $3);`,
+	badge,
+	lastName,
+	firstName,
 	)
 	if err != nil {
 		return nil, err
