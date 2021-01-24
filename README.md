@@ -6,6 +6,7 @@ Project that allows for searching for SPD police officers by badge, first_name, 
   - if `badge` is provided, will look up officer in database by badge
   - else if either `first_name` or `last_name`, a name search will be performed on the database. Due to URL encoding, `*` will be treated as a wildcard
 - `/seattle/officer/search` - expects `first_name` and/or `last_name` to be provided as query parameters. Invokes a fuzzy match based on name, array of officers returned are in descending match score
+- `/tacoma/officer` - expects `first_name` and/or `last_name` to be provided as query parameters; name search will be performed on the database. Due to URL encoding, `*` will be treated as a wildcard
 - `/tacoma/officer/search` - expects `first_name` and/or `last_name` to be provided as query parameters. Temporary route used to support Tacoma PD lookup
 
 ## Officer Model

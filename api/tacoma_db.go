@@ -15,6 +15,24 @@ type tacomaOfficer struct {
 	Salary     nulls.String `json:"salary,omitempty"`
 }
 
+func (db *dbClient) tacomaSearchOfficerByName(firstName, lastName string) ([]*tacomaOfficer, error) {
+	rows, err := db.pool.Query(context.Background(), `
+	SELECT
+		first_name,
+		last_name,
+		title,
+		department,
+		salary
+	FROM tacoma_search_officer_by_name_p(first_name := $1, last_name := $2);`, firstName, lastName,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return marshalTacomaOfficerRows(rows)
+}
+
 func (db *dbClient) tacomaFuzzySearchByName(name string) ([]*tacomaOfficer, error) {
 	rows, err := db.pool.Query(context.Background(), `
 	SELECT
