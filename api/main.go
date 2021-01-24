@@ -18,8 +18,9 @@ func main() {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/ping", h.ping).Methods("GET")
-	router.HandleFunc("/officer", h.getOfficers).Methods("GET")
-	router.HandleFunc("/officer/search", h.fuzzySearch).Methods("GET")
+	router.HandleFunc("/seattle/officer", h.getOfficers).Methods("GET")
+	router.HandleFunc("/seattle/officer/search", h.fuzzySearch).Methods("GET")
+	router.HandleFunc("/tacoma/officer/search", h.tacomaFuzzySearch).Methods("GET")
 
 	port := os.Getenv("PORT")
 	fmt.Println("starting server on port", port)
@@ -104,7 +105,7 @@ func (h *handler) fuzzySearch(w http.ResponseWriter, r *http.Request) {
 	var err error
 
 	if firstName != "" && lastName != "" {
-		officers, err = h.db.fuzzySearchByName(strings.Trim(firstName + " " + lastName, " "))
+		officers, err = h.db.fuzzySearchByName(strings.Trim(firstName+" "+lastName, " "))
 	} else if firstName != "" {
 		officers, err = h.db.fuzzySearchByFirstName(firstName)
 	} else if lastName != "" {
@@ -135,4 +136,33 @@ func alphabetize(officers []*officer) {
 		}
 		return officers[a].LastName < officers[b].LastName
 	})
+}
+
+func (h *handler) tacomaFuzzySearch(w http.ResponseWriter, r *http.Request) {
+	firstName, lastName := strings.TrimSpace(r.URL.Query().Get("first_name")), strings.TrimSpace(r.URL.Query().Get("last_name"))
+
+	officers := []*tacomaOfficer{}
+	var err error
+
+	if firstName != "" && lastName != "" {
+		officers, err = h.db.tacomaFuzzySearchByName(strings.Trim(firstName+" "+lastName, " "))
+	} else if firstName != "" {
+		officers, err = h.db.tacomaFuzzySearchByFirstName(firstName)
+	} else if lastName != "" {
+		officers, err = h.db.tacomaFuzzySearchByLastName(lastName)
+	} else {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name, badge")))
+		return
+	}
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(&officers)
 }

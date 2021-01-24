@@ -27,6 +27,9 @@ type databaseInterface interface {
 	fuzzySearchByName(name string) ([]*officer, error)
 	fuzzySearchByFirstName(firstName string) ([]*officer, error)
 	fuzzySearchByLastName(lastName string) ([]*officer, error)
+	tacomaFuzzySearchByName(name string) ([]*tacomaOfficer, error)
+	tacomaFuzzySearchByFirstName(firstName string) ([]*tacomaOfficer, error)
+	tacomaFuzzySearchByLastName(lastName string) ([]*tacomaOfficer, error)
 }
 
 type dbClient struct {
