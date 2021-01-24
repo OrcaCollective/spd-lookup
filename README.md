@@ -1,11 +1,42 @@
 # SPD Lookup
-Project that allows for searching for SPD police officers by badge, first_name, or last_name. Currently, API and database are hosted on heroku; API is avialable at [https://spd-lookup.herokuapp.com](https://spd-lookup.herokuapp.com)
+Project that allows for searching for SPD police officers by badge, first_name, or last_name
 
 ## Endpoints
-- `/officer` - expects `badge`, `first_name` and/or `last_name` to be provided as query parameters. An array of officers will be returned
+- `/seattle/officer` - expects `badge`, `first_name` and/or `last_name` to be provided as query parameters. An array of officers will be returned
   - if `badge` is provided, will look up officer in database by badge
   - else if either `first_name` or `last_name`, a name search will be performed on the database. Due to URL encoding, `*` will be treated as a wildcard
-- `/officer/search` - expects `first_name` and/or `last_name` to be provided as query parameters. Invokes a fuzzy match based on name, array of officers returned are in descending match score
+- `/seattle/officer/search` - expects `first_name` and/or `last_name` to be provided as query parameters. Invokes a fuzzy match based on name, array of officers returned are in descending match score
+- `/tacoma/officer` - expects `first_name` and/or `last_name` to be provided as query parameters; name search will be performed on the database. Due to URL encoding, `*` will be treated as a wildcard
+- `/tacoma/officer/search` - expects `first_name` and/or `last_name` to be provided as query parameters. Temporary route used to support Tacoma PD lookup
+
+## Officer Model
+### Seattle
+```
+{
+  "badge_number": "6248",
+  "first_name": "Adrian",
+  "middle_name": "Z",
+  "last_name": "Diaz",
+  "title": "Interim Chief Of Police",
+  "unit": "A000",
+  "unit_description": "Cop - Chief Of Police"
+}
+```
+
+### Tacoma
+```
+{
+  "first_name": "Shawn",
+  "last_name": "Gustason",
+  "title": "Police Chief Asst",
+  "department": "Police",
+  "salary": "$309,881.46"
+}
+```
+
+## Running Locally Through Docker Compose
+1. prepare a `.env` file at the root containing entries for `DB_USERNAME` and `DB_PASSWORD`
+1. run `docker-compose up --build`
 
 ## API
 ### Running Locally
