@@ -26,7 +26,7 @@ Project that allows for searching for SPD police officers by badge, first_name, 
 ### Tacoma
 ```
 {
-  "first_name": " Shawn",
+  "first_name": "Shawn",
   "last_name": "Gustason",
   "title": "Police Chief Asst",
   "department": "Police",
