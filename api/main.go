@@ -140,7 +140,13 @@ func alphabetize(officers []*officer) {
 }
 
 func (h *handler) tacomaGetOfficers(w http.ResponseWriter, r *http.Request) {
-	firstName, lastName := strings.TrimSpace(r.URL.Query().Get("first_name")), strings.TrimSpace(r.URL.Query().Get("last_name"))
+	badge, firstName, lastName := r.URL.Query().Get("badge"), strings.TrimSpace(r.URL.Query().Get("first_name")), strings.TrimSpace(r.URL.Query().Get("last_name"))
+
+	if badge != "" && firstName == "" && lastName == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(fmt.Sprintf("At this time we do not have the badge numbers available for Tacoma PD. Please attempt searches by first or last name only.")))
+		return
+	}
 
 	if firstName == "" && lastName == "" {
 		w.WriteHeader(http.StatusBadRequest)
