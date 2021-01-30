@@ -15,8 +15,13 @@ func Start() {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/ping", h.Ping).Methods("GET")
+	router.HandleFunc("/departments", h.DescribeDepartments).Methods("GET")
+
+	router.HandleFunc("/seattle/metadata", h.SeattleOfficerMetadata).Methods("GET")
 	router.HandleFunc("/seattle/officer", h.SeattleStrictMatch).Methods("GET")
 	router.HandleFunc("/seattle/officer/search", h.SeattleFuzzySearch).Methods("GET")
+
+	router.HandleFunc("/tacoma/metadata", h.TacomaOfficerMetadata).Methods("GET")
 	router.HandleFunc("/tacoma/officer", h.TacomaStrictMatch).Methods("GET")
 	router.HandleFunc("/tacoma/officer/search", h.TacomaFuzzySearch).Methods("GET")
 

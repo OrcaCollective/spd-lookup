@@ -1,4 +1,4 @@
-package provider
+package data
 
 import (
 	"context"
@@ -18,10 +18,44 @@ type SeattleOfficer struct {
 	UnitDescription nulls.String `json:"unit_description,omitempty"`
 }
 
+// SeattleOfficerMetadata retreives metadata describing the SeattleOfficer struct
+func (c *Client) SeattleOfficerMetadata() []map[string]string {
+	return []map[string]string{
+		{
+			"FieldName": "badge_number",
+			"Label":     "Badge Number",
+		},
+		{
+			"FieldName": "first_name",
+			"Label":     "First Name",
+		},
+		{
+			"FieldName": "middle_name",
+			"Label":     "Middle Name",
+		},
+		{
+			"FieldName": "last_name",
+			"Label":     "Last Name",
+		},
+		{
+			"FieldName": "title",
+			"Label":     "Title",
+		},
+		{
+			"FieldName": "unit",
+			"Label":     "Unit",
+		},
+		{
+			"FieldName": "unit_description",
+			"Label":     "Unit Description",
+		},
+	}
+}
+
 // SeattleGetOfficerByBadge invokes seattle_get_officer_by_badge_p
-func (db *DBClient) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error) {
+func (c *Client) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error) {
 	ofc := SeattleOfficer{}
-	err := db.pool.QueryRow(context.Background(),
+	err := c.pool.QueryRow(context.Background(),
 		`
 			SELECT
 				badge_number,
@@ -47,8 +81,8 @@ func (db *DBClient) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, err
 }
 
 // SeattleSearchOfficerByName invokes seattle_search_officer_by_name_p
-func (db *DBClient) SeattleSearchOfficerByName(firstName, lastName string) ([]*SeattleOfficer, error) {
-	rows, err := db.pool.Query(context.Background(), `
+func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*SeattleOfficer, error) {
+	rows, err := c.pool.Query(context.Background(), `
 	SELECT
 		badge_number,
 		first_name,
@@ -68,8 +102,8 @@ func (db *DBClient) SeattleSearchOfficerByName(firstName, lastName string) ([]*S
 }
 
 // SeattleFuzzySearchByName invokes seattle_fuzzy_search_officer_by_name_p
-func (db *DBClient) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error) {
-	rows, err := db.pool.Query(context.Background(), `
+func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error) {
+	rows, err := c.pool.Query(context.Background(), `
 	SELECT
 		badge_number,
 		first_name,
@@ -89,8 +123,8 @@ func (db *DBClient) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, er
 }
 
 // SeattleFuzzySearchByFirstName invokes seattle_fuzzy_search_officer_by_first_name_p
-func (db *DBClient) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error) {
-	rows, err := db.pool.Query(context.Background(), `
+func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error) {
+	rows, err := c.pool.Query(context.Background(), `
 	SELECT
 		badge_number,
 		first_name,
@@ -110,8 +144,8 @@ func (db *DBClient) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleO
 }
 
 // SeattleFuzzySearchByLastName invokes seattle_fuzzy_search_officer_by_last_name_p
-func (db *DBClient) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error) {
-	rows, err := db.pool.Query(context.Background(), `
+func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error) {
+	rows, err := c.pool.Query(context.Background(), `
 	SELECT
 		badge_number,
 		first_name,

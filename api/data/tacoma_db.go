@@ -1,4 +1,4 @@
-package provider
+package data
 
 import (
 	"context"
@@ -16,9 +16,35 @@ type TacomaOfficer struct {
 	Salary     nulls.String `json:"salary,omitempty"`
 }
 
+// TacomaOfficerMetadata retreives metadata describing the TacomaOfficer struct
+func (c *Client) TacomaOfficerMetadata() []map[string]string {
+	return []map[string]string{
+		{
+			"FieldName": "first_name",
+			"Label":     "First Name",
+		},
+		{
+			"FieldName": "last_name",
+			"Label":     "Last Name",
+		},
+		{
+			"FieldName": "title",
+			"Label":     "Title",
+		},
+		{
+			"FieldName": "department",
+			"Label":     "Department",
+		},
+		{
+			"FieldName": "salary",
+			"Label":     "Salary",
+		},
+	}
+}
+
 // TacomaSearchOfficerByName invokes tacoma_search_officer_by_name_p
-func (db *DBClient) TacomaSearchOfficerByName(firstName, lastName string) ([]*TacomaOfficer, error) {
-	rows, err := db.pool.Query(context.Background(), `
+func (c *Client) TacomaSearchOfficerByName(firstName, lastName string) ([]*TacomaOfficer, error) {
+	rows, err := c.pool.Query(context.Background(), `
 	SELECT
 		first_name,
 		last_name,
@@ -36,8 +62,8 @@ func (db *DBClient) TacomaSearchOfficerByName(firstName, lastName string) ([]*Ta
 }
 
 // TacomaFuzzySearchByName invokes tacoma_fuzzy_search_officer_by_name_p
-func (db *DBClient) TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error) {
-	rows, err := db.pool.Query(context.Background(), `
+func (c *Client) TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error) {
+	rows, err := c.pool.Query(context.Background(), `
 	SELECT
 		first_name,
 		last_name,
@@ -55,8 +81,8 @@ func (db *DBClient) TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, erro
 }
 
 // TacomaFuzzySearchByFirstName invokes tacoma_fuzzy_search_officer_by_first_name_p
-func (db *DBClient) TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOfficer, error) {
-	rows, err := db.pool.Query(context.Background(), `
+func (c *Client) TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOfficer, error) {
+	rows, err := c.pool.Query(context.Background(), `
 	SELECT
 		first_name,
 		last_name,
@@ -74,8 +100,8 @@ func (db *DBClient) TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOff
 }
 
 // TacomaFuzzySearchByLastName invokes tacoma_fuzzy_search_officer_by_last_name_p
-func (db *DBClient) TacomaFuzzySearchByLastName(lastName string) ([]*TacomaOfficer, error) {
-	rows, err := db.pool.Query(context.Background(), `
+func (c *Client) TacomaFuzzySearchByLastName(lastName string) ([]*TacomaOfficer, error) {
+	rows, err := c.pool.Query(context.Background(), `
 	SELECT
 		first_name,
 		last_name,

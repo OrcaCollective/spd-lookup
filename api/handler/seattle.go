@@ -5,9 +5,16 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
-	"spd-lookup/api/provider"
+	"spd-lookup/api/data"
 	"strings"
 )
+
+// SeattleOfficerMetadata is the handler function for retrieving SPD metadata
+func (h *Handler) SeattleOfficerMetadata(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(h.db.SeattleOfficerMetadata())
+}
 
 // SeattleStrictMatch is the handler function for retrieving SPD officers with a strict match
 func (h *Handler) SeattleStrictMatch(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +39,7 @@ func (h *Handler) seattleGetOfficerByBadge(badge string, w http.ResponseWriter) 
 		if err.Error() == "no rows in result set" {
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode([]*provider.SeattleOfficer{})
+			json.NewEncoder(w).Encode([]*data.SeattleOfficer{})
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
@@ -42,7 +49,7 @@ func (h *Handler) seattleGetOfficerByBadge(badge string, w http.ResponseWriter) 
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode([]*provider.SeattleOfficer{ofc})
+	json.NewEncoder(w).Encode([]*data.SeattleOfficer{ofc})
 }
 
 func (h *Handler) seattleGetOfficersByName(firstName, lastName string, w http.ResponseWriter) {
@@ -82,7 +89,7 @@ func (h *Handler) seattleGetOfficersByName(firstName, lastName string, w http.Re
 func (h *Handler) SeattleFuzzySearch(w http.ResponseWriter, r *http.Request) {
 	firstName, lastName := strings.TrimSpace(r.URL.Query().Get("first_name")), strings.TrimSpace(r.URL.Query().Get("last_name"))
 
-	officers := []*provider.SeattleOfficer{}
+	officers := []*data.SeattleOfficer{}
 	var err error
 
 	if firstName != "" && lastName != "" {

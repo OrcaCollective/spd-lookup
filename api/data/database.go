@@ -1,4 +1,4 @@
-package provider
+package data
 
 import (
 	"context"
@@ -11,24 +11,26 @@ import (
 
 // DatabaseInterface describes database functions
 type DatabaseInterface interface {
+	SeattleOfficerMetadata() []map[string]string
 	SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error)
 	SeattleSearchOfficerByName(firstName, lastName string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error)
+	TacomaOfficerMetadata() []map[string]string
 	TacomaSearchOfficerByName(firstName, lastName string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByLastName(lastName string) ([]*TacomaOfficer, error)
 }
 
-// DBClient is the client used to connect to the db
-type DBClient struct {
+// Client is the client used to connect to the db
+type Client struct {
 	pool *pgxpool.Pool
 }
 
-// NewDBClient is the constructor for DBClient
-func NewDBClient() *DBClient {
+// NewClient is the constructor for Client
+func NewClient() *Client {
 	var pool *pgxpool.Pool
 	if os.Getenv("DATABASE_URL") != "" {
 		pgxConfig, err := pgxpool.ParseConfig(os.Getenv("DATABASE_URL"))
@@ -61,5 +63,5 @@ func NewDBClient() *DBClient {
 		}
 	}
 
-	return &DBClient{pool: pool}
+	return &Client{pool: pool}
 }

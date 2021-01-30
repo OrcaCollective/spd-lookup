@@ -5,9 +5,16 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
-	"spd-lookup/api/provider"
+	"spd-lookup/api/data"
 	"strings"
 )
+
+// TacomaOfficerMetadata is the handler function for retrieving Tacoma metadata
+func (h *Handler) TacomaOfficerMetadata(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(h.db.TacomaOfficerMetadata())
+}
 
 // TacomaStrictMatch is the handler function for retrieving Tacoma officers with a strict match
 func (h *Handler) TacomaStrictMatch(w http.ResponseWriter, r *http.Request) {
@@ -61,7 +68,7 @@ func (h *Handler) TacomaStrictMatch(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) TacomaFuzzySearch(w http.ResponseWriter, r *http.Request) {
 	firstName, lastName := strings.TrimSpace(r.URL.Query().Get("first_name")), strings.TrimSpace(r.URL.Query().Get("last_name"))
 
-	officers := []*provider.TacomaOfficer{}
+	officers := []*data.TacomaOfficer{}
 	var err error
 
 	if firstName != "" && lastName != "" {
