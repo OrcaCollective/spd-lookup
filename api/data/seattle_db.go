@@ -18,7 +18,7 @@ type SeattleOfficer struct {
 	UnitDescription nulls.String `json:"unit_description,omitempty"`
 }
 
-// SeattleOfficerMetadata retreives metadata describing the SeattleOfficer struct
+// SeattleOfficerMetadata retrieves metadata describing the SeattleOfficer struct
 func (c *Client) SeattleOfficerMetadata() []map[string]string {
 	return []map[string]string{
 		{
@@ -66,7 +66,8 @@ func (c *Client) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error)
 				unit,
 				unit_description
 			FROM seattle_get_officer_by_badge_p (badge_number := $1);
-		`, badge,
+		`,
+		badge,
 	).Scan(
 		&ofc.BadgeNumber,
 		&ofc.FirstName,
@@ -82,16 +83,20 @@ func (c *Client) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error)
 
 // SeattleSearchOfficerByName invokes seattle_search_officer_by_name_p
 func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*SeattleOfficer, error) {
-	rows, err := c.pool.Query(context.Background(), `
-	SELECT
-		badge_number,
-		first_name,
-		middle_name,
-		last_name,
-		title,
-		unit,
-		unit_description
-	FROM seattle_search_officer_by_name_p(first_name := $1, last_name := $2);`, firstName, lastName,
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				badge_number,
+				first_name,
+				middle_name,
+				last_name,
+				title,
+				unit,
+				unit_description
+			FROM seattle_search_officer_by_name_p(first_name := $1, last_name := $2);
+		`,
+		firstName,
+		lastName,
 	)
 	if err != nil {
 		return nil, err
@@ -103,16 +108,19 @@ func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*Seat
 
 // SeattleFuzzySearchByName invokes seattle_fuzzy_search_officer_by_name_p
 func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error) {
-	rows, err := c.pool.Query(context.Background(), `
-	SELECT
-		badge_number,
-		first_name,
-		middle_name,
-		last_name,
-		title,
-		unit,
-		unit_description
-	FROM seattle_fuzzy_search_officer_by_name_p(full_name := $1);`, name,
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				badge_number,
+				first_name,
+				middle_name,
+				last_name,
+				title,
+				unit,
+				unit_description
+			FROM seattle_fuzzy_search_officer_by_name_p(full_name := $1);
+		`,
+		name,
 	)
 	if err != nil {
 		return nil, err
@@ -124,16 +132,19 @@ func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error
 
 // SeattleFuzzySearchByFirstName invokes seattle_fuzzy_search_officer_by_first_name_p
 func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error) {
-	rows, err := c.pool.Query(context.Background(), `
-	SELECT
-		badge_number,
-		first_name,
-		middle_name,
-		last_name,
-		title,
-		unit,
-		unit_description
-	FROM seattle_fuzzy_search_officer_by_first_name_p(first_name := $1);`, firstName,
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				badge_number,
+				first_name,
+				middle_name,
+				last_name,
+				title,
+				unit,
+				unit_description
+			FROM seattle_fuzzy_search_officer_by_first_name_p(first_name := $1);
+		`,
+		firstName,
 	)
 	if err != nil {
 		return nil, err
@@ -145,16 +156,19 @@ func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOffi
 
 // SeattleFuzzySearchByLastName invokes seattle_fuzzy_search_officer_by_last_name_p
 func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error) {
-	rows, err := c.pool.Query(context.Background(), `
-	SELECT
-		badge_number,
-		first_name,
-		middle_name,
-		last_name,
-		title,
-		unit,
-		unit_description
-	FROM seattle_fuzzy_search_officer_by_last_name_p(last_name := $1);`, lastName,
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				badge_number,
+				first_name,
+				middle_name,
+				last_name,
+				title,
+				unit,
+				unit_description
+			FROM seattle_fuzzy_search_officer_by_last_name_p(last_name := $1);
+		`,
+		lastName,
 	)
 	if err != nil {
 		return nil, err

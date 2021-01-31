@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
-	"spd-lookup/api/data"
 	"strings"
+
+	"spd-lookup/api/data"
 )
 
 // SeattleOfficerMetadata is the handler function for retrieving SPD metadata

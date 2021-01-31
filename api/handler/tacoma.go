@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
-	"spd-lookup/api/data"
 	"strings"
+
+	"spd-lookup/api/data"
 )
 
 // TacomaOfficerMetadata is the handler function for retrieving Tacoma metadata

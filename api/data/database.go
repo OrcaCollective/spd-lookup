@@ -17,6 +17,7 @@ type DatabaseInterface interface {
 	SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error)
+
 	TacomaOfficerMetadata() []map[string]string
 	TacomaSearchOfficerByName(firstName, lastName string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error)

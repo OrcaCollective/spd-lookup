@@ -44,14 +44,18 @@ func (c *Client) TacomaOfficerMetadata() []map[string]string {
 
 // TacomaSearchOfficerByName invokes tacoma_search_officer_by_name_p
 func (c *Client) TacomaSearchOfficerByName(firstName, lastName string) ([]*TacomaOfficer, error) {
-	rows, err := c.pool.Query(context.Background(), `
-	SELECT
-		first_name,
-		last_name,
-		title,
-		department,
-		salary
-	FROM tacoma_search_officer_by_name_p(first_name := $1, last_name := $2);`, firstName, lastName,
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				first_name,
+				last_name,
+				title,
+				department,
+				salary
+			FROM tacoma_search_officer_by_name_p(first_name := $1, last_name := $2);
+		`,
+		firstName,
+		lastName,
 	)
 	if err != nil {
 		return nil, err
@@ -63,14 +67,17 @@ func (c *Client) TacomaSearchOfficerByName(firstName, lastName string) ([]*Tacom
 
 // TacomaFuzzySearchByName invokes tacoma_fuzzy_search_officer_by_name_p
 func (c *Client) TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error) {
-	rows, err := c.pool.Query(context.Background(), `
-	SELECT
-		first_name,
-		last_name,
-		title,
-		department,
-		salary
-	FROM tacoma_fuzzy_search_officer_by_name_p(full_name := $1);`, name,
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				first_name,
+				last_name,
+				title,
+				department,
+				salary
+			FROM tacoma_fuzzy_search_officer_by_name_p(full_name := $1);
+		`,
+		name,
 	)
 	if err != nil {
 		return nil, err
@@ -82,14 +89,17 @@ func (c *Client) TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error) 
 
 // TacomaFuzzySearchByFirstName invokes tacoma_fuzzy_search_officer_by_first_name_p
 func (c *Client) TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOfficer, error) {
-	rows, err := c.pool.Query(context.Background(), `
-	SELECT
-		first_name,
-		last_name,
-		title,
-		department,
-		salary
-	FROM tacoma_fuzzy_search_officer_by_first_name_p(first_name := $1);`, firstName,
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				first_name,
+				last_name,
+				title,
+				department,
+				salary
+			FROM tacoma_fuzzy_search_officer_by_first_name_p(first_name := $1);
+		`,
+		firstName,
 	)
 	if err != nil {
 		return nil, err
@@ -101,14 +111,17 @@ func (c *Client) TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOffice
 
 // TacomaFuzzySearchByLastName invokes tacoma_fuzzy_search_officer_by_last_name_p
 func (c *Client) TacomaFuzzySearchByLastName(lastName string) ([]*TacomaOfficer, error) {
-	rows, err := c.pool.Query(context.Background(), `
-	SELECT
-		first_name,
-		last_name,
-		title,
-		department,
-		salary
-	FROM tacoma_fuzzy_search_officer_by_last_name_p(last_name := $1);`, lastName,
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				first_name,
+				last_name,
+				title,
+				department,
+				salary
+			FROM tacoma_fuzzy_search_officer_by_last_name_p(last_name := $1);
+		`,
+		lastName,
 	)
 	if err != nil {
 		return nil, err
