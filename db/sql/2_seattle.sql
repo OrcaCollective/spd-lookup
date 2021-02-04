@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS seattle_officers (
 );
 
 COPY seattle_officers (badge_number,title,unit,unit_description,last_name,first_name,middle_name)
-FROM '/seed/SPD_roster_11-15-20.csv' DELIMITER ',' CSV HEADER;
+FROM '/seed/SPD_Roster_1-28-21.csv' DELIMITER ',' CSV HEADER;
 
 CREATE OR REPLACE FUNCTION seattle_get_officer_by_badge_p(badge_number VARCHAR(10))
     RETURNS SETOF seattle_officers AS $$
