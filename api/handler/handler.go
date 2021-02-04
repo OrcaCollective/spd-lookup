@@ -26,23 +26,12 @@ func (h *Handler) Ping(w http.ResponseWriter, r *http.Request) {
 
 // DescribeDepartments returns a list of departments and the fields supported for that department
 func (h *Handler) DescribeDepartments(w http.ResponseWriter, r *http.Request) {
-	departments := []*department{
-		{
-			Name:     "Seattle PD",
-			Metadata: h.db.SeattleOfficerMetadata(),
-		},
-		{
-			Name:     "Tacoma PD",
-			Metadata: h.db.TacomaOfficerMetadata(),
-		},
+	departments := []data.DepartmentMetadata{
+		h.db.SeattleOfficerMetadata(),
+		h.db.TacomaOfficerMetadata(),
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(departments)
-}
-
-type department struct {
-	Name     string              		`json:"name"`
-	Metadata data.DepartmentMetadata	`json:"metadata"`
 }
