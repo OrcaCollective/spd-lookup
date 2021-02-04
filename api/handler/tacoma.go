@@ -80,7 +80,7 @@ func (h *Handler) TacomaFuzzySearch(w http.ResponseWriter, r *http.Request) {
 		officers, err = h.db.TacomaFuzzySearchByLastName(lastName)
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name, badge")))
+		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name")))
 		return
 	}
 

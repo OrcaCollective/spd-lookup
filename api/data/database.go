@@ -11,14 +11,14 @@ import (
 
 // DatabaseInterface describes database functions
 type DatabaseInterface interface {
-	SeattleOfficerMetadata() []map[string]string
+	SeattleOfficerMetadata() map[string]interface{}
 	SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error)
 	SeattleSearchOfficerByName(firstName, lastName string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error)
 
-	TacomaOfficerMetadata() []map[string]string
+	TacomaOfficerMetadata() map[string]interface{}
 	TacomaSearchOfficerByName(firstName, lastName string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOfficer, error)

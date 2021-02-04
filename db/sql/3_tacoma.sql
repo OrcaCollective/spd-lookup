@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS tacoma_officers (
     id              SERIAL PRIMARY KEY,
+    date            DATE,
     first_name      VARCHAR(100),
     last_name       VARCHAR(100),
     title           VARCHAR(100),
@@ -7,8 +8,8 @@ CREATE TABLE IF NOT EXISTS tacoma_officers (
     salary          VARCHAR(50)
 );
 
-COPY tacoma_officers (last_name,first_name,title,department,salary)
-FROM '/seed/tacoma_roster_012421.csv' DELIMITER ',' CSV HEADER;
+COPY tacoma_officers (last_name,first_name,title,department,salary,date)
+FROM '/seed/TPD_Roster_1-24-21.csv' DELIMITER ',' CSV HEADER;
 
 CREATE OR REPLACE FUNCTION tacoma_search_officer_by_name_p(
     first_name  VARCHAR(100),

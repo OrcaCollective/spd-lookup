@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS seattle_officers (
     id                  SERIAL PRIMARY KEY,
+    date                DATE,
     full_name		    VARCHAR(100),
     badge_number        VARCHAR(10),
     first_name          VARCHAR(100),
@@ -10,7 +11,7 @@ CREATE TABLE IF NOT EXISTS seattle_officers (
     unit_description    VARCHAR(100)
 );
 
-COPY seattle_officers (badge_number,full_name,title,unit,unit_description,first_name,middle_name,last_name)
+COPY seattle_officers (badge_number,full_name,title,unit,unit_description,first_name,middle_name,last_name,date)
 FROM '/seed/SPD_Roster_1-28-21.csv' DELIMITER ',' CSV HEADER;
 
 CREATE OR REPLACE FUNCTION seattle_get_officer_by_badge_p(badge_number VARCHAR(10))
@@ -71,13 +72,13 @@ SECURITY DEFINER
 SET search_path =public, pg_temp;
 
 
-CREATE OR REPLACE FUNCTION seattle_fuzzy_seattle_search_officer_by_name_p(full_name  VARCHAR(100))
+CREATE OR REPLACE FUNCTION seattle_fuzzy_search_officer_by_name_p(full_name_v  VARCHAR(100))
     RETURNS SETOF seattle_officers AS $$
 BEGIN
     RETURN QUERY SELECT *
     FROM seattle_officers o
-    WHERE LOWER(o.first_name || ' ' || o.last_name) % LOWER(seattle_fuzzy_seattle_search_officer_by_name_p.full_name)
-    ORDER BY SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER(seattle_fuzzy_seattle_search_officer_by_name_p.full_name)) DESC;
+    WHERE LOWER(o.first_name || ' ' || o.last_name) % LOWER(seattle_fuzzy_search_officer_by_name_p.full_name_v)
+    ORDER BY SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER(seattle_fuzzy_search_officer_by_name_p.full_name_v)) DESC;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
