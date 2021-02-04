@@ -44,5 +44,5 @@ func (h *Handler) DescribeDepartments(w http.ResponseWriter, r *http.Request) {
 
 type department struct {
 	Name     string              		`json:"name"`
-	Metadata map[string]interface{}	`json:"metadata"`
+	Metadata data.DepartmentMetadata	`json:"metadata"`
 }

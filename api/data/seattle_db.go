@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/gobuffalo/nulls"
@@ -22,7 +23,7 @@ type SeattleOfficer struct {
 }
 
 // SeattleOfficerMetadata retrieves metadata describing the SeattleOfficer struct
-func (c *Client) SeattleOfficerMetadata() map[string]interface{} {
+func (c *Client) SeattleOfficerMetadata() DepartmentMetadata {
 	var date time.Time
 	err := c.pool.QueryRow(context.Background(),
 		`
@@ -32,13 +33,12 @@ func (c *Client) SeattleOfficerMetadata() map[string]interface{} {
 		`).Scan(&date)
 
 	if err != nil {
-		return map[string]interface{}{
-			"error": "error fetching most recent roster date from dataset.",
-		}
+		fmt.Printf("DB Client Error: %s", err)
+		return DepartmentMetadata{}
 	}
 
-	return map[string]interface{}{
-		"fields": []map[string]string{
+	return DepartmentMetadata{
+		Fields: []map[string]string{
 			{
 				"FieldName": "badge_number",
 				"Label":     "Badge Number",
@@ -72,7 +72,8 @@ func (c *Client) SeattleOfficerMetadata() map[string]interface{} {
 				"Label":     "Full Name",
 			},
 		},
-		"last_available_roster_date": date.Format("2006-01-02"),
+		LastAvailableRosterDate: date.Format("2006-01-02"),
+		Name: "Seattle PD",
 	}
 }
 
