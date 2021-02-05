@@ -2,6 +2,8 @@ package data
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/gobuffalo/nulls"
 	"github.com/jackc/pgx/v4"
@@ -9,36 +11,53 @@ import (
 
 // TacomaOfficer is the object model for Tacoma PD officers
 type TacomaOfficer struct {
-	FirstName  string       `json:"first_name,omitempty"`
-	LastName   string       `json:"last_name,omitempty"`
-	Title      string       `json:"title,omitempty"`
-	Department string       `json:"department,omitempty"`
-	Salary     nulls.String `json:"salary,omitempty"`
+	Date		time.Time		`json:"date,omitempty"`
+	FirstName	string			`json:"first_name,omitempty"`
+	LastName	string			`json:"last_name,omitempty"`
+	Title		string			`json:"title,omitempty"`
+	Department	string			`json:"department,omitempty"`
+	Salary		nulls.String	`json:"salary,omitempty"`
 }
 
-// TacomaOfficerMetadata retreives metadata describing the TacomaOfficer struct
-func (c *Client) TacomaOfficerMetadata() []map[string]string {
-	return []map[string]string{
-		{
+// TacomaOfficerMetadata retrieves metadata describing the TacomaOfficer struct
+func (c *Client) TacomaOfficerMetadata() DepartmentMetadata {
+	var date time.Time
+	err := c.pool.QueryRow(context.Background(),
+		`
+			SELECT max(date) as date
+			FROM tacoma_officers;
+		`).Scan(&date)
+
+	if err != nil {
+		fmt.Printf("DB Client Error: %s", err)
+		return DepartmentMetadata{}
+	}
+
+	return DepartmentMetadata{
+		Fields: []map[string]string{
+			{
 			"FieldName": "first_name",
 			"Label":     "First Name",
+			},
+			{
+				"FieldName": "last_name",
+				"Label":     "Last Name",
+			},
+			{
+				"FieldName": "title",
+				"Label":     "Title",
+			},
+			{
+				"FieldName": "department",
+				"Label":     "Department",
+			},
+			{
+				"FieldName": "salary",
+				"Label":     "Salary",
+			},
 		},
-		{
-			"FieldName": "last_name",
-			"Label":     "Last Name",
-		},
-		{
-			"FieldName": "title",
-			"Label":     "Title",
-		},
-		{
-			"FieldName": "department",
-			"Label":     "Department",
-		},
-		{
-			"FieldName": "salary",
-			"Label":     "Salary",
-		},
+		LastAvailableRosterDate: date.Format("2006-01-02"),
+		Name: "Tacoma PD",
 	}
 }
 
@@ -47,6 +66,7 @@ func (c *Client) TacomaSearchOfficerByName(firstName, lastName string) ([]*Tacom
 	rows, err := c.pool.Query(context.Background(),
 		`
 			SELECT
+				date,
 				first_name,
 				last_name,
 				title,
@@ -70,6 +90,7 @@ func (c *Client) TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error) 
 	rows, err := c.pool.Query(context.Background(),
 		`
 			SELECT
+				date,
 				first_name,
 				last_name,
 				title,
@@ -92,6 +113,7 @@ func (c *Client) TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOffice
 	rows, err := c.pool.Query(context.Background(),
 		`
 			SELECT
+				date,
 				first_name,
 				last_name,
 				title,
@@ -114,6 +136,7 @@ func (c *Client) TacomaFuzzySearchByLastName(lastName string) ([]*TacomaOfficer,
 	rows, err := c.pool.Query(context.Background(),
 		`
 			SELECT
+				date,
 				first_name,
 				last_name,
 				title,
@@ -136,6 +159,7 @@ func marshalTacomaOfficerRows(rows pgx.Rows) ([]*TacomaOfficer, error) {
 	for rows.Next() {
 		ofc := TacomaOfficer{}
 		err := rows.Scan(
+			&ofc.Date,
 			&ofc.FirstName,
 			&ofc.LastName,
 			&ofc.Title,
