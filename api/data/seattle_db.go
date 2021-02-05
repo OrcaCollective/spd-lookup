@@ -27,9 +27,8 @@ func (c *Client) SeattleOfficerMetadata() DepartmentMetadata {
 	var date time.Time
 	err := c.pool.QueryRow(context.Background(),
 		`
-			SELECT date
-			FROM seattle_officers
-			WHERE date = (select max(date) from seattle_officers);
+			SELECT max(date) as date
+			FROM seattle_officers;
 		`).Scan(&date)
 
 	if err != nil {
