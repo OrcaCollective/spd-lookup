@@ -26,7 +26,7 @@ func (h *Handler) Ping(w http.ResponseWriter, r *http.Request) {
 
 // DescribeDepartments returns a list of departments and the fields supported for that department
 func (h *Handler) DescribeDepartments(w http.ResponseWriter, r *http.Request) {
-	departments := []data.DepartmentMetadata{
+	departments := []*data.DepartmentMetadata{
 		h.db.SeattleOfficerMetadata(),
 		h.db.TacomaOfficerMetadata(),
 	}
