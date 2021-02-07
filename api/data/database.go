@@ -11,21 +11,30 @@ import (
 
 // DepartmentMetadata is the structure of the metadata returned by the SQL DB
 type DepartmentMetadata struct {
-	Name                    string              `json:"name"`
-	LastAvailableRosterDate string              `json:"last_available_roster_date"`
-	Fields                  []map[string]string `json:"fields"`
+	ID                      string                 `json:"id"`
+	Name                    string                 `json:"name"`
+	LastAvailableRosterDate string                 `json:"last_available_roster_date"`
+	Fields                  []map[string]string    `json:"fields"`
+	SearchRoutes            []*SearchRouteMetadata `json:"search_routes"`
+}
+
+// SearchRouteMetadata describes the search routes of a deparment
+type SearchRouteMetadata struct {
+	Type        string   `json:"type"`
+	Path        string   `json:"path"`
+	QueryParams []string `json:"query_params"`
 }
 
 // DatabaseInterface describes database functions
 type DatabaseInterface interface {
-	SeattleOfficerMetadata() DepartmentMetadata
+	SeattleOfficerMetadata() *DepartmentMetadata
 	SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error)
 	SeattleSearchOfficerByName(firstName, lastName string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error)
 
-	TacomaOfficerMetadata() DepartmentMetadata
+	TacomaOfficerMetadata() *DepartmentMetadata
 	TacomaSearchOfficerByName(firstName, lastName string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOfficer, error)

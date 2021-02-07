@@ -11,16 +11,16 @@ import (
 
 // TacomaOfficer is the object model for Tacoma PD officers
 type TacomaOfficer struct {
-	Date		time.Time		`json:"date,omitempty"`
-	FirstName	string			`json:"first_name,omitempty"`
-	LastName	string			`json:"last_name,omitempty"`
-	Title		string			`json:"title,omitempty"`
-	Department	string			`json:"department,omitempty"`
-	Salary		nulls.String	`json:"salary,omitempty"`
+	Date       time.Time    `json:"date,omitempty"`
+	FirstName  string       `json:"first_name,omitempty"`
+	LastName   string       `json:"last_name,omitempty"`
+	Title      string       `json:"title,omitempty"`
+	Department string       `json:"department,omitempty"`
+	Salary     nulls.String `json:"salary,omitempty"`
 }
 
 // TacomaOfficerMetadata retrieves metadata describing the TacomaOfficer struct
-func (c *Client) TacomaOfficerMetadata() DepartmentMetadata {
+func (c *Client) TacomaOfficerMetadata() *DepartmentMetadata {
 	var date time.Time
 	err := c.pool.QueryRow(context.Background(),
 		`
@@ -30,14 +30,14 @@ func (c *Client) TacomaOfficerMetadata() DepartmentMetadata {
 
 	if err != nil {
 		fmt.Printf("DB Client Error: %s", err)
-		return DepartmentMetadata{}
+		return &DepartmentMetadata{}
 	}
 
-	return DepartmentMetadata{
+	return &DepartmentMetadata{
 		Fields: []map[string]string{
 			{
-			"FieldName": "first_name",
-			"Label":     "First Name",
+				"FieldName": "first_name",
+				"Label":     "First Name",
 			},
 			{
 				"FieldName": "last_name",
@@ -57,7 +57,20 @@ func (c *Client) TacomaOfficerMetadata() DepartmentMetadata {
 			},
 		},
 		LastAvailableRosterDate: date.Format("2006-01-02"),
-		Name: "Tacoma PD",
+		Name:                    "Tacoma PD",
+		ID:                      "tpd",
+		SearchRoutes: []*SearchRouteMetadata{
+			{
+				Type:        "exact",
+				Path:        "/tacoma/officer",
+				QueryParams: []string{"first_name", "last_name"},
+			},
+			{
+				Type:        "fuzzy",
+				Path:        "/tacoma/officer/search",
+				QueryParams: []string{"first_name", "last_name"},
+			},
+		},
 	}
 }
 

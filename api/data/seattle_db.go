@@ -11,9 +11,9 @@ import (
 
 // SeattleOfficer is the object model for SPD officers
 type SeattleOfficer struct {
-	Date			time.Time    `json:"date,omitempty"`
+	Date            time.Time    `json:"date,omitempty"`
 	BadgeNumber     string       `json:"badge_number,omitempty"`
-	FullName		string       `json:"full_name,omitempty"`
+	FullName        string       `json:"full_name,omitempty"`
 	Title           string       `json:"title,omitempty"`
 	Unit            string       `json:"unit,omitempty"`
 	UnitDescription nulls.String `json:"unit_description,omitempty"`
@@ -23,7 +23,7 @@ type SeattleOfficer struct {
 }
 
 // SeattleOfficerMetadata retrieves metadata describing the SeattleOfficer struct
-func (c *Client) SeattleOfficerMetadata() DepartmentMetadata {
+func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 	var date time.Time
 	err := c.pool.QueryRow(context.Background(),
 		`
@@ -33,10 +33,10 @@ func (c *Client) SeattleOfficerMetadata() DepartmentMetadata {
 
 	if err != nil {
 		fmt.Printf("DB Client Error: %s", err)
-		return DepartmentMetadata{}
+		return &DepartmentMetadata{}
 	}
 
-	return DepartmentMetadata{
+	return &DepartmentMetadata{
 		Fields: []map[string]string{
 			{
 				"FieldName": "badge_number",
@@ -72,7 +72,20 @@ func (c *Client) SeattleOfficerMetadata() DepartmentMetadata {
 			},
 		},
 		LastAvailableRosterDate: date.Format("2006-01-02"),
-		Name: "Seattle PD",
+		Name:                    "Seattle PD",
+		ID:                      "spd",
+		SearchRoutes: []*SearchRouteMetadata{
+			{
+				Type:        "exact",
+				Path:        "/seattle/officer",
+				QueryParams: []string{"badge", "first_name", "last_name"},
+			},
+			{
+				Type:        "fuzzy",
+				Path:        "/seattle/officer/search",
+				QueryParams: []string{"first_name", "last_name"},
+			},
+		},
 	}
 }
 
