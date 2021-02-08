@@ -11,16 +11,15 @@ import (
 
 // DepartmentMetadata is the structure of the metadata returned by the SQL DB
 type DepartmentMetadata struct {
-	ID                      string                 `json:"id"`
-	Name                    string                 `json:"name"`
-	LastAvailableRosterDate string                 `json:"last_available_roster_date"`
-	Fields                  []map[string]string    `json:"fields"`
-	SearchRoutes            []*SearchRouteMetadata `json:"search_routes"`
+	ID                      string                          `json:"id"`
+	Name                    string                          `json:"name"`
+	LastAvailableRosterDate string                          `json:"last_available_roster_date"`
+	Fields                  []map[string]string             `json:"fields"`
+	SearchRoutes            map[string]*SearchRouteMetadata `json:"search_routes"`
 }
 
 // SearchRouteMetadata describes the search routes of a deparment
 type SearchRouteMetadata struct {
-	Type        string   `json:"type"`
 	Path        string   `json:"path"`
 	QueryParams []string `json:"query_params"`
 }
