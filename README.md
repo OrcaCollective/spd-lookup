@@ -16,7 +16,7 @@ Project that allows for searching for SPD police officers by badge, first_name, 
 ### Seattle
 ```
 {
-  "badge_number": "6248",
+  "badge": "6248",
   "first_name": "Adrian",
   "middle_name": "Z",
   "last_name": "Diaz",

@@ -12,7 +12,7 @@ import (
 // SeattleOfficer is the object model for SPD officers
 type SeattleOfficer struct {
 	Date            time.Time    `json:"date,omitempty"`
-	BadgeNumber     string       `json:"badge_number,omitempty"`
+	Badge           string       `json:"badge,omitempty"`
 	FullName        string       `json:"full_name,omitempty"`
 	Title           string       `json:"title,omitempty"`
 	Unit            string       `json:"unit,omitempty"`
@@ -39,8 +39,8 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 	return &DepartmentMetadata{
 		Fields: []map[string]string{
 			{
-				"FieldName": "badge_number",
-				"Label":     "Badge Number",
+				"FieldName": "badge",
+				"Label":     "Badge",
 			},
 			{
 				"FieldName": "first_name",
@@ -74,14 +74,12 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 		LastAvailableRosterDate: date.Format("2006-01-02"),
 		Name:                    "Seattle PD",
 		ID:                      "spd",
-		SearchRoutes: []*SearchRouteMetadata{
-			{
-				Type:        "exact",
+		SearchRoutes: map[string]*SearchRouteMetadata{
+			"exact": {
 				Path:        "/seattle/officer",
 				QueryParams: []string{"badge", "first_name", "last_name"},
 			},
-			{
-				Type:        "fuzzy",
+			"fuzzy": {
 				Path:        "/seattle/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
@@ -96,7 +94,7 @@ func (c *Client) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error)
 		`
 			SELECT
 				date,
-				badge_number,
+				badge,
 				full_name,
 				first_name,
 				middle_name,
@@ -104,12 +102,12 @@ func (c *Client) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error)
 				title,
 				unit,
 				unit_description
-			FROM seattle_get_officer_by_badge_p (badge_number := $1);
+			FROM seattle_get_officer_by_badge_p (badge := $1);
 		`,
 		badge,
 	).Scan(
 		&ofc.Date,
-		&ofc.BadgeNumber,
+		&ofc.Badge,
 		&ofc.FullName,
 		&ofc.FirstName,
 		&ofc.MiddleName,
@@ -128,7 +126,7 @@ func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*Seat
 		`
 			SELECT
 				date,
-				badge_number,
+				badge,
 				full_name,
 				first_name,
 				middle_name,
@@ -155,7 +153,7 @@ func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error
 		`
 			SELECT
 				date,
-				badge_number,
+				badge,
 				full_name,
 				first_name,
 				middle_name,
@@ -181,7 +179,7 @@ func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOffi
 		`
 			SELECT
 				date,
-				badge_number,
+				badge,
 				full_name,
 				first_name,
 				middle_name,
@@ -207,7 +205,7 @@ func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOffice
 		`
 			SELECT
 				date,
-				badge_number,
+				badge,
 				full_name,
 				first_name,
 				middle_name,
@@ -233,7 +231,7 @@ func seattleMarshalOfficerRows(rows pgx.Rows) ([]*SeattleOfficer, error) {
 		ofc := SeattleOfficer{}
 		err := rows.Scan(
 			&ofc.Date,
-			&ofc.BadgeNumber,
+			&ofc.Badge,
 			&ofc.FullName,
 			&ofc.FirstName,
 			&ofc.MiddleName,

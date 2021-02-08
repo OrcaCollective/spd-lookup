@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS seattle_officers (
     id                  SERIAL PRIMARY KEY,
     date                DATE,
     full_name		    VARCHAR(100),
-    badge_number        VARCHAR(10),
+    badge        VARCHAR(10),
     first_name          VARCHAR(100),
     middle_name         VARCHAR(100),
     last_name           VARCHAR(100),
@@ -11,15 +11,15 @@ CREATE TABLE IF NOT EXISTS seattle_officers (
     unit_description    VARCHAR(100)
 );
 
-COPY seattle_officers (badge_number,full_name,title,unit,unit_description,first_name,middle_name,last_name,date)
+COPY seattle_officers (badge,full_name,title,unit,unit_description,first_name,middle_name,last_name,date)
 FROM '/seed/SPD_Roster_1-28-21.csv' DELIMITER ',' CSV HEADER;
 
-CREATE OR REPLACE FUNCTION seattle_get_officer_by_badge_p(badge_number VARCHAR(10))
+CREATE OR REPLACE FUNCTION seattle_get_officer_by_badge_p(badge VARCHAR(10))
     RETURNS SETOF seattle_officers AS $$
 BEGIN
     RETURN QUERY SELECT *
     FROM seattle_officers o
-    WHERE o.badge_number = seattle_get_officer_by_badge_p.badge_number;
+    WHERE o.badge = seattle_get_officer_by_badge_p.badge;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'

@@ -59,14 +59,12 @@ func (c *Client) TacomaOfficerMetadata() *DepartmentMetadata {
 		LastAvailableRosterDate: date.Format("2006-01-02"),
 		Name:                    "Tacoma PD",
 		ID:                      "tpd",
-		SearchRoutes: []*SearchRouteMetadata{
-			{
-				Type:        "exact",
+		SearchRoutes: map[string]*SearchRouteMetadata{
+			"exact": {
 				Path:        "/tacoma/officer",
 				QueryParams: []string{"first_name", "last_name"},
 			},
-			{
-				Type:        "fuzzy",
+			"fuzzy": {
 				Path:        "/tacoma/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
