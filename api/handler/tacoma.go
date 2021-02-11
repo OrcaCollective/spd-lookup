@@ -23,7 +23,7 @@ func (h *Handler) TacomaStrictMatch(w http.ResponseWriter, r *http.Request) {
 
 	if badge != "" && firstName == "" && lastName == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("At this time we do not have the badge numbers available for Tacoma PD. Please attempt searches by first or last name only.")))
+		w.Write([]byte("At this time we do not have the badge numbers available for Tacoma PD. Please attempt searches by first or last name only."))
 		return
 	}
 
