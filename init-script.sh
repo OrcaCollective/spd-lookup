@@ -11,26 +11,26 @@ do
   esac
 done
 
-if [ $up = "true" ]
+if [ "$up" = "true" ]
 then
   docker volume rm spd-lookup_db_data
   docker-compose up --build $detached
 fi
 
-if [ $down = "true" ]
+if [ "$down" = "true" ]
 then
   docker-compose down
   docker volume rm spd-lookup_db_data
 fi
 
-if [ $restart = "true" ]
+if [ "$restart" = "true" ]
 then
   docker-compose down
   docker volume rm spd-lookup_db_data
   docker-compose up --build $detached
 fi
 
-if [ $error = "true" ]
+if [ "$error" = "true" ]
 then
   echo "error valid flags are -u, -d, -r"
 fi
