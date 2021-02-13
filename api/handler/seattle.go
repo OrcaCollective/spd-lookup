@@ -29,7 +29,7 @@ func (h *Handler) SeattleStrictMatch(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: badge, first_name, last_name")))
+		w.Write([]byte("at least one of the following parameters must be provided: badge, first_name, last_name"))
 	}
 }
 

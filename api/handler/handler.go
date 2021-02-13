@@ -7,15 +7,27 @@ import (
 	"spd-lookup/api/data"
 )
 
+// Interface describes handler methods
+type Interface interface {
+	Ping(w http.ResponseWriter, r *http.Request)
+	DescribeDepartments(w http.ResponseWriter, r *http.Request)
+	SeattleOfficerMetadata(w http.ResponseWriter, r *http.Request)
+	SeattleStrictMatch(w http.ResponseWriter, r *http.Request)
+	SeattleFuzzySearch(w http.ResponseWriter, r *http.Request)
+	TacomaOfficerMetadata(w http.ResponseWriter, r *http.Request)
+	TacomaStrictMatch(w http.ResponseWriter, r *http.Request)
+	TacomaFuzzySearch(w http.ResponseWriter, r *http.Request)
+}
+
 // Handler is the struct for route handler functions
 type Handler struct {
 	db data.DatabaseInterface
 }
 
 // NewHandler is the constructor for the handler
-func NewHandler() *Handler {
+func NewHandler(db data.DatabaseInterface) *Handler {
 	return &Handler{
-		db: data.NewClient(),
+		db: db,
 	}
 }
 
