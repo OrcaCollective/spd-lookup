@@ -33,7 +33,10 @@ func NewHandler(db data.DatabaseInterface) *Handler {
 
 // Ping pong :^)
 func (h *Handler) Ping(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("🏓 P O N G 🏓"))
+	_, err := w.Write([]byte("🏓 P O N G 🏓"))
+	if err != nil {
+		return
+	}
 }
 
 // DescribeDepartments returns a list of departments and the fields supported for that department
@@ -45,5 +48,8 @@ func (h *Handler) DescribeDepartments(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(departments)
+	err := json.NewEncoder(w).Encode(departments)
+	if err != nil {
+		return
+	}
 }

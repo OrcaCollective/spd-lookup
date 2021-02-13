@@ -14,7 +14,10 @@ import (
 func (h *Handler) SeattleOfficerMetadata(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(h.db.SeattleOfficerMetadata())
+	err := json.NewEncoder(w).Encode(h.db.SeattleOfficerMetadata())
+	if err != nil {
+		return
+	}
 }
 
 // SeattleStrictMatch is the handler function for retrieving SPD officers with a strict match
@@ -29,7 +32,10 @@ func (h *Handler) SeattleStrictMatch(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("at least one of the following parameters must be provided: badge, first_name, last_name"))
+		_, err := w.Write([]byte("at least one of the following parameters must be provided: badge, first_name, last_name"))
+		if err != nil {
+			return
+		}
 	}
 }
 
@@ -40,11 +46,17 @@ func (h *Handler) seattleGetOfficerByBadge(badge string, w http.ResponseWriter) 
 		if err.Error() == "no rows in result set" {
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode([]*data.SeattleOfficer{})
+			err := json.NewEncoder(w).Encode([]*data.SeattleOfficer{})
+			if err != nil {
+				return
+			}
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		_, err := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if err != nil {
+			return
+		}
 		return
 	}
 
