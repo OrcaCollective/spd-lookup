@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func NewRouter(h HandInterface) http.Handler {
+func NewRouter(h HandlerInterface) http.Handler {
 	router := mux.NewRouter()
 	router.HandleFunc("/ping", h.Ping).Methods("GET")
 	router.HandleFunc("/departments", h.DescribeDepartments).Methods("GET")
