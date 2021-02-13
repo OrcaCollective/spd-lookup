@@ -122,8 +122,8 @@ func (h *Handler) SeattleFuzzySearch(w http.ResponseWriter, r *http.Request) {
 		officers, err = h.db.SeattleFuzzySearchByLastName(lastName)
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		_, err := w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name")))
-		if err != nil {
+		_, writerErr := w.Write([]byte("at least one of the following parameters must be provided: first_name, last_name"))
+		if writerErr != nil {
 			return
 		}
 		return
@@ -131,7 +131,7 @@ func (h *Handler) SeattleFuzzySearch(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		writeErr := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		_, writeErr := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
 		if writeErr != nil {
 			return
 		}
@@ -140,5 +140,8 @@ func (h *Handler) SeattleFuzzySearch(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&officers)
+	err = json.NewEncoder(w).Encode(&officers)
+	if err != nil {
+		return
+	}
 }
