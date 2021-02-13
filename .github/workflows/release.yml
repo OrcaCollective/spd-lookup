@@ -36,10 +36,10 @@ jobs:
       -
         name: Build and push DB
         uses: docker/build-push-action@v2
-          with:
-            context: ./db
-            file: ./Dockerfile
-            platforms: linux/amd64
-            push: true
-            tags: |
-              mpuckett259/spd-lookup-db:latest
+        with:
+          context: ./db
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            mpuckett259/spd-lookup-db:latest
