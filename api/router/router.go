@@ -26,7 +26,7 @@ func Start() {
 }
 
 // NewRouter is the router constructor
-func NewRouter(h handler.HandlerInterface) http.Handler {
+func NewRouter(h handler.Interface) http.Handler {
 	router := mux.NewRouter()
 	router.HandleFunc("/ping", h.Ping).Methods("GET")
 	router.HandleFunc("/departments", h.DescribeDepartments).Methods("GET")

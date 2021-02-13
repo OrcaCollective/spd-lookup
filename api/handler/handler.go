@@ -7,8 +7,8 @@ import (
 	"spd-lookup/api/data"
 )
 
-// HandlerInterface describes handler methods
-type HandlerInterface interface {
+// Interface describes handler methods
+type Interface interface {
 	Ping(w http.ResponseWriter, r *http.Request)
 	DescribeDepartments(w http.ResponseWriter, r *http.Request)
 	SeattleOfficerMetadata(w http.ResponseWriter, r *http.Request)
