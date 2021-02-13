@@ -62,7 +62,10 @@ func (h *Handler) seattleGetOfficerByBadge(badge string, w http.ResponseWriter) 
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode([]*data.SeattleOfficer{ofc})
+	err = json.NewEncoder(w).Encode([]*data.SeattleOfficer{ofc})
+	if err != nil {
+		return
+	}
 }
 
 func (h *Handler) seattleGetOfficersByName(firstName, lastName string, w http.ResponseWriter) {
@@ -82,7 +85,10 @@ func (h *Handler) seattleGetOfficersByName(firstName, lastName string, w http.Re
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		_, errWrite := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if errWrite != nil {
+			return
+		}
 		return
 	}
 
@@ -95,7 +101,10 @@ func (h *Handler) seattleGetOfficersByName(firstName, lastName string, w http.Re
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&officers)
+	err = json.NewEncoder(w).Encode(&officers)
+	if err != nil {
+		return
+	}
 }
 
 // SeattleFuzzySearch is the handler function for retrieving SPD officers through fuzzy search
@@ -113,13 +122,19 @@ func (h *Handler) SeattleFuzzySearch(w http.ResponseWriter, r *http.Request) {
 		officers, err = h.db.SeattleFuzzySearchByLastName(lastName)
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name")))
+		_, err := w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name")))
+		if err != nil {
+			return
+		}
 		return
 	}
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		writeErr := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if writeErr != nil {
+			return
+		}
 		return
 	}
 

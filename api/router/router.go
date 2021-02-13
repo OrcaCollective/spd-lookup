@@ -22,7 +22,10 @@ func Start() {
 
 	port := os.Getenv("PORT")
 	fmt.Println("starting server on port", port)
-	http.ListenAndServe(":"+port, router)
+	err := http.ListenAndServe(":"+port, router)
+	if err != nil {
+		return
+	}
 }
 
 // NewRouter is the router constructor
