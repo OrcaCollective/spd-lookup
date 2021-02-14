@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: sdsa/spd-lookup-db:latest
+    build: ./db
     container_name: spd_lookup_db
     restart: always
     environment:
@@ -13,7 +13,7 @@ services:
       - ./seed:/seed
       - db_data:/var/lib/postgresql/data
   api:
-    image: sdsa/spd-lookup-api:latest
+    build: ./api
     container_name: spd_lookup_api
     restart: always
     ports:
