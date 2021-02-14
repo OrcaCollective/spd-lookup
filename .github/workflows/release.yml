@@ -9,22 +9,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      -
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         name: Set up QEMU
-      -
-        uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-qemu-action@v1
         name: Set up Docker Buildx
-      -
-        uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v1
         name: Login to DockerHub
-      -
-        uses: docker/login-action@v1
+      - uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      -
-        name: Build and push API
+      - name: Build and push API
         uses: docker/build-push-action@v2
         with:
           context: ./api
@@ -32,9 +27,8 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            mpuckett259/spd-lookup-api:latest
-      -
-        name: Build and push DB
+            sdsa/spd-lookup-api:latest
+      - name: Build and push DB
         uses: docker/build-push-action@v2
         with:
           context: ./db
@@ -42,4 +36,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            mpuckett259/spd-lookup-db:latest
+            sdsa/spd-lookup-db:latest
