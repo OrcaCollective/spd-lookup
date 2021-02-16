@@ -14,7 +14,10 @@ import (
 func (h *Handler) SeattleOfficerMetadata(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(h.db.SeattleOfficerMetadata())
+	err := json.NewEncoder(w).Encode(h.db.SeattleOfficerMetadata())
+	if err != nil {
+		return
+	}
 }
 
 // SeattleStrictMatch is the handler function for retrieving SPD officers with a strict match
@@ -29,7 +32,10 @@ func (h *Handler) SeattleStrictMatch(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: badge, first_name, last_name")))
+		_, err := w.Write([]byte("at least one of the following parameters must be provided: badge, first_name, last_name"))
+		if err != nil {
+			return
+		}
 	}
 }
 
@@ -40,17 +46,26 @@ func (h *Handler) seattleGetOfficerByBadge(badge string, w http.ResponseWriter) 
 		if err.Error() == "no rows in result set" {
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode([]*data.SeattleOfficer{})
+			err := json.NewEncoder(w).Encode([]*data.SeattleOfficer{})
+			if err != nil {
+				return
+			}
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		_, err := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if err != nil {
+			return
+		}
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode([]*data.SeattleOfficer{ofc})
+	err = json.NewEncoder(w).Encode([]*data.SeattleOfficer{ofc})
+	if err != nil {
+		return
+	}
 }
 
 func (h *Handler) seattleGetOfficersByName(firstName, lastName string, w http.ResponseWriter) {
@@ -70,7 +85,10 @@ func (h *Handler) seattleGetOfficersByName(firstName, lastName string, w http.Re
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		_, errWrite := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if errWrite != nil {
+			return
+		}
 		return
 	}
 
@@ -83,7 +101,10 @@ func (h *Handler) seattleGetOfficersByName(firstName, lastName string, w http.Re
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&officers)
+	err = json.NewEncoder(w).Encode(&officers)
+	if err != nil {
+		return
+	}
 }
 
 // SeattleFuzzySearch is the handler function for retrieving SPD officers through fuzzy search
@@ -101,17 +122,26 @@ func (h *Handler) SeattleFuzzySearch(w http.ResponseWriter, r *http.Request) {
 		officers, err = h.db.SeattleFuzzySearchByLastName(lastName)
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name")))
+		_, writerErr := w.Write([]byte("at least one of the following parameters must be provided: first_name, last_name"))
+		if writerErr != nil {
+			return
+		}
 		return
 	}
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		_, writeErr := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if writeErr != nil {
+			return
+		}
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&officers)
+	err = json.NewEncoder(w).Encode(&officers)
+	if err != nil {
+		return
+	}
 }

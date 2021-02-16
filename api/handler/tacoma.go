@@ -14,7 +14,10 @@ import (
 func (h *Handler) TacomaOfficerMetadata(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(h.db.TacomaOfficerMetadata())
+	err := json.NewEncoder(w).Encode(h.db.TacomaOfficerMetadata())
+	if err != nil {
+		return
+	}
 }
 
 // TacomaStrictMatch is the handler function for retrieving Tacoma officers with a strict match
@@ -23,13 +26,19 @@ func (h *Handler) TacomaStrictMatch(w http.ResponseWriter, r *http.Request) {
 
 	if badge != "" && firstName == "" && lastName == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("At this time we do not have the badge numbers available for Tacoma PD. Please attempt searches by first or last name only.")))
+		_, writerErr := w.Write([]byte("At this time we do not have the badge numbers available for Tacoma PD. Please attempt searches by first or last name only."))
+		if writerErr != nil {
+			return
+		}
 		return
 	}
 
 	if firstName == "" && lastName == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name")))
+		_, writerErr := w.Write([]byte("at least one of the following parameters must be provided: first_name, last_name"))
+		if writerErr != nil {
+			return
+		}
 		return
 	}
 
@@ -49,7 +58,10 @@ func (h *Handler) TacomaStrictMatch(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		_, writerErr := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if writerErr != nil {
+			return
+		}
 		return
 	}
 
@@ -62,7 +74,10 @@ func (h *Handler) TacomaStrictMatch(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&officers)
+	err = json.NewEncoder(w).Encode(&officers)
+	if err != nil {
+		return
+	}
 }
 
 // TacomaFuzzySearch is the handler function for retrieving Tacoma officers through fuzzy search
@@ -80,17 +95,26 @@ func (h *Handler) TacomaFuzzySearch(w http.ResponseWriter, r *http.Request) {
 		officers, err = h.db.TacomaFuzzySearchByLastName(lastName)
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("at least one of the following parameters must be provided: first_name, last_name")))
+		_, writerErr := w.Write([]byte("at least one of the following parameters must be provided: first_name, last_name"))
+		if writerErr != nil {
+			return
+		}
 		return
 	}
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		_, writerErr := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if writerErr != nil {
+			return
+		}
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&officers)
+	err = json.NewEncoder(w).Encode(&officers)
+	if err != nil {
+		return
+	}
 }

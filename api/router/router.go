@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"spd-lookup/api/data"
 	"spd-lookup/api/handler"
 
 	"github.com/gorilla/mux"
@@ -12,8 +13,23 @@ import (
 
 // Start starts up the router
 func Start() {
-	h := handler.NewHandler()
+	router := NewRouter(handler.NewHandler(data.NewClient(
+		os.Getenv("DB_USERNAME"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_NAME"),
+	)))
 
+	port := os.Getenv("PORT")
+	fmt.Println("starting server on port", port)
+	err := http.ListenAndServe(":"+port, router)
+	if err != nil {
+		return
+	}
+}
+
+// NewRouter is the router constructor
+func NewRouter(h handler.Interface) http.Handler {
 	router := mux.NewRouter()
 	router.HandleFunc("/ping", h.Ping).Methods("GET")
 	router.HandleFunc("/departments", h.DescribeDepartments).Methods("GET")
@@ -25,8 +41,5 @@ func Start() {
 	router.HandleFunc("/tacoma/metadata", h.TacomaOfficerMetadata).Methods("GET")
 	router.HandleFunc("/tacoma/officer", h.TacomaStrictMatch).Methods("GET")
 	router.HandleFunc("/tacoma/officer/search", h.TacomaFuzzySearch).Methods("GET")
-
-	port := os.Getenv("PORT")
-	fmt.Println("starting server on port", port)
-	http.ListenAndServe(":"+port, router)
+	return router
 }
