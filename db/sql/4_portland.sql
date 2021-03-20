@@ -1,51 +1,150 @@
 CREATE TABLE IF NOT EXISTS portland_officers (
-    id                          SERIAL PRIMARY KEY,
-    first_name                  VARCHAR(100),
-    last_name                   VARCHAR(100),
-    gender                      VARCHAR(15),
-    rank                        VARCHAR(50),
-    employee_id                 VARCHAR(20),
-    helmet_id                   VARCHAR(10),
-    helmet_id_three_digit       VARCHAR(10),
-    salary                      VARCHAR(50),
-    
-Empl w PPB 3/12/21  ||3||
-Empl w PPB 12/28/20  ||3||
-Empl w PPB October 2020?  ||3||
-Retired/Resigned Since 6/1/2020  ||3||
-Retired/Resigned Since 6/1/2020? OR Cert Revoked [Ever]  ||10||
-If Yes, Date  ||8||
-HIre Year  ||6||
-Hire date  ||10||
-State Cert Date  ||10||
-SupervisoryAdvancedIntermedBasic  ||12||
-Employee  (Chest) ID  ||9||
-Helmet #  ||4||
-3-Dig Helmet #  ||3||
-Rank  ||8||
-First Name  ||13||
-Last Name  ||15||
-M/F  ||3||
-Badge/DPSST Number  ||7||
-Pic on Cops.photo(y/n)  ||3||
-RRT(y/n)  ||6||
-2016 RRT per 2017 PPB AR  ||3||
-2018 Jeff Niiya Email cc RRT  ||3||
-2018RRT Specific Training  ||3||
-2019RRT Specific Training  ||3||
-2020RRT Specific Training  ||3||
-2020 Sound Truck Training  ||3||
-Has Instructed Course for DPSST 2017+  ||3||
-Instructor for Less Lethal/Chem Weapons Courses  ||3||
-Cops.Photo Profile Link  ||31||
-Has Been Involved in OIS/ Significant UoF Incident  ||3||
-Notes  ||498||
-Fiscal 2019 Earnings  ||14||
+    id                              SERIAL PRIMARY KEY,
+    first_name                      VARCHAR(100),
+    last_name                       VARCHAR(100),
+    gender                          VARCHAR(15),
+    officer_rank                    VARCHAR(50),
+    employee_id                     VARCHAR(20),
+    helmet_id                       VARCHAR(10),
+    helmet_id_three_digit           VARCHAR(10),
+    salary                          VARCHAR(50),
+    badge                           VARCHAR(20),
+    cops_photo_profile_link         VARCHAR(100),
+    cops_photo_has_photo            VARCHAR(10),
+    employed_3_12_21                VARCHAR(10),
+    employed_12_28_20               VARCHAR(10),
+    employed_10_01_20               VARCHAR(10),
+    retired_6_1_20                  VARCHAR(10),
+    retired_or_cert_revoked         VARCHAR(20),
+    retired_or_cert_revoked_date    VARCHAR(20),
+    hire_year                       VARCHAR(10),
+    hire_date                       VARCHAR(20),
+    state_cert_date                 VARCHAR(20),
+    state_cert_level                VARCHAR(20),
+    rrt                             VARCHAR(10),
+    rrt_2016                        VARCHAR(10),
+    rrt_2018_niiya_email            VARCHAR(10),
+    rrt_2018                        VARCHAR(10),
+    rrt_2019                        VARCHAR(10),
+    rrt_2020                        VARCHAR(10),
+    sound_truck_training_2020       VARCHAR(10),
+    instructed_for_dpsst            VARCHAR(10),
+    instructed_for_less_lethal      VARCHAR(10),
+    involved_in_ois_uof             VARCHAR(10),
+    notes                           VARCHAR(1000)
 );
 
-COPY portland_officers (last_name,first_name,title,department,salary,date)
+COPY portland_officers (
+    employed_3_12_21,
+    employed_12_28_20,
+    employed_10_01_20,
+    retired_6_1_20,
+    retired_or_cert_revoked,
+    retired_or_cert_revoked_date,
+    hire_year,
+    hire_date,
+    state_cert_date,
+    state_cert_level,
+    employee_id,
+    helmet_id,
+    helmet_id_three_digit,
+    officer_rank,
+    first_name,
+    last_name,
+    gender,
+    badge,
+    cops_photo_has_photo,
+    rrt,
+    rrt_2016,
+    rrt_2018_niiya_email,
+    rrt_2018,
+    rrt_2019,
+    rrt_2020,
+    sound_truck_training_2020,
+    instructed_for_dpsst,
+    instructed_for_less_lethal,
+    cops_photo_profile_link,
+    involved_in_ois_uof,
+    notes,
+    salary
+)
 FROM '/seed/TPD_Roster_1-24-21.csv' DELIMITER ',' CSV HEADER;
 
+--------------------------------------------------------------------------------
+-- Strict search
+--------------------------------------------------------------------------------
+
+-- Badge
+CREATE OR REPLACE FUNCTION portland_get_officer_by_badge_p(badge VARCHAR(10))
+    RETURNS SETOF portland_officers AS $$
+BEGIN
+    RETURN QUERY SELECT *
+    FROM portland_officers o
+    WHERE o.badge = portland_get_officer_by_badge_p.badge;
+    RETURN;
+END; $$
+LANGUAGE 'plpgsql'
+SECURITY DEFINER
+SET search_path =public, pg_temp;
+
+
+-- Employee ID
+CREATE OR REPLACE FUNCTION portland_get_officer_by_employee_p(employee_id VARCHAR(20))
+    RETURNS SETOF portland_officers AS $$
+BEGIN
+    RETURN QUERY SELECT *
+    FROM portland_officers o
+    WHERE o.employee_id = portland_get_officer_by_badge_p.employee_id;
+    RETURN;
+END; $$
+LANGUAGE 'plpgsql'
+SECURITY DEFINER
+SET search_path =public, pg_temp;
+
+
+-- Badge number
+CREATE OR REPLACE FUNCTION portland_get_officer_by_badge_p(badge VARCHAR(20))
+    RETURNS SETOF portland_officers AS $$
+BEGIN
+    RETURN QUERY SELECT *
+    FROM portland_officers o
+    WHERE o.badge = portland_get_officer_by_badge_p.badge;
+    RETURN;
+END; $$
+LANGUAGE 'plpgsql'
+SECURITY DEFINER
+SET search_path =public, pg_temp;
+
+
+-- Helmet ID
+CREATE OR REPLACE FUNCTION portland_get_officer_by_helmet_p(helmet_id VARCHAR(10))
+    RETURNS SETOF portland_officers AS $$
+BEGIN
+    RETURN QUERY SELECT *
+    FROM portland_officers o
+    WHERE o.helmet_id = portland_get_officer_by_badge_p.helmet_id;
+    RETURN;
+END; $$
+LANGUAGE 'plpgsql'
+SECURITY DEFINER
+SET search_path =public, pg_temp;
+
+
+-- Helmet ID 3 digit
+CREATE OR REPLACE FUNCTION portland_get_officer_by_helmet__three_digit_p(helmet_id_three_digit VARCHAR(10))
+    RETURNS SETOF portland_officers AS $$
+BEGIN
+    RETURN QUERY SELECT *
+    FROM portland_officers o
+    WHERE o.helmet_id_three_digit = portland_get_officer_by_badge_p.helmet_id_three_digit;
+    RETURN;
+END; $$
+LANGUAGE 'plpgsql'
+SECURITY DEFINER
+SET search_path =public, pg_temp;
+
+
+-- Name
 CREATE OR REPLACE FUNCTION portland_search_officer_by_name_p(
     first_name  VARCHAR(100),
     last_name   VARCHAR(100)
@@ -63,6 +162,11 @@ SECURITY DEFINER
 SET search_path =public, pg_temp;
 
 
+--------------------------------------------------------------------------------
+-- Fuzzy search
+--------------------------------------------------------------------------------
+
+-- First name
 CREATE OR REPLACE FUNCTION portland_fuzzy_search_officer_by_first_name_p(first_name  VARCHAR(100))
     RETURNS SETOF portland_officers AS $$
 BEGIN
@@ -77,6 +181,7 @@ SECURITY DEFINER
 SET search_path =public, pg_temp;
 
 
+-- Last name
 CREATE OR REPLACE FUNCTION portland_fuzzy_search_officer_by_last_name_p(last_name  VARCHAR(100))
     RETURNS SETOF portland_officers AS $$
 BEGIN
@@ -91,13 +196,14 @@ SECURITY DEFINER
 SET search_path =public, pg_temp;
 
 
-CREATE OR REPLACE FUNCTION portland_fuzzy_search_officer_by_name_p(full_name  VARCHAR(100))
+-- Full name
+CREATE OR REPLACE FUNCTION portland_fuzzy_search_officer_by_name_p(full_name_v  VARCHAR(100))
     RETURNS SETOF portland_officers AS $$
 BEGIN
     RETURN QUERY SELECT *
     FROM portland_officers o
-    WHERE LOWER(o.first_name || ' ' || o.last_name) % LOWER(portland_fuzzy_search_officer_by_name_p.full_name)
-    ORDER BY SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER(portland_fuzzy_search_officer_by_name_p.full_name)) DESC;
+    WHERE LOWER(o.first_name || ' ' || o.last_name) % LOWER(portland_fuzzy_search_officer_by_name_p.full_name_v)
+    ORDER BY SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER(portland_fuzzy_search_officer_by_name_p.full_name_v)) DESC;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
