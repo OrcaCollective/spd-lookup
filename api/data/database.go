@@ -37,6 +37,16 @@ type DatabaseInterface interface {
 	TacomaFuzzySearchByName(name string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByFirstName(firstName string) ([]*TacomaOfficer, error)
 	TacomaFuzzySearchByLastName(lastName string) ([]*TacomaOfficer, error)
+
+	PortlandOfficerMetadata() *DepartmentMetadata
+	PortlandSearchOfficersByBadge(badge string) ([]*PortlandOfficer, error)
+	PortlandSearchOfficersByEmployeeId(employee_id string) ([]*PortlandOfficer, error)
+	PortlandSearchOfficersByHelmetId(helmet_id string) ([]*PortlandOfficer, error)
+	PortlandSearchOfficersByHelmetIdThreeDigit(helmet_id_three_digit string) ([]*PortlandOfficer, error)
+	PortlandSearchOfficersByName(firstName, lastName string) ([]*PortlandOfficer, error)
+	PortlandFuzzySearchByName(name string) ([]*PortlandOfficer, error)
+	PortlandFuzzySearchByFirstName(firstName string) ([]*PortlandOfficer, error)
+	PortlandFuzzySearchByLastName(lastName string) ([]*PortlandOfficer, error)
 }
 
 // Client is the client used to connect to the db

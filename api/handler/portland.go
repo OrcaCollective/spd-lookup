@@ -23,23 +23,23 @@ func (h *Handler) PortlandOfficerMetadata(w http.ResponseWriter, r *http.Request
 // PortlandStrictMatch is the handler function for retrieving SPD officers with a strict match
 func (h *Handler) PortlandStrictMatch(w http.ResponseWriter, r *http.Request) {
     badge := r.URL.Query().Get("badge")
-    first_name := r.URL.Query().Get("first_name")
-    last_name := r.URL.Query().Get("last_name")
-    employee_id := r.URL.Query().Get("employee_id")
-    helmet_id := r.URL.Query().Get("helmet_id")
-    helmet_id_three_digit := r.URL.Query().Get("helmet_id_three_digit")
+    firstName := r.URL.Query().Get("first_name")
+    lastName := r.URL.Query().Get("last_name")
+    employeeId := r.URL.Query().Get("employee_id")
+    helmetId := r.URL.Query().Get("helmet_id")
+    helmetIdThreeDigit := r.URL.Query().Get("helmet_id_three_digit")
 
 	if badge != "" {
 		h.portlandGetOfficersByBadge(badge, w)
 		return
-    } else if employee_id != "" {
-		h.portlandGetOfficersByEmployeeId(employee_id, w)
+    } else if employeeId != "" {
+		h.portlandGetOfficersByEmployeeId(employeeId, w)
 		return
-    } else if helmet_id != "" {
-		h.portlandGetOfficersByHelmetId(helmet_id, w)
+    } else if helmetId != "" {
+		h.portlandGetOfficersByHelmetId(helmetId, w)
 		return
-    } else if helmet_id_three_digit != "" {
-		h.portlandGetOfficersByHelmetIdThreeDigit(helmet_id_three_digit, w)
+    } else if helmetIdThreeDigit != "" {
+		h.portlandGetOfficersByHelmetIdThreeDigit(helmetIdThreeDigit, w)
 		return
 	} else if firstName != "" || lastName != "" {
 		h.portlandGetOfficersByName(firstName, lastName, w)
@@ -89,8 +89,8 @@ func (h *Handler) portlandGetOfficersByBadge(badge string, w http.ResponseWriter
 	}
 }
 
-func (h *Handler) portlandGetOfficersByEmployeeId(employee_id string, w http.ResponseWriter) {
-	officers, err := h.db.PortlandSearchOfficersByEmployeeId(employee_id)
+func (h *Handler) portlandGetOfficersByEmployeeId(employeeId string, w http.ResponseWriter) {
+	officers, err := h.db.PortlandSearchOfficersByEmployeeId(employeeId)
 
 	if err != nil {
 		if err.Error() == "no rows in result set" {
@@ -126,8 +126,8 @@ func (h *Handler) portlandGetOfficersByEmployeeId(employee_id string, w http.Res
 	}
 }
 
-func (h *Handler) portlandGetOfficersByHelmetId(helmet_id string, w http.ResponseWriter) {
-	officers, err := h.db.PortlandSearchOfficersByHelmetId(helmet_id)
+func (h *Handler) portlandGetOfficersByHelmetId(helmetId string, w http.ResponseWriter) {
+	officers, err := h.db.PortlandSearchOfficersByHelmetId(helmetId)
 
 	if err != nil {
 		if err.Error() == "no rows in result set" {
@@ -163,8 +163,8 @@ func (h *Handler) portlandGetOfficersByHelmetId(helmet_id string, w http.Respons
 	}
 }
 
-func (h *Handler) portlandGetOfficersByHelmetIdThreeDigit(helmet_id_three_digit string, w http.ResponseWriter) {
-	officers, err := h.db.PortlandSearchOfficersByHelmetIdThreeDigit(helmet_id_three_digit)
+func (h *Handler) portlandGetOfficersByHelmetIdThreeDigit(helmetIdThreeDigit string, w http.ResponseWriter) {
+	officers, err := h.db.PortlandSearchOfficersByHelmetIdThreeDigit(helmetIdThreeDigit)
 
 	if err != nil {
 		if err.Error() == "no rows in result set" {

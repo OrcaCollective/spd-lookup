@@ -2,8 +2,6 @@ package data
 
 import (
 	"context"
-	"fmt"
-	"time"
 
 	"github.com/gobuffalo/nulls"
 	"github.com/jackc/pgx/v4"
@@ -11,8 +9,8 @@ import (
 
 // PortlandOfficer is the object model for PPB officers
 type PortlandOfficer struct {
-	FirstName                   nulls.String    `json:"first_name,omitempty"`
-	LastName                    nulls.String    `json:"last_name,omitempty"`
+	FirstName                   string          `json:"first_name,omitempty"`
+	LastName                    string          `json:"last_name,omitempty"`
 	Gender                      nulls.String    `json:"gender,omitempty"`
 	OfficerRank                 nulls.String    `json:"officer_rank,omitempty"`
 	EmployeeID                  nulls.String    `json:"employee_id,omitempty"`
@@ -179,7 +177,7 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
             },
 		},
 		LastAvailableRosterDate: "2021-03-12",
-		Name:                    "Portland PD",
+		Name:                    "Portland PB",
 		ID:                      "ppb",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
@@ -196,9 +194,41 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 
 // PortlandSearchOfficersByBadge invokes portland_search_officer_by_badge_p
 func (c *Client) PortlandSearchOfficersByBadge(badge string) ([]*PortlandOfficer, error) {
-	rows, err := c.pool.QueryRow(context.Background(),
+	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT *
+			SELECT
+                first_name,
+                last_name,
+                gender,
+                officer_rank,
+                employee_id,
+                helmet_id,
+                helmet_id_three_digit,
+                salary,
+                badge,
+                cops_photo_profile_link,
+                cops_photo_has_photo,
+                employed_3_12_21,
+                employed_12_28_20,
+                employed_10_01_20,
+                retired_6_1_20,
+                retired_or_cert_revoked,
+                retired_or_cert_revoked_date,
+                hire_year,
+                hire_date,
+                state_cert_date,
+                state_cert_level,
+                rrt,
+                rrt_2016,
+                rrt_2018_niiya_email,
+                rrt_2018,
+                rrt_2019,
+                rrt_2020,
+                sound_truck_training_2020,
+                instructed_for_dpsst,
+                instructed_for_less_lethal,
+                involved_in_ois_uof,
+                notes
 			FROM portland_search_officer_by_badge_p (badge := $1);
 		`,
 		badge,
@@ -210,12 +240,45 @@ func (c *Client) PortlandSearchOfficersByBadge(badge string) ([]*PortlandOfficer
 	defer rows.Close()
 
 	return portlandMarshalOfficerRows(rows)
+}
 
 // PortlandGetOfficerByEmployeeId invokes portland_search_officer_by_employee_p
 func (c *Client) PortlandSearchOfficersByEmployeeId(employee_id string) ([]*PortlandOfficer, error) {
-	rows, err := c.pool.QueryRow(context.Background(),
+	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT *
+			SELECT
+                first_name,
+                last_name,
+                gender,
+                officer_rank,
+                employee_id,
+                helmet_id,
+                helmet_id_three_digit,
+                salary,
+                badge,
+                cops_photo_profile_link,
+                cops_photo_has_photo,
+                employed_3_12_21,
+                employed_12_28_20,
+                employed_10_01_20,
+                retired_6_1_20,
+                retired_or_cert_revoked,
+                retired_or_cert_revoked_date,
+                hire_year,
+                hire_date,
+                state_cert_date,
+                state_cert_level,
+                rrt,
+                rrt_2016,
+                rrt_2018_niiya_email,
+                rrt_2018,
+                rrt_2019,
+                rrt_2020,
+                sound_truck_training_2020,
+                instructed_for_dpsst,
+                instructed_for_less_lethal,
+                involved_in_ois_uof,
+                notes
 			FROM portland_search_officer_by_employee_p (employee_id := $1);
 		`,
 		employee_id,
@@ -227,12 +290,45 @@ func (c *Client) PortlandSearchOfficersByEmployeeId(employee_id string) ([]*Port
 	defer rows.Close()
 
 	return portlandMarshalOfficerRows(rows)
+}
 
 // PortlandGetOfficerByHelmetId invokes portland_search_officer_by_helmet_p
 func (c *Client) PortlandSearchOfficersByHelmetId(helmet_id string) ([]*PortlandOfficer, error) {
-	rows, err := c.pool.QueryRow(context.Background(),
+	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT *
+			SELECT
+                first_name,
+                last_name,
+                gender,
+                officer_rank,
+                employee_id,
+                helmet_id,
+                helmet_id_three_digit,
+                salary,
+                badge,
+                cops_photo_profile_link,
+                cops_photo_has_photo,
+                employed_3_12_21,
+                employed_12_28_20,
+                employed_10_01_20,
+                retired_6_1_20,
+                retired_or_cert_revoked,
+                retired_or_cert_revoked_date,
+                hire_year,
+                hire_date,
+                state_cert_date,
+                state_cert_level,
+                rrt,
+                rrt_2016,
+                rrt_2018_niiya_email,
+                rrt_2018,
+                rrt_2019,
+                rrt_2020,
+                sound_truck_training_2020,
+                instructed_for_dpsst,
+                instructed_for_less_lethal,
+                involved_in_ois_uof,
+                notes
 			FROM portland_search_officer_by_helmet_p (helmet_id := $1);
 		`,
 		helmet_id,
@@ -244,12 +340,45 @@ func (c *Client) PortlandSearchOfficersByHelmetId(helmet_id string) ([]*Portland
 	defer rows.Close()
 
 	return portlandMarshalOfficerRows(rows)
+}
 
 // PortlandGetOfficerByHelmetIdThreeDigit invokes portland_search_officer_by_helmet_p
 func (c *Client) PortlandSearchOfficersByHelmetIdThreeDigit(helmet_id_three_digit string) ([]*PortlandOfficer, error) {
-	rows, err := c.pool.QueryRow(context.Background(),
+	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT *
+			SELECT
+                first_name,
+                last_name,
+                gender,
+                officer_rank,
+                employee_id,
+                helmet_id,
+                helmet_id_three_digit,
+                salary,
+                badge,
+                cops_photo_profile_link,
+                cops_photo_has_photo,
+                employed_3_12_21,
+                employed_12_28_20,
+                employed_10_01_20,
+                retired_6_1_20,
+                retired_or_cert_revoked,
+                retired_or_cert_revoked_date,
+                hire_year,
+                hire_date,
+                state_cert_date,
+                state_cert_level,
+                rrt,
+                rrt_2016,
+                rrt_2018_niiya_email,
+                rrt_2018,
+                rrt_2019,
+                rrt_2020,
+                sound_truck_training_2020,
+                instructed_for_dpsst,
+                instructed_for_less_lethal,
+                involved_in_ois_uof,
+                notes
 			FROM portland_search_officer_by_helmet_three_digit_p (helmet_id_three_digit := $1);
 		`,
 		helmet_id_three_digit,
@@ -261,12 +390,45 @@ func (c *Client) PortlandSearchOfficersByHelmetIdThreeDigit(helmet_id_three_digi
 	defer rows.Close()
 
 	return portlandMarshalOfficerRows(rows)
+}
 
 // PortlandSearchOfficerByName invokes portland_search_officer_by_name_p
 func (c *Client) PortlandSearchOfficersByName(firstName, lastName string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT *
+			SELECT
+                first_name,
+                last_name,
+                gender,
+                officer_rank,
+                employee_id,
+                helmet_id,
+                helmet_id_three_digit,
+                salary,
+                badge,
+                cops_photo_profile_link,
+                cops_photo_has_photo,
+                employed_3_12_21,
+                employed_12_28_20,
+                employed_10_01_20,
+                retired_6_1_20,
+                retired_or_cert_revoked,
+                retired_or_cert_revoked_date,
+                hire_year,
+                hire_date,
+                state_cert_date,
+                state_cert_level,
+                rrt,
+                rrt_2016,
+                rrt_2018_niiya_email,
+                rrt_2018,
+                rrt_2019,
+                rrt_2020,
+                sound_truck_training_2020,
+                instructed_for_dpsst,
+                instructed_for_less_lethal,
+                involved_in_ois_uof,
+                notes
 			FROM portland_search_officer_by_name_p(first_name := $1, last_name := $2);
 		`,
 		firstName,
@@ -284,7 +446,39 @@ func (c *Client) PortlandSearchOfficersByName(firstName, lastName string) ([]*Po
 func (c *Client) PortlandFuzzySearchByName(name string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT *
+			SELECT
+                first_name,
+                last_name,
+                gender,
+                officer_rank,
+                employee_id,
+                helmet_id,
+                helmet_id_three_digit,
+                salary,
+                badge,
+                cops_photo_profile_link,
+                cops_photo_has_photo,
+                employed_3_12_21,
+                employed_12_28_20,
+                employed_10_01_20,
+                retired_6_1_20,
+                retired_or_cert_revoked,
+                retired_or_cert_revoked_date,
+                hire_year,
+                hire_date,
+                state_cert_date,
+                state_cert_level,
+                rrt,
+                rrt_2016,
+                rrt_2018_niiya_email,
+                rrt_2018,
+                rrt_2019,
+                rrt_2020,
+                sound_truck_training_2020,
+                instructed_for_dpsst,
+                instructed_for_less_lethal,
+                involved_in_ois_uof,
+                notes
 			FROM portland_fuzzy_search_officer_by_name_p(full_name_v := $1);
 		`,
 		name,
@@ -301,7 +495,39 @@ func (c *Client) PortlandFuzzySearchByName(name string) ([]*PortlandOfficer, err
 func (c *Client) PortlandFuzzySearchByFirstName(firstName string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT *
+			SELECT
+                first_name,
+                last_name,
+                gender,
+                officer_rank,
+                employee_id,
+                helmet_id,
+                helmet_id_three_digit,
+                salary,
+                badge,
+                cops_photo_profile_link,
+                cops_photo_has_photo,
+                employed_3_12_21,
+                employed_12_28_20,
+                employed_10_01_20,
+                retired_6_1_20,
+                retired_or_cert_revoked,
+                retired_or_cert_revoked_date,
+                hire_year,
+                hire_date,
+                state_cert_date,
+                state_cert_level,
+                rrt,
+                rrt_2016,
+                rrt_2018_niiya_email,
+                rrt_2018,
+                rrt_2019,
+                rrt_2020,
+                sound_truck_training_2020,
+                instructed_for_dpsst,
+                instructed_for_less_lethal,
+                involved_in_ois_uof,
+                notes
 			FROM portland_fuzzy_search_officer_by_first_name_p(first_name := $1);
 		`,
 		firstName,
@@ -318,7 +544,39 @@ func (c *Client) PortlandFuzzySearchByFirstName(firstName string) ([]*PortlandOf
 func (c *Client) PortlandFuzzySearchByLastName(lastName string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT *
+			SELECT
+                first_name,
+                last_name,
+                gender,
+                officer_rank,
+                employee_id,
+                helmet_id,
+                helmet_id_three_digit,
+                salary,
+                badge,
+                cops_photo_profile_link,
+                cops_photo_has_photo,
+                employed_3_12_21,
+                employed_12_28_20,
+                employed_10_01_20,
+                retired_6_1_20,
+                retired_or_cert_revoked,
+                retired_or_cert_revoked_date,
+                hire_year,
+                hire_date,
+                state_cert_date,
+                state_cert_level,
+                rrt,
+                rrt_2016,
+                rrt_2018_niiya_email,
+                rrt_2018,
+                rrt_2019,
+                rrt_2020,
+                sound_truck_training_2020,
+                instructed_for_dpsst,
+                instructed_for_less_lethal,
+                involved_in_ois_uof,
+                notes
 			FROM portland_fuzzy_search_officer_by_last_name_p(last_name := $1);
 		`,
 		lastName,
@@ -336,38 +594,38 @@ func portlandMarshalOfficerRows(rows pgx.Rows) ([]*PortlandOfficer, error) {
 	for rows.Next() {
 		ofc := PortlandOfficer{}
 		err := rows.Scan(
-            &ofc.FirstName
-            &ofc.LastName
-            &ofc.Gender
-            &ofc.OfficerRank
-            &ofc.EmployeeID
-            &ofc.HelmetID
-            &ofc.HelmetIDThreeDigit
-            &ofc.Salary
-            &ofc.Badge
-            &ofc.CopsPhotoProfileLink
-            &ofc.CopsPhotoHasPhoto
-            &ofc.Employed_3_12_21
-            &ofc.Employed_12_28_20
-            &ofc.Employed_10_01_20
-            &ofc.Retired_6_1_20
-            &ofc.RetiredOrCertRevoked
-            &ofc.RetiredOrCertRevokedDate
-            &ofc.HireYear
-            &ofc.HireDate
-            &ofc.StateCertDate
-            &ofc.StateCertLevel
-            &ofc.RRT
-            &ofc.RRT2016
-            &ofc.RRT2018NiiyaEmail
-            &ofc.RRT2018
-            &ofc.RRT2019
-            &ofc.RRT2020
-            &ofc.SoundTruckTraining
-            &ofc.InstructedForDpsst
-            &ofc.InstructedForLessLethal
-            &ofc.InvolvedInOisUof
-            &ofc.Notes
+            &ofc.FirstName,
+            &ofc.LastName,
+            &ofc.Gender,
+            &ofc.OfficerRank,
+            &ofc.EmployeeID,
+            &ofc.HelmetID,
+            &ofc.HelmetIDThreeDigit,
+            &ofc.Salary,
+            &ofc.Badge,
+            &ofc.CopsPhotoProfileLink,
+            &ofc.CopsPhotoHasPhoto,
+            &ofc.Employed_3_12_21,
+            &ofc.Employed_12_28_20,
+            &ofc.Employed_10_01_20,
+            &ofc.Retired_6_1_20,
+            &ofc.RetiredOrCertRevoked,
+            &ofc.RetiredOrCertRevokedDate,
+            &ofc.HireYear,
+            &ofc.HireDate,
+            &ofc.StateCertDate,
+            &ofc.StateCertLevel,
+            &ofc.RRT,
+            &ofc.RRT2016,
+            &ofc.RRT2018NiiyaEmail,
+            &ofc.RRT2018,
+            &ofc.RRT2019,
+            &ofc.RRT2020,
+            &ofc.SoundTruckTraining,
+            &ofc.InstructedForDpsst,
+            &ofc.InstructedForLessLethal,
+            &ofc.InvolvedInOisUof,
+            &ofc.Notes,
 		)
 
 		if err != nil {
