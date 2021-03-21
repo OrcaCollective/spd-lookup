@@ -17,6 +17,9 @@ type Interface interface {
 	TacomaOfficerMetadata(w http.ResponseWriter, r *http.Request)
 	TacomaStrictMatch(w http.ResponseWriter, r *http.Request)
 	TacomaFuzzySearch(w http.ResponseWriter, r *http.Request)
+	PortlandOfficerMetadata(w http.ResponseWriter, r *http.Request)
+	PortlandStrictMatch(w http.ResponseWriter, r *http.Request)
+	PortlandFuzzySearch(w http.ResponseWriter, r *http.Request)
 }
 
 // Handler is the struct for route handler functions
@@ -44,6 +47,7 @@ func (h *Handler) DescribeDepartments(w http.ResponseWriter, r *http.Request) {
 	departments := []*data.DepartmentMetadata{
 		h.db.SeattleOfficerMetadata(),
 		h.db.TacomaOfficerMetadata(),
+		h.db.PortlandOfficerMetadata(),
 	}
 
 	w.WriteHeader(http.StatusOK)

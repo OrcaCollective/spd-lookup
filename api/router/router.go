@@ -41,5 +41,9 @@ func NewRouter(h handler.Interface) http.Handler {
 	router.HandleFunc("/tacoma/metadata", h.TacomaOfficerMetadata).Methods("GET")
 	router.HandleFunc("/tacoma/officer", h.TacomaStrictMatch).Methods("GET")
 	router.HandleFunc("/tacoma/officer/search", h.TacomaFuzzySearch).Methods("GET")
+
+	router.HandleFunc("/portland/metadata", h.PortlandOfficerMetadata).Methods("GET")
+	router.HandleFunc("/portland/officer", h.PortlandStrictMatch).Methods("GET")
+	router.HandleFunc("/portland/officer/search", h.PortlandFuzzySearch).Methods("GET")
 	return router
 }
