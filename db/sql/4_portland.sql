@@ -75,12 +75,12 @@ FROM '/seed/TPD_Roster_1-24-21.csv' DELIMITER ',' CSV HEADER;
 --------------------------------------------------------------------------------
 
 -- Badge
-CREATE OR REPLACE FUNCTION portland_get_officer_by_badge_p(badge VARCHAR(10))
+CREATE OR REPLACE FUNCTION portland_search_officer_by_badge_p(badge VARCHAR(10))
     RETURNS SETOF portland_officers AS $$
 BEGIN
     RETURN QUERY SELECT *
     FROM portland_officers o
-    WHERE o.badge = portland_get_officer_by_badge_p.badge;
+    WHERE o.badge = portland_search_officer_by_badge_p.badge;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
@@ -89,26 +89,12 @@ SET search_path =public, pg_temp;
 
 
 -- Employee ID
-CREATE OR REPLACE FUNCTION portland_get_officer_by_employee_p(employee_id VARCHAR(20))
+CREATE OR REPLACE FUNCTION portland_search_officer_by_employee_p(employee_id VARCHAR(20))
     RETURNS SETOF portland_officers AS $$
 BEGIN
     RETURN QUERY SELECT *
     FROM portland_officers o
-    WHERE o.employee_id = portland_get_officer_by_badge_p.employee_id;
-    RETURN;
-END; $$
-LANGUAGE 'plpgsql'
-SECURITY DEFINER
-SET search_path =public, pg_temp;
-
-
--- Badge number
-CREATE OR REPLACE FUNCTION portland_get_officer_by_badge_p(badge VARCHAR(20))
-    RETURNS SETOF portland_officers AS $$
-BEGIN
-    RETURN QUERY SELECT *
-    FROM portland_officers o
-    WHERE o.badge = portland_get_officer_by_badge_p.badge;
+    WHERE o.employee_id = portland_search_officer_by_employee_p.employee_id;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
@@ -117,12 +103,12 @@ SET search_path =public, pg_temp;
 
 
 -- Helmet ID
-CREATE OR REPLACE FUNCTION portland_get_officer_by_helmet_p(helmet_id VARCHAR(10))
+CREATE OR REPLACE FUNCTION portland_search_officer_by_helmet_p(helmet_id VARCHAR(10))
     RETURNS SETOF portland_officers AS $$
 BEGIN
     RETURN QUERY SELECT *
     FROM portland_officers o
-    WHERE o.helmet_id = portland_get_officer_by_badge_p.helmet_id;
+    WHERE o.helmet_id = portland_search_officer_by_helmet_p.helmet_id;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
@@ -131,12 +117,12 @@ SET search_path =public, pg_temp;
 
 
 -- Helmet ID 3 digit
-CREATE OR REPLACE FUNCTION portland_get_officer_by_helmet__three_digit_p(helmet_id_three_digit VARCHAR(10))
+CREATE OR REPLACE FUNCTION portland_search_officer_by_helmet_three_digit_p(helmet_id_three_digit VARCHAR(10))
     RETURNS SETOF portland_officers AS $$
 BEGIN
     RETURN QUERY SELECT *
     FROM portland_officers o
-    WHERE o.helmet_id_three_digit = portland_get_officer_by_badge_p.helmet_id_three_digit;
+    WHERE o.helmet_id_three_digit = portland_search_officer_by_helmet_three_digit_p.helmet_id_three_digit;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
@@ -189,21 +175,6 @@ BEGIN
     FROM portland_officers o
     WHERE LOWER(o.last_name) % LOWER(portland_fuzzy_search_officer_by_last_name_p.last_name)
     ORDER BY SIMILARITY(LOWER(o.last_name), LOWER(portland_fuzzy_search_officer_by_last_name_p.last_name)) DESC;
-    RETURN;
-END; $$
-LANGUAGE 'plpgsql'
-SECURITY DEFINER
-SET search_path =public, pg_temp;
-
-
--- Full name
-CREATE OR REPLACE FUNCTION portland_fuzzy_search_officer_by_name_p(full_name_v  VARCHAR(100))
-    RETURNS SETOF portland_officers AS $$
-BEGIN
-    RETURN QUERY SELECT *
-    FROM portland_officers o
-    WHERE LOWER(o.first_name || ' ' || o.last_name) % LOWER(portland_fuzzy_search_officer_by_name_p.full_name_v)
-    ORDER BY SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER(portland_fuzzy_search_officer_by_name_p.full_name_v)) DESC;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
