@@ -17,7 +17,7 @@ type PortlandOfficer struct {
 	OfficerRank                 nulls.String    `json:"officer_rank,omitempty"`
 	EmployeeID                  nulls.String    `json:"employee_id,omitempty"`
 	HelmetID                    nulls.String    `json:"helmet_id,omitempty"`
-	HelmetIDThreeDigits         nulls.String    `json:"helmet_id_three_digits,omitempty"`
+	HelmetIDThreeDigit          nulls.String    `json:"helmet_id_three_digit,omitempty"`
 	Salary                      nulls.String    `json:"salary,omitempty"`
 	Badge                       nulls.String    `json:"badge,omitempty"`
 	CopsPhotoProfileLink        nulls.String    `json:"cops_photo_profile_link,omitempty"`
@@ -183,64 +183,87 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 		ID:                      "ppb",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/seattle/officer",
-				QueryParams: []string{"badge", "first_name", "last_name"},
+				Path:        "/portland/officer",
+				QueryParams: []string{"badge", "first_name", "last_name", "employee_id", "helmet_id", "helmet_id_three_digit"},
 			},
 			"fuzzy": {
-				Path:        "/seattle/officer/search",
+				Path:        "/portland/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},
 	}
 }
 
-// SeattleGetOfficerByBadge invokes seattle_get_officer_by_badge_p
-func (c *Client) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error) {
-	ofc := SeattleOfficer{}
-	err := c.pool.QueryRow(context.Background(),
+// PortlandGetOfficerByBadge invokes portland_search_officer_by_badge_p
+func (c *Client) PortlandSearchOfficerByBadge(badge string) ([]*PortlandOfficer, error) {
+	rows, err := c.pool.QueryRow(context.Background(),
 		`
-			SELECT
-				date,
-				badge,
-				full_name,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
-			FROM seattle_get_officer_by_badge_p (badge := $1);
+			SELECT *
+			FROM portland_search_officer_by_badge_p (badge := $1);
 		`,
 		badge,
-	).Scan(
-		&ofc.Date,
-		&ofc.Badge,
-		&ofc.FullName,
-		&ofc.FirstName,
-		&ofc.MiddleName,
-		&ofc.LastName,
-		&ofc.Title,
-		&ofc.Unit,
-		&ofc.UnitDescription,
-	)
 
-	return &ofc, err
-}
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-// SeattleSearchOfficerByName invokes seattle_search_officer_by_name_p
-func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*SeattleOfficer, error) {
+	return portlandMarshalOfficerRows(rows)
+
+// PortlandGetOfficerByEmployeeId invokes portland_search_officer_by_employee_p
+func (c *Client) PortlandSearchOfficerByEmployeeId(employee_id string) ([]*PortlandOfficer, error) {
+	rows, err := c.pool.QueryRow(context.Background(),
+		`
+			SELECT *
+			FROM portland_search_officer_by_employee_p (employee_id := $1);
+		`,
+		employee_id,
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return portlandMarshalOfficerRows(rows)
+
+// PortlandGetOfficerByHelmetId invokes portland_search_officer_by_helmet_p
+func (c *Client) PortlandSearchOfficerByHelmetId(helmet_id string) ([]*PortlandOfficer, error) {
+	rows, err := c.pool.QueryRow(context.Background(),
+		`
+			SELECT *
+			FROM portland_search_officer_by_helmet_p (helmet_id := $1);
+		`,
+		helmet_id,
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return portlandMarshalOfficerRows(rows)
+
+// PortlandGetOfficerByHelmetIdThreeDigit invokes portland_search_officer_by_helmet_p
+func (c *Client) PortlandSearchOfficerByHelmetIdThreeDigit(helmet_id_three_digit string) ([]*PortlandOfficer, error) {
+	rows, err := c.pool.QueryRow(context.Background(),
+		`
+			SELECT *
+			FROM portland_search_officer_by_helmet_three_digit_p (helmet_id_three_digit := $1);
+		`,
+		helmet_id_three_digit,
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return portlandMarshalOfficerRows(rows)
+
+// PortlandSearchOfficerByName invokes portland_search_officer_by_name_p
+func (c *Client) PortlandSearchOfficerByName(firstName, lastName string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT
-				date,
-				badge,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
-			FROM seattle_search_officer_by_name_p(first_name := $1, last_name := $2);
+			SELECT *
+			FROM portland_search_officer_by_name_p(first_name := $1, last_name := $2);
 		`,
 		firstName,
 		lastName,
@@ -250,11 +273,11 @@ func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*Seat
 	}
 	defer rows.Close()
 
-	return seattleMarshalOfficerRows(rows)
+	return portlandMarshalOfficerRows(rows)
 }
 
-// SeattleFuzzySearchByName invokes seattle_fuzzy_search_officer_by_name_p
-func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error) {
+// PortlandFuzzySearchByFirstName invokes portland_fuzzy_search_officer_by_first_name_p
+func (c *Client) PortlandFuzzySearchByFirstName(firstName string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
 			SELECT
@@ -267,33 +290,7 @@ func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error
 				title,
 				unit,
 				unit_description
-			FROM seattle_fuzzy_search_officer_by_name_p(full_name_v := $1);
-		`,
-		name,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	return seattleMarshalOfficerRows(rows)
-}
-
-// SeattleFuzzySearchByFirstName invokes seattle_fuzzy_search_officer_by_first_name_p
-func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error) {
-	rows, err := c.pool.Query(context.Background(),
-		`
-			SELECT
-				date,
-				badge,
-				full_name,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
-			FROM seattle_fuzzy_search_officer_by_first_name_p(first_name := $1);
+			FROM portland_fuzzy_search_officer_by_first_name_p(first_name := $1);
 		`,
 		firstName,
 	)
@@ -302,11 +299,11 @@ func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOffi
 	}
 	defer rows.Close()
 
-	return seattleMarshalOfficerRows(rows)
+	return portlandMarshalOfficerRows(rows)
 }
 
-// SeattleFuzzySearchByLastName invokes seattle_fuzzy_search_officer_by_last_name_p
-func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error) {
+// PortlandFuzzySearchByLastName invokes portland_fuzzy_search_officer_by_last_name_p
+func (c *Client) PortlandFuzzySearchByLastName(lastName string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
 			SELECT
@@ -319,7 +316,7 @@ func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOffice
 				title,
 				unit,
 				unit_description
-			FROM seattle_fuzzy_search_officer_by_last_name_p(last_name := $1);
+			FROM portland_fuzzy_search_officer_by_last_name_p(last_name := $1);
 		`,
 		lastName,
 	)
@@ -328,23 +325,46 @@ func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOffice
 	}
 	defer rows.Close()
 
-	return seattleMarshalOfficerRows(rows)
+	return portlandMarshalOfficerRows(rows)
 }
 
-func seattleMarshalOfficerRows(rows pgx.Rows) ([]*SeattleOfficer, error) {
-	officers := []*SeattleOfficer{}
+func portlandMarshalOfficerRows(rows pgx.Rows) ([]*PortlandOfficer, error) {
+	officers := []*PortlandOfficer{}
 	for rows.Next() {
-		ofc := SeattleOfficer{}
+		ofc := PortlandOfficer{}
 		err := rows.Scan(
-			&ofc.Date,
-			&ofc.Badge,
-			&ofc.FullName,
-			&ofc.FirstName,
-			&ofc.MiddleName,
-			&ofc.LastName,
-			&ofc.Title,
-			&ofc.Unit,
-			&ofc.UnitDescription,
+            &ofc.FirstName
+            &ofc.LastName
+            &ofc.Gender
+            &ofc.OfficerRank
+            &ofc.EmployeeID
+            &ofc.HelmetID
+            &ofc.HelmetIDThreeDigit
+            &ofc.Salary
+            &ofc.Badge
+            &ofc.CopsPhotoProfileLink
+            &ofc.CopsPhotoHasPhoto
+            &ofc.Employed_3_12_21
+            &ofc.Employed_12_28_20
+            &ofc.Employed_10_01_20
+            &ofc.Retired_6_1_20
+            &ofc.RetiredOrCertRevoked
+            &ofc.RetiredOrCertRevokedDate
+            &ofc.HireYear
+            &ofc.HireDate
+            &ofc.StateCertDate
+            &ofc.StateCertLevel
+            &ofc.RRT
+            &ofc.RRT2016
+            &ofc.RRT2018NiiyaEmail
+            &ofc.RRT2018
+            &ofc.RRT2019
+            &ofc.RRT2020
+            &ofc.SoundTruckTraining
+            &ofc.InstructedForDpsst
+            &ofc.InstructedForLessLethal
+            &ofc.InvolvedInOisUof
+            &ofc.Notes
 		)
 
 		if err != nil {
