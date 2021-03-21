@@ -76,9 +76,9 @@ func (h *Handler) portlandGetOfficersByBadge(badge string, w http.ResponseWriter
 
 	sort.Slice(officers, func(a, b int) bool {
 		if officers[a].LastName == officers[b].LastName {
-			return officers[a].FirstName < officers[b].FirstName
+			return officers[a].FirstName.String < officers[b].FirstName.String
 		}
-		return officers[a].LastName < officers[b].LastName
+		return officers[a].LastName.String < officers[b].LastName.String
 	})
 
 	w.WriteHeader(http.StatusOK)
@@ -113,9 +113,9 @@ func (h *Handler) portlandGetOfficersByEmployeeId(employeeId string, w http.Resp
 
 	sort.Slice(officers, func(a, b int) bool {
 		if officers[a].LastName == officers[b].LastName {
-			return officers[a].FirstName < officers[b].FirstName
+			return officers[a].FirstName.String < officers[b].FirstName.String
 		}
-		return officers[a].LastName < officers[b].LastName
+		return officers[a].LastName.String < officers[b].LastName.String
 	})
 
 	w.WriteHeader(http.StatusOK)
@@ -150,9 +150,9 @@ func (h *Handler) portlandGetOfficersByHelmetId(helmetId string, w http.Response
 
 	sort.Slice(officers, func(a, b int) bool {
 		if officers[a].LastName == officers[b].LastName {
-			return officers[a].FirstName < officers[b].FirstName
+			return officers[a].FirstName.String < officers[b].FirstName.String
 		}
-		return officers[a].LastName < officers[b].LastName
+		return officers[a].LastName.String < officers[b].LastName.String
 	})
 
 	w.WriteHeader(http.StatusOK)
@@ -187,9 +187,9 @@ func (h *Handler) portlandGetOfficersByHelmetIdThreeDigit(helmetIdThreeDigit str
 
 	sort.Slice(officers, func(a, b int) bool {
 		if officers[a].LastName == officers[b].LastName {
-			return officers[a].FirstName < officers[b].FirstName
+			return officers[a].FirstName.String < officers[b].FirstName.String
 		}
-		return officers[a].LastName < officers[b].LastName
+		return officers[a].LastName.String < officers[b].LastName.String
 	})
 
 	w.WriteHeader(http.StatusOK)
@@ -226,9 +226,9 @@ func (h *Handler) portlandGetOfficersByName(firstName, lastName string, w http.R
 
 	sort.Slice(officers, func(a, b int) bool {
 		if officers[a].LastName == officers[b].LastName {
-			return officers[a].FirstName < officers[b].FirstName
+			return officers[a].FirstName.String < officers[b].FirstName.String
 		}
-		return officers[a].LastName < officers[b].LastName
+		return officers[a].LastName.String < officers[b].LastName.String
 	})
 
 	w.WriteHeader(http.StatusOK)
