@@ -180,3 +180,17 @@ END; $$
 LANGUAGE 'plpgsql'
 SECURITY DEFINER
 SET search_path =public, pg_temp;
+
+-- Full Name
+CREATE OR REPLACE FUNCTION portland_fuzzy_search_officer_by_name_p(full_name_v  VARCHAR(100))
+    RETURNS SETOF portland_officers AS $$
+BEGIN
+    RETURN QUERY SELECT *
+    FROM portland_officers o
+    WHERE LOWER(o.first_name || ' ' || o.last_name) % LOWER(portland_fuzzy_search_officer_by_name_p.full_name_v)
+    ORDER BY SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER(portland_fuzzy_search_officer_by_name_p.full_name_v)) DESC;
+    RETURN;
+END; $$
+LANGUAGE 'plpgsql'
+SECURITY DEFINER
+SET search_path =public, pg_temp;

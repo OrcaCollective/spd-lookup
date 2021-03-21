@@ -176,7 +176,7 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
             {
                 "FieldName": "notes",
                 "Label": "Notes",
-            }
+            },
 		},
 		LastAvailableRosterDate: "2021-03-12",
 		Name:                    "Portland PD",
@@ -194,14 +194,15 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 	}
 }
 
-// PortlandGetOfficerByBadge invokes portland_search_officer_by_badge_p
-func (c *Client) PortlandSearchOfficerByBadge(badge string) ([]*PortlandOfficer, error) {
+// PortlandSearchOfficersByBadge invokes portland_search_officer_by_badge_p
+func (c *Client) PortlandSearchOfficersByBadge(badge string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.QueryRow(context.Background(),
 		`
 			SELECT *
 			FROM portland_search_officer_by_badge_p (badge := $1);
 		`,
 		badge,
+    )
 
 	if err != nil {
 		return nil, err
@@ -211,13 +212,14 @@ func (c *Client) PortlandSearchOfficerByBadge(badge string) ([]*PortlandOfficer,
 	return portlandMarshalOfficerRows(rows)
 
 // PortlandGetOfficerByEmployeeId invokes portland_search_officer_by_employee_p
-func (c *Client) PortlandSearchOfficerByEmployeeId(employee_id string) ([]*PortlandOfficer, error) {
+func (c *Client) PortlandSearchOfficersByEmployeeId(employee_id string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.QueryRow(context.Background(),
 		`
 			SELECT *
 			FROM portland_search_officer_by_employee_p (employee_id := $1);
 		`,
 		employee_id,
+    )
 
 	if err != nil {
 		return nil, err
@@ -227,13 +229,14 @@ func (c *Client) PortlandSearchOfficerByEmployeeId(employee_id string) ([]*Portl
 	return portlandMarshalOfficerRows(rows)
 
 // PortlandGetOfficerByHelmetId invokes portland_search_officer_by_helmet_p
-func (c *Client) PortlandSearchOfficerByHelmetId(helmet_id string) ([]*PortlandOfficer, error) {
+func (c *Client) PortlandSearchOfficersByHelmetId(helmet_id string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.QueryRow(context.Background(),
 		`
 			SELECT *
 			FROM portland_search_officer_by_helmet_p (helmet_id := $1);
 		`,
 		helmet_id,
+    )
 
 	if err != nil {
 		return nil, err
@@ -243,13 +246,14 @@ func (c *Client) PortlandSearchOfficerByHelmetId(helmet_id string) ([]*PortlandO
 	return portlandMarshalOfficerRows(rows)
 
 // PortlandGetOfficerByHelmetIdThreeDigit invokes portland_search_officer_by_helmet_p
-func (c *Client) PortlandSearchOfficerByHelmetIdThreeDigit(helmet_id_three_digit string) ([]*PortlandOfficer, error) {
+func (c *Client) PortlandSearchOfficersByHelmetIdThreeDigit(helmet_id_three_digit string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.QueryRow(context.Background(),
 		`
 			SELECT *
 			FROM portland_search_officer_by_helmet_three_digit_p (helmet_id_three_digit := $1);
 		`,
 		helmet_id_three_digit,
+    )
 
 	if err != nil {
 		return nil, err
@@ -259,7 +263,7 @@ func (c *Client) PortlandSearchOfficerByHelmetIdThreeDigit(helmet_id_three_digit
 	return portlandMarshalOfficerRows(rows)
 
 // PortlandSearchOfficerByName invokes portland_search_officer_by_name_p
-func (c *Client) PortlandSearchOfficerByName(firstName, lastName string) ([]*PortlandOfficer, error) {
+func (c *Client) PortlandSearchOfficersByName(firstName, lastName string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
 			SELECT *
@@ -276,20 +280,28 @@ func (c *Client) PortlandSearchOfficerByName(firstName, lastName string) ([]*Por
 	return portlandMarshalOfficerRows(rows)
 }
 
+// PortlandFuzzySearchByName invokes portland_fuzzy_search_officer_by_name_p
+func (c *Client) PortlandFuzzySearchByName(name string) ([]*PortlandOfficer, error) {
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT *
+			FROM portland_fuzzy_search_officer_by_name_p(full_name_v := $1);
+		`,
+		name,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return portlandMarshalOfficerRows(rows)
+}
+
 // PortlandFuzzySearchByFirstName invokes portland_fuzzy_search_officer_by_first_name_p
 func (c *Client) PortlandFuzzySearchByFirstName(firstName string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT
-				date,
-				badge,
-				full_name,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
+			SELECT *
 			FROM portland_fuzzy_search_officer_by_first_name_p(first_name := $1);
 		`,
 		firstName,
@@ -306,16 +318,7 @@ func (c *Client) PortlandFuzzySearchByFirstName(firstName string) ([]*PortlandOf
 func (c *Client) PortlandFuzzySearchByLastName(lastName string) ([]*PortlandOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
-			SELECT
-				date,
-				badge,
-				full_name,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
+			SELECT *
 			FROM portland_fuzzy_search_officer_by_last_name_p(last_name := $1);
 		`,
 		lastName,
