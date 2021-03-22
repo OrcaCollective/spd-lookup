@@ -5,6 +5,8 @@ services:
     image: sdsa/spd-lookup-db:latest
     container_name: spd_lookup_db
     restart: always
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
