@@ -14,6 +14,9 @@ services:
     volumes:
       - ./seed:/seed
       - db_data:/var/lib/postgresql/data
+      - ./db/pg_hba.conf:/data/pg_hba.conf
+    networks:
+      - postgres-network
   api:
     image: sdsa/spd-lookup-api:latest
     container_name: spd_lookup_api
@@ -28,6 +31,11 @@ services:
       - DB_HOST=db
     depends_on:
       - db
+    networks:
+      - postgres-network
 
 volumes:
   db_data:
+
+networks:
+  postgres-network:
