@@ -7,6 +7,7 @@ services:
     restart: always
     command: [
       "postgres",
+      "-c", "config_file=/data/postgresql.conf",
       "-c", "logging_collector=on",
       "-c", "log_directory=/pg_logs",
       "-c", "log_filename=postgresql.log"
@@ -21,6 +22,7 @@ services:
       - ./seed:/seed
       - ./db/db_logs:/pg_logs
       - ./db/pg_hba.conf:/data/pg_hba.conf
+      - ./db/postgresql.conf:/data/postgresql.conf
     networks:
       - postgres-network
   api:
