@@ -1,6 +1,7 @@
 FROM postgres:alpine
 
-RUN apt update && apt install fail2ban
+COPY pg_hba.conf /data/
+COPY postgresql.conf /data/
 
 COPY sql/* /docker-entrypoint-initdb.d/
 RUN chmod a+r /docker-entrypoint-initdb.d/*
