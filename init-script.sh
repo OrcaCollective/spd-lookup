@@ -19,7 +19,6 @@ fi
 
 if [ "$up" = "true" ]
 then
-  docker volume rm spd-lookup_db_data
   docker-compose -f $file up --build $detached
   chown -R 70:70 db/db_logs
 fi
@@ -27,14 +26,12 @@ fi
 if [ "$down" = "true" ]
 then
   docker-compose -f $file down
-  docker volume rm spd-lookup_db_data
   rm -rf db/db_logs
 fi
 
 if [ "$restart" = "true" ]
 then
   docker-compose -f $file down
-  docker volume rm spd-lookup_db_data
   rm -rf db/db_logs
   docker-compose -f $file up --build $detached
   chown -R 70:70 db/db_logs
