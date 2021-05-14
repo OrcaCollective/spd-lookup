@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS seattle_officers (
     id                  SERIAL PRIMARY KEY,
     date                DATE,
     full_name		    VARCHAR(100),
-    badge        VARCHAR(10),
+    badge               VARCHAR(10),
     first_name          VARCHAR(100),
     middle_name         VARCHAR(100),
     last_name           VARCHAR(100),
