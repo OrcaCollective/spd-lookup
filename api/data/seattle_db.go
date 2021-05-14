@@ -88,9 +88,8 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 }
 
 // SeattleGetOfficerByBadge invokes seattle_get_officer_by_badge_p
-func (c *Client) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error) {
-	ofc := SeattleOfficer{}
-	err := c.pool.QueryRow(context.Background(),
+func (c *Client) SeattleGetOfficerByBadge(badge string) ([]*SeattleOfficer, error) {
+	rows, err := c.pool.Query(context.Background(),
 		`
 			SELECT
 				date,
@@ -102,22 +101,16 @@ func (c *Client) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error)
 				title,
 				unit,
 				unit_description
-			FROM seattle_get_officer_by_badge_p (badge := $1);
+			FROM seattle_get_officer_by_badge_p(badge := $1);
 		`,
 		badge,
-	).Scan(
-		&ofc.Date,
-		&ofc.Badge,
-		&ofc.FullName,
-		&ofc.FirstName,
-		&ofc.MiddleName,
-		&ofc.LastName,
-		&ofc.Title,
-		&ofc.Unit,
-		&ofc.UnitDescription,
 	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-	return &ofc, err
+	return seattleMarshalOfficerRows(rows)
 }
 
 // SeattleSearchOfficerByName invokes seattle_search_officer_by_name_p

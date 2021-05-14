@@ -40,29 +40,27 @@ func (h *Handler) SeattleStrictMatch(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) seattleGetOfficerByBadge(badge string, w http.ResponseWriter) {
-	ofc, err := h.db.SeattleGetOfficerByBadge(badge)
+	officers, err := h.db.SeattleGetOfficerByBadge(badge)
 
 	if err != nil {
-		if err.Error() == "no rows in result set" {
-			w.WriteHeader(http.StatusOK)
-			w.Header().Set("Content-Type", "application/json")
-			err := json.NewEncoder(w).Encode([]*data.SeattleOfficer{})
-			if err != nil {
-				return
-			}
-			return
-		}
 		w.WriteHeader(http.StatusInternalServerError)
-		_, err := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
-		if err != nil {
+		_, errWrite := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if errWrite != nil {
 			return
 		}
 		return
 	}
 
+	sort.Slice(officers, func(a, b int) bool {
+		if officers[a].LastName == officers[b].LastName {
+			return officers[a].FirstName < officers[b].FirstName
+		}
+		return officers[a].LastName < officers[b].LastName
+	})
+
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode([]*data.SeattleOfficer{ofc})
+	err = json.NewEncoder(w).Encode(&officers)
 	if err != nil {
 		return
 	}

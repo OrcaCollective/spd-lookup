@@ -49,13 +49,13 @@ var testSeattleOfficer1 = &data.SeattleOfficer{Date: mayday, Badge: "1", FirstNa
 var testSeattleOfficer2 = &data.SeattleOfficer{Date: mayday, Badge: "2", FirstName: "first", LastName: "poo"}
 var testSeattleOfficer3 = &data.SeattleOfficer{Date: mayday, Badge: "3", FirstName: "test", LastName: "poo"}
 
-func (m *MockDatabase) SeattleGetOfficerByBadge(badge string) (*data.SeattleOfficer, error) {
+func (m *MockDatabase) SeattleGetOfficerByBadge(badge string) ([]*data.SeattleOfficer, error) {
 	if badge == "db_error" {
 		return nil, fmt.Errorf("get officer by badge db error")
 	} else if badge == "badge_not_found" {
 		return nil, fmt.Errorf("no rows in result set")
 	}
-	return testSeattleOfficer1, nil
+	return []*data.SeattleOfficer{testSeattleOfficer1, testSeattleOfficer2, testSeattleOfficer3}, nil
 }
 
 func (m *MockDatabase) SeattleSearchOfficerByName(firstName, lastName string) ([]*data.SeattleOfficer, error) {

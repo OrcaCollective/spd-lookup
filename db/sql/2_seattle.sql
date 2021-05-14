@@ -36,7 +36,8 @@ BEGIN
     RETURN QUERY SELECT *
     FROM seattle_officers o
     WHERE LOWER(o.first_name) LIKE LOWER(seattle_search_officer_by_name_p.first_name)
-    AND LOWER(o.last_name) LIKE LOWER(seattle_search_officer_by_name_p.last_name);
+    AND LOWER(o.last_name) LIKE LOWER(seattle_search_officer_by_name_p.last_name)
+    ORDER BY o.date DESC;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
@@ -50,7 +51,9 @@ BEGIN
     RETURN QUERY SELECT *
     FROM seattle_officers o
     WHERE LOWER(o.first_name) % LOWER(seattle_fuzzy_search_officer_by_first_name_p.first_name)
-    ORDER BY SIMILARITY(LOWER(o.first_name), LOWER(seattle_fuzzy_search_officer_by_first_name_p.first_name)) DESC;
+    ORDER BY
+        o.date DESC,
+        SIMILARITY(LOWER(o.first_name), LOWER(seattle_fuzzy_search_officer_by_first_name_p.first_name)) DESC;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
@@ -64,7 +67,9 @@ BEGIN
     RETURN QUERY SELECT *
     FROM seattle_officers o
     WHERE LOWER(o.last_name) % LOWER(seattle_fuzzy_search_officer_by_last_name_p.last_name)
-    ORDER BY SIMILARITY(LOWER(o.last_name), LOWER(seattle_fuzzy_search_officer_by_last_name_p.last_name)) DESC;
+    ORDER BY
+        o.date DESC, 
+        SIMILARITY(LOWER(o.last_name), LOWER(seattle_fuzzy_search_officer_by_last_name_p.last_name)) DESC;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
@@ -78,7 +83,9 @@ BEGIN
     RETURN QUERY SELECT *
     FROM seattle_officers o
     WHERE LOWER(o.first_name || ' ' || o.last_name) % LOWER(seattle_fuzzy_search_officer_by_name_p.full_name_v)
-    ORDER BY SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER(seattle_fuzzy_search_officer_by_name_p.full_name_v)) DESC;
+    ORDER BY
+        o.date DESC, 
+        SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER(seattle_fuzzy_search_officer_by_name_p.full_name_v)) DESC;
     RETURN;
 END; $$
 LANGUAGE 'plpgsql'
