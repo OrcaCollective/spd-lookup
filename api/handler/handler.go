@@ -13,6 +13,7 @@ type Interface interface {
 	DescribeDepartments(w http.ResponseWriter, r *http.Request)
 	SeattleOfficerMetadata(w http.ResponseWriter, r *http.Request)
 	SeattleStrictMatch(w http.ResponseWriter, r *http.Request)
+	SeattleStrictMatchHistorical(w http.ResponseWriter, r *http.Request)
 	SeattleFuzzySearch(w http.ResponseWriter, r *http.Request)
 	TacomaOfficerMetadata(w http.ResponseWriter, r *http.Request)
 	TacomaStrictMatch(w http.ResponseWriter, r *http.Request)
