@@ -39,6 +39,25 @@ func (h *Handler) SeattleStrictMatch(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// SeattleStrictMatchHistorical is the handler function for retrieving SPD officers with a strict match
+func (h *Handler) SeattleStrictMatchHistorical(w http.ResponseWriter, r *http.Request) {
+	badge, firstName, lastName := r.URL.Query().Get("badge"), r.URL.Query().Get("first_name"), r.URL.Query().Get("last_name")
+
+	if badge != "" {
+		h.seattleGetOfficerByBadgeHistorical(badge, w)
+		return
+	} else if firstName != "" || lastName != "" {
+		h.seattleGetOfficersByNameHistorical(firstName, lastName, w)
+		return
+	} else {
+		w.WriteHeader(http.StatusBadRequest)
+		_, err := w.Write([]byte("at least one of the following parameters must be provided: badge, first_name, last_name"))
+		if err != nil {
+			return
+		}
+	}
+}
+
 func (h *Handler) seattleGetOfficerByBadge(badge string, w http.ResponseWriter) {
 	officers, err := h.db.SeattleGetOfficerByBadge(badge)
 
@@ -80,6 +99,72 @@ func (h *Handler) seattleGetOfficersByName(firstName, lastName string, w http.Re
 	}
 
 	officers, err := h.db.SeattleSearchOfficerByName(firstName, lastName)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_, errWrite := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if errWrite != nil {
+			return
+		}
+		return
+	}
+
+	sort.Slice(officers, func(a, b int) bool {
+		if officers[a].LastName == officers[b].LastName {
+			return officers[a].FirstName < officers[b].FirstName
+		}
+		return officers[a].LastName < officers[b].LastName
+	})
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(&officers)
+	if err != nil {
+		return
+	}
+}
+
+func (h *Handler) seattleGetOfficerByBadgeHistorical(badge string, w http.ResponseWriter) {
+	officers, err := h.db.SeattleGetOfficerByBadgeHistorical(badge)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_, errWrite := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if errWrite != nil {
+			return
+		}
+		return
+	}
+
+	sort.Slice(officers, func(a, b int) bool {
+		if officers[a].LastName == officers[b].LastName {
+			return officers[a].FirstName < officers[b].FirstName
+		}
+		return officers[a].LastName < officers[b].LastName
+	})
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(&officers)
+	if err != nil {
+		return
+	}
+}
+
+func (h *Handler) seattleGetOfficersByNameHistorical(firstName, lastName string, w http.ResponseWriter) {
+	if firstName == "" {
+		firstName = "%"
+	} else {
+		firstName = strings.ReplaceAll(firstName, "*", "%")
+	}
+
+	if lastName == "" {
+		lastName = "%"
+	} else {
+		lastName = strings.ReplaceAll(lastName, "*", "%")
+	}
+
+	officers, err := h.db.SeattleSearchOfficerByNameHistorical(firstName, lastName)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
