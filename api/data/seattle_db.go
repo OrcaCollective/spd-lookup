@@ -220,12 +220,6 @@ func (c *Client) SeattleSearchOfficerByNameHistorical(firstName, lastName string
 				o.unit_description,
 				CASE WHEN o.date = max_roster.max_date THEN TRUE ELSE FALSE END is_current
 			FROM seattle_officers o, max_roster
-			WHERE
-				LOWER(o.first_name) LIKE LOWER($1) 
-				AND LOWER(o.last_name) LIKE LOWER($2)
-				CASE WHEN o.date = m.max_date THEN TRUE ELSE FALSE END is_current
-			FROM seattle_officers o
-			CROSS JOIN max_roster m
 			WHERE o.first_name = $1 AND o.last_name = $2
 			ORDER BY o.date DESC;
 		`,
