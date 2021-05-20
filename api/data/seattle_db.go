@@ -201,12 +201,9 @@ func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*Seat
 	return seattleMarshalOfficerRows(rows)
 }
 
-<<<<<<< HEAD
 // SeattleSearchOfficerByNameHistorical returns an officer by their first or last name. It searches the full historical
 // roster list and returns the results in descending order by roster date.
-=======
 // SeattleSearchOfficerByName invokes seattle_search_officer_by_name_p
->>>>>>> enable-external-db-readers
 func (c *Client) SeattleSearchOfficerByNameHistorical(firstName, lastName string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
@@ -221,18 +218,15 @@ func (c *Client) SeattleSearchOfficerByNameHistorical(firstName, lastName string
 				o.title,
 				o.unit,
 				o.unit_description,
-<<<<<<< HEAD
 				CASE WHEN o.date = max_roster.max_date THEN TRUE ELSE FALSE END is_current
 			FROM seattle_officers o, max_roster
 			WHERE
 				LOWER(o.first_name) LIKE LOWER($1) 
 				AND LOWER(o.last_name) LIKE LOWER($2)
-=======
 				CASE WHEN o.date = m.max_date THEN TRUE ELSE FALSE END is_current
 			FROM seattle_officers o
 			CROSS JOIN max_roster m
 			WHERE o.first_name = $1 AND o.last_name = $2
->>>>>>> enable-external-db-readers
 			ORDER BY o.date DESC;
 		`,
 		firstName,
