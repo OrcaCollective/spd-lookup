@@ -203,7 +203,6 @@ func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*Seat
 
 // SeattleSearchOfficerByNameHistorical returns an officer by their first or last name. It searches the full historical
 // roster list and returns the results in descending order by roster date.
-// SeattleSearchOfficerByName invokes seattle_search_officer_by_name_p
 func (c *Client) SeattleSearchOfficerByNameHistorical(firstName, lastName string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
