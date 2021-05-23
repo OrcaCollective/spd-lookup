@@ -19,6 +19,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - name: Set release verison env
+        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
       - name: Build and push API
         uses: docker/build-push-action@v2
         with:
@@ -26,6 +28,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
+            sdsa/spd-lookup-api:$RELEASE_VERSION
             sdsa/spd-lookup-api:latest
       - name: Build and push DB
         uses: docker/build-push-action@v2
@@ -34,4 +37,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
+            sdsa/spd-lookup-db:$RELEASE_VERSION
             sdsa/spd-lookup-db:latest
