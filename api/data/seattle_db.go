@@ -40,6 +40,10 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 	return &DepartmentMetadata{
 		Fields: []map[string]string{
 			{
+				"FieldName": "date",
+				"Label":     "Date",
+			},
+			{
 				"FieldName": "badge",
 				"Label":     "Badge",
 			},
@@ -129,7 +133,7 @@ func (c *Client) SeattleGetOfficerByBadge(badge string) ([]*SeattleOfficer, erro
 	return seattleMarshalOfficerRows(rows)
 }
 
-// SeattleGetOfficerByBadgeHistorical returns an officer by their badge. It searches 
+// SeattleGetOfficerByBadgeHistorical returns an officer by their badge. It searches
 // the full historical roster list and returns all entries in descending date order.
 func (c *Client) SeattleGetOfficerByBadgeHistorical(badge string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
@@ -188,7 +192,9 @@ func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*Seat
 				CASE WHEN o.date = max_roster.max_date THEN TRUE ELSE FALSE END is_current
 			FROM o, max_roster
 			WHERE o.seqnum = 1
-			ORDER BY o.date DESC;
+			ORDER BY 
+				o.date DESC,
+				o.full_name;
 		`,
 		firstName,
 		lastName,
@@ -234,7 +240,7 @@ func (c *Client) SeattleSearchOfficerByNameHistorical(firstName, lastName string
 }
 
 // SeattleFuzzySearchByName returns an list of officers by their full name using fuzzy matching.
-// It searches the full historical roster list but only returns the last availabe roster entry. Entries 
+// It searches the full historical roster list but only returns the last availabe roster entry. Entries
 // are sorted by date in descending order.
 func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
@@ -275,7 +281,7 @@ func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error
 }
 
 // SeattleFuzzySearchByFirstName returns an list of officers by their first name using fuzzy matching.
-// It searches the full historical roster list but only returns the last availabe roster entry. Entries 
+// It searches the full historical roster list but only returns the last availabe roster entry. Entries
 // are sorted by date in descending order.
 func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
@@ -316,7 +322,7 @@ func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOffi
 }
 
 // SeattleFuzzySearchByLastName returns an list of officers by their last name using fuzzy matching.
-// It searches the full historical roster list but only returns the last availabe roster entry. Entries 
+// It searches the full historical roster list but only returns the last availabe roster entry. Entries
 // are sorted by date in descending order.
 func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
