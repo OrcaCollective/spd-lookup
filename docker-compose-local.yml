@@ -5,13 +5,17 @@ services:
     build: ./db
     container_name: spd_lookup_db
     restart: always
+    command: "-c config_file=/data/postgresql.conf"
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=ACAB_DB
     volumes:
       - ./seed:/seed
-      - db_data:/var/lib/postgresql/data
+    networks:
+      - postgres-network
   api:
     build: ./api
     container_name: spd_lookup_api
@@ -26,6 +30,9 @@ services:
       - DB_HOST=db
     depends_on:
       - db
+    networks:
+      - postgres-network
 
-volumes:
-  db_data:
+networks:
+  postgres-network:
+    

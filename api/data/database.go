@@ -26,11 +26,14 @@ type SearchRouteMetadata struct {
 // DatabaseInterface describes database functions
 type DatabaseInterface interface {
 	SeattleOfficerMetadata() *DepartmentMetadata
-	SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error)
+	SeattleGetOfficerByBadge(badge string) ([]*SeattleOfficer, error)
 	SeattleSearchOfficerByName(firstName, lastName string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error)
 	SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error)
+
+	SeattleGetOfficerByBadgeHistorical(badge string) ([]*SeattleOfficer, error)
+	SeattleSearchOfficerByNameHistorical(firstName, lastName string) ([]*SeattleOfficer, error)
 
 	TacomaOfficerMetadata() *DepartmentMetadata
 	TacomaSearchOfficerByName(firstName, lastName string) ([]*TacomaOfficer, error)

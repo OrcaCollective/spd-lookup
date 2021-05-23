@@ -20,6 +20,7 @@ type SeattleOfficer struct {
 	FirstName       string       `json:"first_name,omitempty"`
 	MiddleName      nulls.String `json:"middle_name,omitempty"`
 	LastName        string       `json:"last_name,omitempty"`
+	Current         bool         `json:"is_current"`
 }
 
 // SeattleOfficerMetadata retrieves metadata describing the SeattleOfficer struct
@@ -70,6 +71,10 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 				"FieldName": "full_name",
 				"Label":     "Full Name",
 			},
+			{
+				"FieldName": "is_current",
+				"Label":     "Current",
+			},
 		},
 		LastAvailableRosterDate: date.Format("2006-01-02"),
 		Name:                    "Seattle PD",
@@ -83,58 +88,107 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 				Path:        "/seattle/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
+			"historical-exact": {
+				Path:        "/seattle/officer/historical",
+				QueryParams: []string{"badge", "first_name", "last_name"},
+			},
 		},
 	}
 }
 
-// SeattleGetOfficerByBadge invokes seattle_get_officer_by_badge_p
-func (c *Client) SeattleGetOfficerByBadge(badge string) (*SeattleOfficer, error) {
-	ofc := SeattleOfficer{}
-	err := c.pool.QueryRow(context.Background(),
+// SeattleGetOfficerByBadge returns an officer by their badge. It searches the full historical
+// roster list but only returns the most recent entry.
+func (c *Client) SeattleGetOfficerByBadge(badge string) ([]*SeattleOfficer, error) {
+	rows, err := c.pool.Query(context.Background(),
 		`
+			WITH max_roster AS (SELECT MAX(date) max_date FROM seattle_officers)
 			SELECT
-				date,
-				badge,
-				full_name,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
-			FROM seattle_get_officer_by_badge_p (badge := $1);
+				o.date,
+				o.badge,
+				o.full_name,
+				o.first_name,
+				o.middle_name,
+				o.last_name,
+				o.title,
+				o.unit,
+				o.unit_description,
+				CASE WHEN o.date = m.max_date THEN TRUE ELSE FALSE END is_current
+			FROM seattle_officers o
+			CROSS JOIN max_roster m
+			WHERE o.badge = $1
+			ORDER BY o.date DESC
+			LIMIT 1;
 		`,
 		badge,
-	).Scan(
-		&ofc.Date,
-		&ofc.Badge,
-		&ofc.FullName,
-		&ofc.FirstName,
-		&ofc.MiddleName,
-		&ofc.LastName,
-		&ofc.Title,
-		&ofc.Unit,
-		&ofc.UnitDescription,
 	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-	return &ofc, err
+	return seattleMarshalOfficerRows(rows)
 }
 
-// SeattleSearchOfficerByName invokes seattle_search_officer_by_name_p
+// SeattleGetOfficerByBadgeHistorical returns an officer by their badge. It searches 
+// the full historical roster list and returns all entries in descending date order.
+func (c *Client) SeattleGetOfficerByBadgeHistorical(badge string) ([]*SeattleOfficer, error) {
+	rows, err := c.pool.Query(context.Background(),
+		`
+			WITH max_roster AS (SELECT MAX(date) max_date FROM seattle_officers)
+			SELECT
+				o.date,
+				o.badge,
+				o.full_name,
+				o.first_name,
+				o.middle_name,
+				o.last_name,
+				o.title,
+				o.unit,
+				o.unit_description,
+				CASE WHEN o.date = m.max_date THEN TRUE ELSE FALSE END is_current
+			FROM seattle_officers o
+			CROSS JOIN max_roster m
+			WHERE o.badge = $1
+			ORDER BY o.date DESC;
+		`,
+		badge,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return seattleMarshalOfficerRows(rows)
+}
+
+// SeattleSearchOfficerByName returns an officer by their first or last name. It searches the full historical
+// roster list but only returns the most recent entry.
 func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
+			WITH o AS (
+				SELECT
+					*,
+					row_number() over (partition by o.badge order by o.date desc) seqnum
+				FROM seattle_officers o
+				WHERE LOWER(o.first_name) LIKE LOWER($1)
+				AND LOWER(o.last_name) LIKE LOWER($2)
+			),
+			max_roster AS (SELECT MAX(date) max_date FROM seattle_officers)
 			SELECT
-				date,
-				badge,
-				full_name,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
-			FROM seattle_search_officer_by_name_p(first_name := $1, last_name := $2);
+				o.date,
+				o.badge,
+				o.full_name,
+				o.first_name,
+				o.middle_name,
+				o.last_name,
+				o.title,
+				o.unit,
+				o.unit_description,
+				CASE WHEN o.date = max_roster.max_date THEN TRUE ELSE FALSE END is_current
+			FROM o, max_roster
+			WHERE o.seqnum = 1
+			ORDER BY o.date DESC;
 		`,
 		firstName,
 		lastName,
@@ -147,21 +201,68 @@ func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*Seat
 	return seattleMarshalOfficerRows(rows)
 }
 
-// SeattleFuzzySearchByName invokes seattle_fuzzy_search_officer_by_name_p
+// SeattleSearchOfficerByNameHistorical returns an officer by their first or last name. It searches the full historical
+// roster list and returns the results in descending order by roster date.
+func (c *Client) SeattleSearchOfficerByNameHistorical(firstName, lastName string) ([]*SeattleOfficer, error) {
+	rows, err := c.pool.Query(context.Background(),
+		`
+			WITH max_roster AS (SELECT MAX(date) max_date FROM seattle_officers)
+			SELECT
+				o.date,
+				o.badge,
+				o.full_name,
+				o.first_name,
+				o.middle_name,
+				o.last_name,
+				o.title,
+				o.unit,
+				o.unit_description,
+				CASE WHEN o.date = max_roster.max_date THEN TRUE ELSE FALSE END is_current
+			FROM seattle_officers o, max_roster
+			WHERE o.first_name = $1 AND o.last_name = $2
+			ORDER BY o.date DESC;
+		`,
+		firstName,
+		lastName,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return seattleMarshalOfficerRows(rows)
+}
+
+// SeattleFuzzySearchByName returns an list of officers by their full name using fuzzy matching.
+// It searches the full historical roster list but only returns the last availabe roster entry. Entries 
+// are sorted by date in descending order.
 func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
+			WITH o AS (
+				SELECT
+					*,
+					row_number() over (partition by o.badge order by o.date desc) seqnum
+				FROM seattle_officers o
+				WHERE LOWER(first_name || ' ' || last_name) % LOWER($1)
+			),
+			max_roster AS (SELECT MAX(date) max_date FROM seattle_officers)
 			SELECT
-				date,
-				badge,
-				full_name,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
-			FROM seattle_fuzzy_search_officer_by_name_p(full_name_v := $1);
+				o.date,
+				o.badge,
+				o.full_name,
+				o.first_name,
+				o.middle_name,
+				o.last_name,
+				o.title,
+				o.unit,
+				o.unit_description,
+				CASE WHEN o.date = max_roster.max_date THEN TRUE ELSE FALSE END is_current
+			FROM o, max_roster
+			WHERE o.seqnum = 1
+			ORDER BY
+				o.date DESC,
+				SIMILARITY(LOWER(o.first_name || ' ' || o.last_name), LOWER($1)) DESC;
 		`,
 		name,
 	)
@@ -173,21 +274,36 @@ func (c *Client) SeattleFuzzySearchByName(name string) ([]*SeattleOfficer, error
 	return seattleMarshalOfficerRows(rows)
 }
 
-// SeattleFuzzySearchByFirstName invokes seattle_fuzzy_search_officer_by_first_name_p
+// SeattleFuzzySearchByFirstName returns an list of officers by their first name using fuzzy matching.
+// It searches the full historical roster list but only returns the last availabe roster entry. Entries 
+// are sorted by date in descending order.
 func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
+			WITH o AS (
+				SELECT
+					*,
+					row_number() over (partition by o.badge order by o.date desc) seqnum
+				FROM seattle_officers o
+				WHERE LOWER(first_name) % LOWER($1)
+			),
+			max_roster AS (SELECT MAX(date) max_date FROM seattle_officers)
 			SELECT
-				date,
-				badge,
-				full_name,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
-			FROM seattle_fuzzy_search_officer_by_first_name_p(first_name := $1);
+				o.date,
+				o.badge,
+				o.full_name,
+				o.first_name,
+				o.middle_name,
+				o.last_name,
+				o.title,
+				o.unit,
+				o.unit_description,
+				CASE WHEN o.date = max_roster.max_date THEN TRUE ELSE FALSE END is_current
+			FROM o, max_roster
+			WHERE o.seqnum = 1
+			ORDER BY
+				o.date DESC,
+				SIMILARITY(LOWER(o.first_name), LOWER($1)) DESC;
 		`,
 		firstName,
 	)
@@ -199,21 +315,36 @@ func (c *Client) SeattleFuzzySearchByFirstName(firstName string) ([]*SeattleOffi
 	return seattleMarshalOfficerRows(rows)
 }
 
-// SeattleFuzzySearchByLastName invokes seattle_fuzzy_search_officer_by_last_name_p
+// SeattleFuzzySearchByLastName returns an list of officers by their last name using fuzzy matching.
+// It searches the full historical roster list but only returns the last availabe roster entry. Entries 
+// are sorted by date in descending order.
 func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error) {
 	rows, err := c.pool.Query(context.Background(),
 		`
+			WITH o AS (
+				SELECT
+					*,
+					row_number() over (partition by o.badge order by o.date desc) seqnum
+				FROM seattle_officers o
+				WHERE LOWER(last_name) % LOWER($1)
+			),
+			max_roster AS (SELECT MAX(date) max_date FROM seattle_officers)
 			SELECT
-				date,
-				badge,
-				full_name,
-				first_name,
-				middle_name,
-				last_name,
-				title,
-				unit,
-				unit_description
-			FROM seattle_fuzzy_search_officer_by_last_name_p(last_name := $1);
+				o.date,
+				o.badge,
+				o.full_name,
+				o.first_name,
+				o.middle_name,
+				o.last_name,
+				o.title,
+				o.unit,
+				o.unit_description,
+				CASE WHEN o.date = max_roster.max_date THEN TRUE ELSE FALSE END is_current
+			FROM o, max_roster
+			WHERE o.seqnum = 1
+			ORDER BY
+				o.date DESC,
+				SIMILARITY(LOWER(o.last_name), LOWER($1)) DESC;
 		`,
 		lastName,
 	)
@@ -225,6 +356,8 @@ func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOffice
 	return seattleMarshalOfficerRows(rows)
 }
 
+// seattleMarshalOfficerRows takes SQL return objects and marshals them onto the
+// SeattleOfficer object for return as JSON by the API.
 func seattleMarshalOfficerRows(rows pgx.Rows) ([]*SeattleOfficer, error) {
 	officers := []*SeattleOfficer{}
 	for rows.Next() {
@@ -239,6 +372,7 @@ func seattleMarshalOfficerRows(rows pgx.Rows) ([]*SeattleOfficer, error) {
 			&ofc.Title,
 			&ofc.Unit,
 			&ofc.UnitDescription,
+			&ofc.Current,
 		)
 
 		if err != nil {
