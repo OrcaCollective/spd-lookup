@@ -28,7 +28,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            sdsa/spd-lookup-api:$RELEASE_VERSION
+            sdsa/spd-lookup-api:${{ env.RELEASE_VERSION }}
             sdsa/spd-lookup-api:latest
       - name: Build and push DB
         uses: docker/build-push-action@v2
@@ -37,5 +37,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            sdsa/spd-lookup-db:$RELEASE_VERSION
+            sdsa/spd-lookup-db:${{ env.RELEASE_VERSION }}
             sdsa/spd-lookup-db:latest
