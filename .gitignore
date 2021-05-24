@@ -7,3 +7,5 @@ workspace.*
 .idea
 
 db/db_logs/
+
+act-secrets
