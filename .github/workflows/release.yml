@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
       - name: Set release verison env
-        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+        run: echo "RELEASE_VERSION=$(echo ${GITHUB_REF:10})" >> $RELEASE_VERSION
       - name: Build and push API
         uses: docker/build-push-action@v2
         with:
