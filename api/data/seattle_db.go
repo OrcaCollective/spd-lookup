@@ -41,7 +41,7 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 		Fields: []map[string]string{
 			{
 				"FieldName": "date",
-				"Label":     "Date",
+				"Label":     "Roster Date",
 			},
 			{
 				"FieldName": "badge",
@@ -77,7 +77,7 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 			},
 			{
 				"FieldName": "is_current",
-				"Label":     "Current",
+				"Label":     "On Current Roster",
 			},
 		},
 		LastAvailableRosterDate: date.Format("2006-01-02"),
