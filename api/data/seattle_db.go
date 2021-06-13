@@ -94,7 +94,7 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 			},
 			"historical-exact": {
 				Path:        "/seattle/officer/historical",
-				QueryParams: []string{"badge", "first_name", "last_name"},
+				QueryParams: []string{"badge"},
 			},
 		},
 	}
@@ -195,38 +195,6 @@ func (c *Client) SeattleSearchOfficerByName(firstName, lastName string) ([]*Seat
 			ORDER BY 
 				o.date DESC,
 				o.full_name;
-		`,
-		firstName,
-		lastName,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	return seattleMarshalOfficerRows(rows)
-}
-
-// SeattleSearchOfficerByNameHistorical returns an officer by their first or last name. It searches the full historical
-// roster list and returns the results in descending order by roster date.
-func (c *Client) SeattleSearchOfficerByNameHistorical(firstName, lastName string) ([]*SeattleOfficer, error) {
-	rows, err := c.pool.Query(context.Background(),
-		`
-			WITH max_roster AS (SELECT MAX(date) max_date FROM seattle_officers)
-			SELECT
-				o.date,
-				o.badge,
-				o.full_name,
-				o.first_name,
-				o.middle_name,
-				o.last_name,
-				o.title,
-				o.unit,
-				o.unit_description,
-				CASE WHEN o.date = max_roster.max_date THEN TRUE ELSE FALSE END is_current
-			FROM seattle_officers o, max_roster
-			WHERE o.first_name = $1 AND o.last_name = $2
-			ORDER BY o.date DESC;
 		`,
 		firstName,
 		lastName,

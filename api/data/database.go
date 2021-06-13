@@ -33,7 +33,6 @@ type DatabaseInterface interface {
 	SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOfficer, error)
 
 	SeattleGetOfficerByBadgeHistorical(badge string) ([]*SeattleOfficer, error)
-	SeattleSearchOfficerByNameHistorical(firstName, lastName string) ([]*SeattleOfficer, error)
 
 	TacomaOfficerMetadata() *DepartmentMetadata
 	TacomaSearchOfficerByName(firstName, lastName string) ([]*TacomaOfficer, error)
