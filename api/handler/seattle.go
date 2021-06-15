@@ -127,10 +127,10 @@ func (h *Handler) seattleGetOfficerByBadgeHistorical(badge string, w http.Respon
 	}
 
 	sort.Slice(officers, func(a, b int) bool {
-		if officers[a].LastName == officers[b].LastName {
-			return officers[a].FirstName < officers[b].FirstName
+		if officers[a].Date == officers[b].Date {
+			return officers[a].Date > officers[b].Date
 		}
-		return officers[a].LastName < officers[b].LastName
+		return officers[a].Date > officers[b].Date
 	})
 
 	w.WriteHeader(http.StatusOK)
