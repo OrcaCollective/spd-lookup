@@ -22,12 +22,12 @@ type TacomaOfficer struct {
 // tacomaOfficer is an internal intermediary between the returned SQL rows data
 // and the actual JSON return itself.
 type tacomaOfficer struct {
-	Date       time.Time    `json:"date,omitempty"`
-	FirstName  nulls.String `json:"first_name,omitempty"`
-	LastName   nulls.String `json:"last_name,omitempty"`
-	Title      nulls.String `json:"title,omitempty"`
-	Department nulls.String `json:"department,omitempty"`
-	Salary     nulls.String `json:"salary,omitempty"`
+	Date       time.Time
+	FirstName  nulls.String
+	LastName   nulls.String
+	Title      nulls.String
+	Department nulls.String
+	Salary     nulls.String
 }
 
 // TacomaOfficerMetadata retrieves metadata describing the TacomaOfficer struct
