@@ -11,11 +11,11 @@ import (
 
 // TacomaOfficer is the object model for Tacoma PD officers
 type TacomaOfficer struct {
-	Date       string    `json:"date,omitempty"`
-	FirstName  string       `json:"first_name,omitempty"`
-	LastName   string       `json:"last_name,omitempty"`
-	Title      string       `json:"title,omitempty"`
-	Department string       `json:"department,omitempty"`
+	Date       string `json:"date,omitempty"`
+	FirstName  string `json:"first_name,omitempty"`
+	LastName   string `json:"last_name,omitempty"`
+	Title      string `json:"title,omitempty"`
+	Department string `json:"department,omitempty"`
 	Salary     string `json:"salary,omitempty"`
 }
 
@@ -23,10 +23,10 @@ type TacomaOfficer struct {
 // and the actual JSON return itself.
 type tacomaOfficer struct {
 	Date       time.Time    `json:"date,omitempty"`
-	FirstName  nulls.String       `json:"first_name,omitempty"`
-	LastName   nulls.String       `json:"last_name,omitempty"`
-	Title      nulls.String       `json:"title,omitempty"`
-	Department nulls.String       `json:"department,omitempty"`
+	FirstName  nulls.String `json:"first_name,omitempty"`
+	LastName   nulls.String `json:"last_name,omitempty"`
+	Title      nulls.String `json:"title,omitempty"`
+	Department nulls.String `json:"department,omitempty"`
 	Salary     nulls.String `json:"salary,omitempty"`
 }
 
