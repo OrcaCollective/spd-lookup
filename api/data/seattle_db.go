@@ -11,16 +11,31 @@ import (
 
 // SeattleOfficer is the object model for SPD officers
 type SeattleOfficer struct {
-	Date            time.Time    `json:"date,omitempty"`
-	Badge           string       `json:"badge,omitempty"`
-	FullName        string       `json:"full_name,omitempty"`
-	Title           string       `json:"title,omitempty"`
-	Unit            string       `json:"unit,omitempty"`
-	UnitDescription nulls.String `json:"unit_description,omitempty"`
-	FirstName       string       `json:"first_name,omitempty"`
-	MiddleName      nulls.String `json:"middle_name,omitempty"`
-	LastName        string       `json:"last_name,omitempty"`
-	Current         bool         `json:"is_current"`
+	Date            string `json:"date,omitempty"`
+	Badge           string `json:"badge,omitempty"`
+	FullName        string `json:"full_name,omitempty"`
+	Title           string `json:"title,omitempty"`
+	Unit            string `json:"unit,omitempty"`
+	UnitDescription string `json:"unit_description,omitempty"`
+	FirstName       string `json:"first_name,omitempty"`
+	MiddleName      string `json:"middle_name,omitempty"`
+	LastName        string `json:"last_name,omitempty"`
+	Current         bool   `json:"is_current"`
+}
+
+// seattleOfficer is an internal intermediary between the returned SQL rows data
+// and the actual JSON return itself.
+type seattleOfficer struct {
+	Date            time.Time
+	Badge           nulls.String
+	FullName        nulls.String
+	Title           nulls.String
+	Unit            nulls.String
+	UnitDescription nulls.String
+	FirstName       nulls.String
+	MiddleName      nulls.String
+	LastName        nulls.String
+	Current         bool
 }
 
 // SeattleOfficerMetadata retrieves metadata describing the SeattleOfficer struct
@@ -335,7 +350,7 @@ func (c *Client) SeattleFuzzySearchByLastName(lastName string) ([]*SeattleOffice
 func seattleMarshalOfficerRows(rows pgx.Rows) ([]*SeattleOfficer, error) {
 	officers := []*SeattleOfficer{}
 	for rows.Next() {
-		ofc := SeattleOfficer{}
+		ofc := seattleOfficer{}
 		err := rows.Scan(
 			&ofc.Date,
 			&ofc.Badge,
@@ -352,7 +367,21 @@ func seattleMarshalOfficerRows(rows pgx.Rows) ([]*SeattleOfficer, error) {
 		if err != nil {
 			return nil, err
 		}
-		officers = append(officers, &ofc)
+
+		returnOfficer := SeattleOfficer{
+			ofc.Date.Format("2006-01-02"),
+			ofc.Badge.String,
+			ofc.FullName.String,
+			ofc.Title.String,
+			ofc.Unit.String,
+			ofc.UnitDescription.String,
+			ofc.FirstName.String,
+			ofc.MiddleName.String,
+			ofc.LastName.String,
+			ofc.Current,
+		}
+
+		officers = append(officers, &returnOfficer)
 	}
 	return officers, nil
 }
