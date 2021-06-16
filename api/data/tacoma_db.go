@@ -11,12 +11,23 @@ import (
 
 // TacomaOfficer is the object model for Tacoma PD officers
 type TacomaOfficer struct {
-	Date       time.Time    `json:"date,omitempty"`
-	FirstName  string       `json:"first_name,omitempty"`
-	LastName   string       `json:"last_name,omitempty"`
-	Title      string       `json:"title,omitempty"`
-	Department string       `json:"department,omitempty"`
-	Salary     nulls.String `json:"salary,omitempty"`
+	Date       string `json:"date,omitempty"`
+	FirstName  string `json:"first_name,omitempty"`
+	LastName   string `json:"last_name,omitempty"`
+	Title      string `json:"title,omitempty"`
+	Department string `json:"department,omitempty"`
+	Salary     string `json:"salary,omitempty"`
+}
+
+// tacomaOfficer is an internal intermediary between the returned SQL rows data
+// and the actual JSON return itself.
+type tacomaOfficer struct {
+	Date       time.Time
+	FirstName  nulls.String
+	LastName   nulls.String
+	Title      nulls.String
+	Department nulls.String
+	Salary     nulls.String
 }
 
 // TacomaOfficerMetadata retrieves metadata describing the TacomaOfficer struct
@@ -168,7 +179,7 @@ func (c *Client) TacomaFuzzySearchByLastName(lastName string) ([]*TacomaOfficer,
 func marshalTacomaOfficerRows(rows pgx.Rows) ([]*TacomaOfficer, error) {
 	officers := []*TacomaOfficer{}
 	for rows.Next() {
-		ofc := TacomaOfficer{}
+		ofc := tacomaOfficer{}
 		err := rows.Scan(
 			&ofc.Date,
 			&ofc.FirstName,
@@ -181,7 +192,16 @@ func marshalTacomaOfficerRows(rows pgx.Rows) ([]*TacomaOfficer, error) {
 		if err != nil {
 			return nil, err
 		}
-		officers = append(officers, &ofc)
+
+		returnOfficer := TacomaOfficer{
+			ofc.Date.Format("2006-01-02"),
+			ofc.FirstName.String,
+			ofc.LastName.String,
+			ofc.Title.String,
+			ofc.Department.String,
+			ofc.Salary.String,
+		}
+		officers = append(officers, &returnOfficer)
 	}
 	return officers, nil
 }

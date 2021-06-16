@@ -22,23 +22,23 @@ func (h *Handler) PortlandOfficerMetadata(w http.ResponseWriter, r *http.Request
 
 // PortlandStrictMatch is the handler function for retrieving SPD officers with a strict match
 func (h *Handler) PortlandStrictMatch(w http.ResponseWriter, r *http.Request) {
-    badge := r.URL.Query().Get("badge")
-    firstName := r.URL.Query().Get("first_name")
-    lastName := r.URL.Query().Get("last_name")
-    employeeId := r.URL.Query().Get("employee_id")
-    helmetId := r.URL.Query().Get("helmet_id")
-    helmetIdThreeDigit := r.URL.Query().Get("helmet_id_three_digit")
+	badge := r.URL.Query().Get("badge")
+	firstName := r.URL.Query().Get("first_name")
+	lastName := r.URL.Query().Get("last_name")
+	employeeId := r.URL.Query().Get("employee_id")
+	helmetId := r.URL.Query().Get("helmet_id")
+	helmetIdThreeDigit := r.URL.Query().Get("helmet_id_three_digit")
 
 	if badge != "" {
 		h.portlandGetOfficersByBadge(badge, w)
 		return
-    } else if employeeId != "" {
+	} else if employeeId != "" {
 		h.portlandGetOfficersByEmployeeId(employeeId, w)
 		return
-    } else if helmetId != "" {
+	} else if helmetId != "" {
 		h.portlandGetOfficersByHelmetId(helmetId, w)
 		return
-    } else if helmetIdThreeDigit != "" {
+	} else if helmetIdThreeDigit != "" {
 		h.portlandGetOfficersByHelmetIdThreeDigit(helmetIdThreeDigit, w)
 		return
 	} else if firstName != "" || lastName != "" {
@@ -110,7 +110,6 @@ func (h *Handler) portlandGetOfficersByEmployeeId(employeeId string, w http.Resp
 		return
 	}
 
-
 	sort.Slice(officers, func(a, b int) bool {
 		if officers[a].LastName == officers[b].LastName {
 			return officers[a].FirstName.String < officers[b].FirstName.String
@@ -147,7 +146,6 @@ func (h *Handler) portlandGetOfficersByHelmetId(helmetId string, w http.Response
 		return
 	}
 
-
 	sort.Slice(officers, func(a, b int) bool {
 		if officers[a].LastName == officers[b].LastName {
 			return officers[a].FirstName.String < officers[b].FirstName.String
@@ -183,7 +181,6 @@ func (h *Handler) portlandGetOfficersByHelmetIdThreeDigit(helmetIdThreeDigit str
 		}
 		return
 	}
-
 
 	sort.Slice(officers, func(a, b int) bool {
 		if officers[a].LastName == officers[b].LastName {

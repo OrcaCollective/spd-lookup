@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"spd-lookup/api/data"
-	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -28,7 +27,7 @@ type MockDatabase struct {
 	data.DatabaseInterface
 }
 
-var mayday, _ = time.Parse("2006-01-02", "1889-05-01")
+var mayday = "1889-05-01"
 
 func (m *MockDatabase) SeattleOfficerMetadata() *data.DepartmentMetadata {
 	return &data.DepartmentMetadata{

@@ -126,13 +126,6 @@ func (h *Handler) seattleGetOfficerByBadgeHistorical(badge string, w http.Respon
 		return
 	}
 
-	sort.Slice(officers, func(a, b int) bool {
-		if officers[a].LastName == officers[b].LastName {
-			return officers[a].FirstName < officers[b].FirstName
-		}
-		return officers[a].LastName < officers[b].LastName
-	})
-
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(&officers)

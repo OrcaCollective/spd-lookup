@@ -9,38 +9,38 @@ import (
 
 // PortlandOfficer is the object model for PPB officers
 type PortlandOfficer struct {
-	FirstName					nulls.String	`json:"first_name,omitempty"`
-	LastName					nulls.String	`json:"last_name,omitempty"`
-	Gender						nulls.String	`json:"gender,omitempty"`
-	OfficerRank					nulls.String	`json:"officer_rank,omitempty"`
-	EmployeeID					nulls.String	`json:"employee_id,omitempty"`
-	HelmetID					nulls.String	`json:"helmet_id,omitempty"`
-	HelmetIDThreeDigit			nulls.String	`json:"helmet_id_three_digit,omitempty"`
-	Salary						nulls.String	`json:"salary,omitempty"`
-	Badge						nulls.String	`json:"badge,omitempty"`
-	CopsPhotoProfileLink		nulls.String	`json:"cops_photo_profile_link,omitempty"`
-	CopsPhotoHasPhoto			nulls.String	`json:"cops_photo_has_photo,omitempty"`
-	Employed_3_12_21			nulls.String	`json:"employed_3_12_21,omitempty"`
-	Employed_12_28_20			nulls.String	`json:"employed_12_28_20,omitempty"`
-	Employed_10_01_20			nulls.String	`json:"employed_10_01_20,omitempty"`
-	Retired_6_1_20				nulls.String	`json:"retired_6_1_20,omitempty"`
-	RetiredOrCertRevoked		nulls.String	`json:"retired_or_cert_revoked,omitempty"`
-	RetiredOrCertRevokedDate	nulls.String	`json:"retired_or_cert_revoked_date,omitempty"`
-	HireYear					nulls.String	`json:"hire_year,omitempty"`
-	HireDate					nulls.String	`json:"hire_date,omitempty"`
-	StateCertDate				nulls.String	`json:"state_cert_date,omitempty"`
-	StateCertLevel				nulls.String	`json:"state_cert_level,omitempty"`
-	RRT							nulls.String	`json:"rrt,omitempty"`
-	RRT2016						nulls.String	`json:"rrt_2016,omitempty"`
-	RRT2018NiiyaEmail			nulls.String	`json:"rrt_2018_niiya_email,omitempty"`
-	RRT2018						nulls.String	`json:"rrt_2018,omitempty"`
-	RRT2019						nulls.String	`json:"rrt_2019,omitempty"`
-	RRT2020						nulls.String	`json:"rrt_2020,omitempty"`
-	SoundTruckTraining			nulls.String	`json:"sound_truck_training_2020,omitempty"`
-	InstructedForDpsst			nulls.String	`json:"instructed_for_dpsst,omitempty"`
-	InstructedForLessLethal		nulls.String	`json:"instructed_for_less_lethal,omitempty"`
-	InvolvedInOisUof			nulls.String	`json:"involved_in_ois_uof,omitempty"`
-	Notes						nulls.String	`json:"notes,omitempty"`
+	FirstName                nulls.String `json:"first_name,omitempty"`
+	LastName                 nulls.String `json:"last_name,omitempty"`
+	Gender                   nulls.String `json:"gender,omitempty"`
+	OfficerRank              nulls.String `json:"officer_rank,omitempty"`
+	EmployeeID               nulls.String `json:"employee_id,omitempty"`
+	HelmetID                 nulls.String `json:"helmet_id,omitempty"`
+	HelmetIDThreeDigit       nulls.String `json:"helmet_id_three_digit,omitempty"`
+	Salary                   nulls.String `json:"salary,omitempty"`
+	Badge                    nulls.String `json:"badge,omitempty"`
+	CopsPhotoProfileLink     nulls.String `json:"cops_photo_profile_link,omitempty"`
+	CopsPhotoHasPhoto        nulls.String `json:"cops_photo_has_photo,omitempty"`
+	Employed_3_12_21         nulls.String `json:"employed_3_12_21,omitempty"`
+	Employed_12_28_20        nulls.String `json:"employed_12_28_20,omitempty"`
+	Employed_10_01_20        nulls.String `json:"employed_10_01_20,omitempty"`
+	Retired_6_1_20           nulls.String `json:"retired_6_1_20,omitempty"`
+	RetiredOrCertRevoked     nulls.String `json:"retired_or_cert_revoked,omitempty"`
+	RetiredOrCertRevokedDate nulls.String `json:"retired_or_cert_revoked_date,omitempty"`
+	HireYear                 nulls.String `json:"hire_year,omitempty"`
+	HireDate                 nulls.String `json:"hire_date,omitempty"`
+	StateCertDate            nulls.String `json:"state_cert_date,omitempty"`
+	StateCertLevel           nulls.String `json:"state_cert_level,omitempty"`
+	RRT                      nulls.String `json:"rrt,omitempty"`
+	RRT2016                  nulls.String `json:"rrt_2016,omitempty"`
+	RRT2018NiiyaEmail        nulls.String `json:"rrt_2018_niiya_email,omitempty"`
+	RRT2018                  nulls.String `json:"rrt_2018,omitempty"`
+	RRT2019                  nulls.String `json:"rrt_2019,omitempty"`
+	RRT2020                  nulls.String `json:"rrt_2020,omitempty"`
+	SoundTruckTraining       nulls.String `json:"sound_truck_training_2020,omitempty"`
+	InstructedForDpsst       nulls.String `json:"instructed_for_dpsst,omitempty"`
+	InstructedForLessLethal  nulls.String `json:"instructed_for_less_lethal,omitempty"`
+	InvolvedInOisUof         nulls.String `json:"involved_in_ois_uof,omitempty"`
+	Notes                    nulls.String `json:"notes,omitempty"`
 }
 
 // PortlandOfficerMetadata retrieves metadata describing the PortlandOfficer struct
@@ -49,143 +49,143 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 		Fields: []map[string]string{
 			{
 				"FieldName": "first_name",
-				"Label": "First Name",
+				"Label":     "First Name",
 			},
 			{
 				"FieldName": "last_name",
-				"Label": "Last Name",
+				"Label":     "Last Name",
 			},
 			{
 				"FieldName": "gender",
-				"Label": "Gender",
+				"Label":     "Gender",
 			},
 			{
 				"FieldName": "officer_rank",
-				"Label": "Rank",
+				"Label":     "Rank",
 			},
 			{
 				"FieldName": "employee_id",
-				"Label": "Employee (Chest) ID",
+				"Label":     "Employee (Chest) ID",
 			},
 			{
 				"FieldName": "helmet_id",
-				"Label": "Helmet #",
+				"Label":     "Helmet #",
 			},
 			{
 				"FieldName": "helmet_id_three_digit",
-				"Label": "3-Digit Helmet #",
+				"Label":     "3-Digit Helmet #",
 			},
 			{
 				"FieldName": "salary",
-				"Label": "Fiscal Earnings 2019",
+				"Label":     "Fiscal Earnings 2019",
 			},
 			{
 				"FieldName": "badge",
-				"Label": "Badge/DPSST Number",
+				"Label":     "Badge/DPSST Number",
 			},
 			{
 				"FieldName": "cops_photo_profile_link",
-				"Label": "Cops.Photo Profile Link",
+				"Label":     "Cops.Photo Profile Link",
 			},
 			{
 				"FieldName": "cops_photo_has_photo",
-				"Label": "Pic on Cops.photo (y/n)",
+				"Label":     "Pic on Cops.photo (y/n)",
 			},
 			{
 				"FieldName": "employed_3_12_21",
-				"Label": "Employed as of 3/12/21",
+				"Label":     "Employed as of 3/12/21",
 			},
 			{
 				"FieldName": "employed_12_28_20",
-				"Label": "Employed as of 12/28/20",
+				"Label":     "Employed as of 12/28/20",
 			},
 			{
 				"FieldName": "employed_10_01_20",
-				"Label": "Employed as of 10/01/20",
+				"Label":     "Employed as of 10/01/20",
 			},
 			{
 				"FieldName": "retired_6_1_20",
-				"Label": "Retired/Resigned as of 6/1/20",
+				"Label":     "Retired/Resigned as of 6/1/20",
 			},
 			{
 				"FieldName": "retired_or_cert_revoked",
-				"Label": "Retired/Resigned as of 6/1/20 OR Cert Revoked (ever)",
+				"Label":     "Retired/Resigned as of 6/1/20 OR Cert Revoked (ever)",
 			},
 			{
 				"FieldName": "retired_or_cert_revoked_date",
-				"Label": "Date of Cert Revoke",
+				"Label":     "Date of Cert Revoke",
 			},
 			{
 				"FieldName": "hire_year",
-				"Label": "Hire Year",
+				"Label":     "Hire Year",
 			},
 			{
 				"FieldName": "hire_date",
-				"Label": "Hire Date",
+				"Label":     "Hire Date",
 			},
 			{
 				"FieldName": "state_cert_date",
-				"Label": "State Certification Date",
+				"Label":     "State Certification Date",
 			},
 			{
 				"FieldName": "state_cert_level",
-				"Label": "State Certification Level",
+				"Label":     "State Certification Level",
 			},
 			{
 				"FieldName": "rrt",
-				"Label": "RRT (Rapid Response Team) Member",
+				"Label":     "RRT (Rapid Response Team) Member",
 			},
 			{
 				"FieldName": "rrt_2016",
-				"Label": "RRT member as of 2016 via 2017 PPB AR",
+				"Label":     "RRT member as of 2016 via 2017 PPB AR",
 			},
 			{
 				"FieldName": "rrt_2018_niiya_email",
-				"Label": "RRT member as of 2018 via Niiya Email",
+				"Label":     "RRT member as of 2018 via Niiya Email",
 			},
 			{
 				"FieldName": "rrt_2018",
-				"Label": "RRT Specific Training 2018",
+				"Label":     "RRT Specific Training 2018",
 			},
 			{
 				"FieldName": "rrt_2019",
-				"Label": "RRT Specific Training 2019",
+				"Label":     "RRT Specific Training 2019",
 			},
 			{
 				"FieldName": "rrt_2020",
-				"Label": "RRT Specific Training 2020",
+				"Label":     "RRT Specific Training 2020",
 			},
 			{
 				"FieldName": "sound_truck_training_2020",
-				"Label": "Sound Truck Training 2020",
+				"Label":     "Sound Truck Training 2020",
 			},
 			{
 				"FieldName": "instructed_for_dpsst",
-				"Label": "Has Instructed Course for DPSST 2017+",
+				"Label":     "Has Instructed Course for DPSST 2017+",
 			},
 			{
 				"FieldName": "instructed_for_less_lethal",
-				"Label": "Instructor for Less Lethal/Chemical Weapons Courses",
+				"Label":     "Instructor for Less Lethal/Chemical Weapons Courses",
 			},
 			{
 				"FieldName": "involved_in_ois_uof",
-				"Label": "Has Been Involved in OIS/Significant UoF Incident",
+				"Label":     "Has Been Involved in OIS/Significant UoF Incident",
 			},
 			{
 				"FieldName": "notes",
-				"Label": "Notes",
+				"Label":     "Notes",
 			},
 		},
 		LastAvailableRosterDate: "2021-03-12",
-		Name:					"Portland PB",
-		ID:					  "ppb",
+		Name:                    "Portland PB",
+		ID:                      "ppb",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:		"/portland/officer",
+				Path:        "/portland/officer",
 				QueryParams: []string{"badge", "first_name", "last_name", "employee_id", "helmet_id", "helmet_id_three_digit"},
 			},
 			"fuzzy": {
-				Path:		"/portland/officer/search",
+				Path:        "/portland/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},
