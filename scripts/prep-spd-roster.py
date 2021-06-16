@@ -22,6 +22,9 @@ def main():
     }
     df.rename(columns=column_names, inplace=True)
 
+    # Strip out unwanted whitespace from any string fields in the DataFrame
+    df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+
     # Split the names out
     df['first_name'] = df.apply(lambda x: first_name(x), axis=1)
     df['middle_name'] = df.apply(lambda x: middle_name(x), axis=1)
