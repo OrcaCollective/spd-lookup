@@ -18,7 +18,7 @@ def main():
         'Badge_Num': 'badge',
         'Title_Description': 'title',
         'Unit': 'unit',
-        'Unit_Description': 'unit_Description'
+        'Unit_Description': 'unit_description'
     }
     df.rename(columns=column_names, inplace=True)
 
