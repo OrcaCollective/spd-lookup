@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    build: ./db
+    image: sdsa/spd-lookup-db:latest
     container_name: spd_lookup_db
     restart: always
     command: "-c config_file=/data/postgresql.conf"
@@ -17,7 +17,7 @@ services:
     networks:
       - postgres-network
   api:
-    build: ./api
+    image: sdsa/spd-lookup-api:latest
     container_name: spd_lookup_api
     restart: always
     ports:
@@ -35,4 +35,3 @@ services:
 
 networks:
   postgres-network:
-    
