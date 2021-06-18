@@ -1,14 +1,14 @@
 import pandas as pd
-import sys
+import click
 
 from pandas.core.frame import DataFrame
 
 
-def main():
-    date = sys.argv[1]
-    in_csv = sys.argv[2]
-    out_csv = sys.argv[3]
-
+@click.command()
+@click.option('-d', '--date', required=True, type=str, prompt=True, help='The date of the roster in the format YYYY-MM-DD.')
+@click.option('-i', '--in-csv', required=True, type=str, prompt=True, help='Path to the source file. Can be relative to current directory.')
+@click.option('-o', '--out-csv', required=True, type=str, prompt=True, help='Path to save the resulting CSV in. Can be relative to current directory.')
+def main(date, in_csv, out_csv):
     # Import CSV passed to script
     df = pd.read_csv(in_csv)
 
