@@ -21,6 +21,9 @@ type Interface interface {
 	PortlandOfficerMetadata(w http.ResponseWriter, r *http.Request)
 	PortlandStrictMatch(w http.ResponseWriter, r *http.Request)
 	PortlandFuzzySearch(w http.ResponseWriter, r *http.Request)
+	AuburnOfficerMetadata(w http.ResponseWriter, r *http.Request)
+	AuburnStrictMatch(w http.ResponseWriter, r *http.Request)
+	AuburnFuzzySearch(w http.ResponseWriter, r *http.Request)
 }
 
 // Handler is the struct for route handler functions
@@ -49,6 +52,7 @@ func (h *Handler) DescribeDepartments(w http.ResponseWriter, r *http.Request) {
 		h.db.SeattleOfficerMetadata(),
 		h.db.TacomaOfficerMetadata(),
 		h.db.PortlandOfficerMetadata(),
+		h.db.AuburnOfficerMetadata(),
 	}
 
 	w.WriteHeader(http.StatusOK)
