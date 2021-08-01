@@ -62,6 +62,13 @@ type DatabaseInterface interface {
 	LakewoodFuzzySearchByName(name string) ([]*LakewoodOfficer, error)
 	LakewoodFuzzySearchByFirstName(firstName string) ([]*LakewoodOfficer, error)
 	LakewoodFuzzySearchByLastName(lastName string) ([]*LakewoodOfficer, error)
+
+	OlympiaOfficerMetadata() *DepartmentMetadata
+	OlympiaGetOfficerByBadge(badge string) ([]*OlympiaOfficer, error)
+	OlympiaSearchOfficerByName(firstName, lastName string) ([]*OlympiaOfficer, error)
+	OlympiaFuzzySearchByName(name string) ([]*OlympiaOfficer, error)
+	OlympiaFuzzySearchByFirstName(firstName string) ([]*OlympiaOfficer, error)
+	OlympiaFuzzySearchByLastName(lastName string) ([]*OlympiaOfficer, error)
 }
 
 // Client is the client used to connect to the db
