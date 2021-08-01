@@ -12,4 +12,4 @@ CREATE TABLE IF NOT EXISTS seattle_officers (
 );
 
 COPY seattle_officers (badge,full_name,title,unit,unit_description,first_name,middle_name,last_name,date)
-FROM '/seed/SPD_Rosters_Historical.csv' DELIMITER ',' CSV HEADER;
+FROM '/seed/Seattle-WA-Police-Department_Historical.csv' DELIMITER ',' CSV HEADER;

@@ -68,7 +68,7 @@ COPY portland_officers (
     notes,
     salary
 )
-FROM '/seed/PPB_Roster_3-20-21.csv' DELIMITER ',' CSV HEADER;
+FROM '/seed/Portland-OR-Police-Bureau_3-20-21.csv' DELIMITER ',' CSV HEADER;
 
 --------------------------------------------------------------------------------
 -- Strict search

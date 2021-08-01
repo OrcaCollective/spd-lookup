@@ -1,0 +1,119 @@
+﻿date,title,last_name,first_name,unit,unit_description
+5/1/2021,Police Chief,Zaro,Mike,1,Office of the Chief of Police
+5/1/2021,Assistant Police Chief,Unfred,John,2,Office of the Chief of Police
+5/1/2021,Administrative Assistant,Lavergne,Joanna,,Office of the Chief of Police
+5/1/2021,Crime Analyst,Strand,Douglas,,Office of the Chief of Police
+5/1/2021,Police Chaplain,Burgos,Victor,703,Office of the Chief of Police
+5/1/2021,*Lead* Police Chaplain,Woods,Jason,702,Office of the Chief of Police
+5/1/2021,Professional Standards Lieutenant,Lawler,Chris,4,Administrative Unit
+5/1/2021,Professional Standards Sergeant,Prater,Jeremy,21,Administrative Unit
+5/1/2021,Training & Accreditations Officer,Russell,Mike,108,Administrative Unit
+5/1/2021,Administrative Assistant,Pitts,Svea,,Administrative Unit
+5/1/2021,Office Assistant,James,Chris,,Administrative Unit
+5/1/2021,Office Assistant,Wear,Lexcie,,Administrative Unit
+5/1/2021,Unit Lieutenant,Alwine,Jeff,3,Patrol Operations
+5/1/2021,Patrol Sergeant,Fraser,John,13,Patrol Operations Day Shift A
+5/1/2021,Patrol Officer,McClelland,Nick,112,Patrol Operations Day Shift A
+5/1/2021,Patrol Officer,Alexander,Chris,166,Patrol Operations Day Shift A
+5/1/2021, Patrol Officer,Brown,Savannah,163,Patrol Operations Day Shift A
+5/1/2021,Patrol Officer,Danley,Brian,125,Patrol Operations Day Shift A
+5/1/2021,Patrol Officer,Martin,Russ,103,Patrol Operations Day Shift A
+5/1/2021,Patrol Officer,Beard,Jonathon,147,Patrol Operations Day Shift A
+5/1/2021,Patrol Officer,Arbiol,Joseph,148,Patrol Operations Day Shift A
+5/1/2021,Patrol Sergeant,Suver,Andy,11,Patrol Operations Swing Shift A
+5/1/2021,Patrol Officer,Wright,Melody,158,Patrol Operations Swing Shift A
+5/1/2021,Patrol Officer,Lee,Austin,109,Patrol Operations Swing Shift A
+5/1/2021,Patrol Officer,Teclemariam,Nile,151,Patrol Operations Swing Shift A
+5/1/2021,Patrol Officer,Vahle,Jeremy,107,Patrol Operations Swing Shift A
+5/1/2021,Patrol Officer,Novasky,Scott,118,Patrol Operations Swing Shift A
+5/1/2021,Patrol Officer,Repp,Joshua,157,Patrol Operations Swing Shift A
+5/1/2021,Patrol Officer,Bentz,Kasey,172,Patrol Operations Swing Shift A
+5/1/2021,K9 Officer ,Bucat,Anthony,137/K933,Patrol Operations Swing Shift A
+5/1/2021,Patrol Sergeant,Borchardt,Tim,26,Patrol Operations Graveyard Shift A
+5/1/2021,Patrol Officer,Moffitt,Stephen,169,Patrol Operations Graveyard Shift A
+5/1/2021,Patrol Officer,Northcutt,Joshua,165,Patrol Operations Graveyard Shift A
+5/1/2021,Patrol Officer,Pingul,Jared,168,Patrol Operations Graveyard Shift A
+5/1/2021,Patrol Officer,Veenker,Jacob,143,Patrol Operations Graveyard Shift A
+5/1/2021,Patrol Officer,Hall,Andy,114,Patrol Operations Graveyard Shift A
+5/1/2021,Patrol Officer,Keisler,Jeremy,141,Patrol Operations Graveyard Shift A
+5/1/2021,Patrol Officer,Elisara,Travis,162,Patrol Operations Graveyard Shift A
+5/1/2021,Patrol Sergeant,Eakes,Mark,10,Patrol Operations Day Shift B
+5/1/2021,Patrol Officer,Weekes,Brian,122,Patrol Operations Day Shift B
+5/1/2021,Patrol Officer,Latimer,Darrin,100,Patrol Operations Day Shift B
+5/1/2021,Patrol Officer,Noble,Shawn,136,Patrol Operations Day Shift B
+5/1/2021,Patrol Officer,Johnson,Mike,126,Patrol Operations Day Shift B
+5/1/2021,Patrol Officer,Moody,Ryan,123,Patrol Operations Day Shift B
+5/1/2021,Patrol Officer,James,Jeremy,127,Patrol Operations Day Shift B
+5/1/2021,Patrol Officer,Wiley,Mike,111,Patrol Operations Day Shift B
+5/1/2021,K-9 Officer (Fri-Mon) Dayshift,Syler,Jim,102/K930,Patrol Operations Day Shift B
+5/1/2021,Patrol Sergeant,Paynter,Jeff,18,Patrol Operations Swing Shift B
+5/1/2021,Patrol Officer,Rodriguez,Kim,153,Patrol Operations Swing Shift B
+5/1/2021,Patrol Officer,Schueller,Zach,146,Patrol Operations Swing Shift B
+5/1/2021,Patrol Officer,Czuleger,Keith,132,Patrol Operations Swing Shift B
+5/1/2021,Patrol Officer,Luttrull,Brian,154,Patrol Operations Swing Shift B
+5/1/2021,Patrol Officer,Pyon,Daniel,159,Patrol Operations Swing Shift B
+5/1/2021,Patrol Officer,Wellman,Joseph,156,Patrol Operations Swing Shift B
+5/1/2021,Patrol Officer,Osness,Paul,113,Patrol Operations Swing Shift B
+5/1/2021,Patrol Sergeant,Catlett,Jason,24,Patrol Operations Graveyard Shift B
+5/1/2021,Patrol Officer,Sivankeo,Vince,119,Patrol Operations Graveyard Shift B
+5/1/2021,Patrol Officer,Casas,Roberto,145,Patrol Operations Graveyard Shift B
+5/1/2021,Patrol Officer,Maulen,David,152,Patrol Operations Graveyard Shift B
+5/1/2021,Patrol Officer,White,Cody,155,Patrol Operations Graveyard Shift B
+5/1/2021,Patrol Officer,Harvey,Dennis,140,Patrol Operations Graveyard Shift B
+5/1/2021,Patrol Officer,Leitgeb,Matt,160,Patrol Operations Graveyard Shift B
+5/1/2021,Patrol Officer,Beauchamp,Joshua,164,Patrol Operations Graveyard Shift B
+5/1/2021,Reserve Police Officer,Folk,Dennis,250,Patrol Operations Reserve Police Officers
+5/1/2021,Reserve Police Officer,Henterly,John,251,Patrol Operations Reserve Police Officers
+5/1/2021,Reserve Police Officer,Henriques,Cody,252,Patrol Operations Reserve Police Officers
+5/1/2021,Reserve Police Officer ,Smith,Travis,253,Patrol Operations Reserve Police Officers
+5/1/2021,Reserve Police Officer,Boere,Grant,254,Patrol Operations Reserve Police Officers
+5/1/2021,Lieutenant,Gildehaus,Andy,6,Speciality Units
+5/1/2021,Neighborhood Policing Sergeant,Devaney,Ken,20,Neighborhood Policing Unit
+5/1/2021,NPO,Tenney,Dan,120,Neighborhood Policing Unit
+5/1/2021,NPO,Fitzgerald,Jessica,139,Neighborhood Policing Unit
+5/1/2021,NPO,Rocco,Ralph,106,Neighborhood Policing Unit
+5/1/2021,NPO,Henson,Ken,104,Neighborhood Policing Unit
+5/1/2021,NPO,Cannon,Jason,130,Neighborhood Policing Unit
+5/1/2021,Community Service Officer,Miller,Mike,302,CSRT
+5/1/2021,Code Enforcement,Mathies,Bill,801,CSRT
+5/1/2021,Code Enforcement,Dunn,Sean,802,CSRT
+5/1/2021,Traffic Sergeant,Porche,Charles,22,Traffic Unit
+5/1/2021,Motors/Traffic Enforcement Officer,Butts,David,105,Traffic Unit
+5/1/2021,Traffic Enforcement Officer,McGettigan,Mike,124,Traffic Unit
+5/1/2021,Equiv. Academy,Cockle,Lesha,173,Traffic Unit
+5/1/2021,Academy/PTO,Topasna,Brian,170,Traffic Unit
+5/1/2021,Traffic Services CSO,McClure,Kevin,303,Traffic Unit
+5/1/2021,Court Security Sergeant,Markert,Brian,17,Court Security
+5/1/2021,Court Compliance Officer,Himes,Cameron,500,Court Security
+5/1/2021,Court Compliance Officer,Lomeli,Daisy,501,Court Security
+5/1/2021,Court Compliance Officer,Melville,Tyler,502,Court Security
+5/1/2021,Animal Control Officer,Buck,Correne,967,Animal Control Section
+5/1/2021,Animal Control Officer,Sexton,Becky,968,Animal Control Section
+5/1/2021,Evidence/Property Supervisor,Meeks,Erica,350,Property Room Section
+5/1/2021,Evidence Tech,Allen,Dallas,351,Property Room Section
+5/1/2021,Lieutenant,Westby,Chris,5,Criminal Investigations Unit
+5/1/2021,Sergeant w/PSATT,Carroll,Jeff,16,Criminal Investigations Unit
+5/1/2021,Major Crimes Sergeant,Hall,Rich,14,"Criminal Investigations Unit, Major Crimes"
+5/1/2021,Major Crime Detective,Latimer,Karen,60,"Criminal Investigations Unit, Major Crimes"
+5/1/2021,Major Crime Detective,Bunton,Les ,52,"Criminal Investigations Unit, Major Crimes"
+5/1/2021,Major Crime Detective,Martin,Jeff,58,"Criminal Investigations Unit, Major Crimes"
+5/1/2021,WSH Investigator,Lofland,Jim,116,"Criminal Investigations Unit, Major Crimes"
+5/1/2021,Forensic Services Manager Detective,Johnson,Bryan,50,"Criminal Investigations Unit, Forensic Serivces Unit"
+5/1/2021,       Special Assault Sergeant,Conlon,Sean,25,Criminal Investigations Unit Special Assault Unit
+5/1/2021,Detective,Eggleston,Brent,51,Criminal Investigations Unit Special Assault Unit
+5/1/2021,Detective,Hunt,Michelle,117,Criminal Investigations Unit Special Assault Unit
+5/1/2021,Investigator,Feldman,Jordan,138,Criminal Investigations Unit Special Assault Unit
+5/1/2021,Forensics/Special Assault Detective,Bowl,Chris,56,Criminal Investigations Unit Special Assault Unit
+5/1/2021,Forensics/Special Assault Detective,Sale,Darin,55,Criminal Investigations Unit Special Assault Unit
+5/1/2021,Investigator,Pettit,Joel,150,Criminal Investigations Unit Special Assault Unit
+5/1/2021,        Special Operations Sergeant,Crommes,David,15,"Criminal Investigations Unit, Special Operations Unit"
+5/1/2021,Narcotics Detective/FBI ILTF,Larson,Ryan,54,"Criminal Investigations Unit, Special Operations Unit"
+5/1/2021,Gang Detective/SS Task Force,Barnard,Rick,57,"Criminal Investigations Unit, Special Operations Unit"
+5/1/2021,Drug Investigator,Criss,Max,134,"Criminal Investigations Unit, Special Operations Unit"
+5/1/2021,Drug Investigator/DEA Task Force,Hamilton,Ryan,110,"Criminal Investigations Unit, Special Operations Unit"
+5/1/2021,Drug Investigator,Clark,Kevin,133,"Criminal Investigations Unit, Special Operations Unit"
+5/1/2021,       Property Crimes Sergeant,Johnson,Peter,19,"Criminal Investigations Unit, Property Crimes Unit (PROAC)"
+5/1/2021,Investigator,Anderson,Jon,131,"Criminal Investigations Unit, Property Crimes Unit (PROAC)"
+5/1/2021,Investigator,Dier,Noah,128,"Criminal Investigations Unit, Property Crimes Unit (PROAC)"
+5/1/2021,Investigator,Merrill,Mike,142,"Criminal Investigations Unit, Property Crimes Unit (PROAC)"
+5/1/2021,Detective-WATPA Task Force,Jordan,Todd,53,"Criminal Investigations Unit, Property Crimes Unit (PROAC)"

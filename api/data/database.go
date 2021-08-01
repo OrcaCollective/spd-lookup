@@ -49,6 +49,26 @@ type DatabaseInterface interface {
 	PortlandFuzzySearchByName(name string) ([]*PortlandOfficer, error)
 	PortlandFuzzySearchByFirstName(firstName string) ([]*PortlandOfficer, error)
 	PortlandFuzzySearchByLastName(lastName string) ([]*PortlandOfficer, error)
+
+	AuburnOfficerMetadata() *DepartmentMetadata
+	AuburnGetOfficerByBadge(badge string) ([]*AuburnOfficer, error)
+	AuburnSearchOfficerByName(firstName, lastName string) ([]*AuburnOfficer, error)
+	AuburnFuzzySearchByName(name string) ([]*AuburnOfficer, error)
+	AuburnFuzzySearchByFirstName(firstName string) ([]*AuburnOfficer, error)
+	AuburnFuzzySearchByLastName(lastName string) ([]*AuburnOfficer, error)
+
+	LakewoodOfficerMetadata() *DepartmentMetadata
+	LakewoodSearchOfficerByName(firstName, lastName string) ([]*LakewoodOfficer, error)
+	LakewoodFuzzySearchByName(name string) ([]*LakewoodOfficer, error)
+	LakewoodFuzzySearchByFirstName(firstName string) ([]*LakewoodOfficer, error)
+	LakewoodFuzzySearchByLastName(lastName string) ([]*LakewoodOfficer, error)
+
+	OlympiaOfficerMetadata() *DepartmentMetadata
+	OlympiaGetOfficerByBadge(badge string) ([]*OlympiaOfficer, error)
+	OlympiaSearchOfficerByName(firstName, lastName string) ([]*OlympiaOfficer, error)
+	OlympiaFuzzySearchByName(name string) ([]*OlympiaOfficer, error)
+	OlympiaFuzzySearchByFirstName(firstName string) ([]*OlympiaOfficer, error)
+	OlympiaFuzzySearchByLastName(lastName string) ([]*OlympiaOfficer, error)
 }
 
 // Client is the client used to connect to the db
