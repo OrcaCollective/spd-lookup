@@ -39,22 +39,6 @@ func (h *Handler) AuburnStrictMatch(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// AuburnStrictMatchHistorical is the handler function for retrieving SPD officers with a strict match
-func (h *Handler) AuburnStrictMatchHistorical(w http.ResponseWriter, r *http.Request) {
-	badge := r.URL.Query().Get("badge")
-
-	if badge != "" {
-		h.auburnGetOfficerByBadge(badge, w)
-		return
-	} else {
-		w.WriteHeader(http.StatusBadRequest)
-		_, err := w.Write([]byte("at least one of the following parameters must be provided: badge"))
-		if err != nil {
-			return
-		}
-	}
-}
-
 func (h *Handler) auburnGetOfficerByBadge(badge string, w http.ResponseWriter) {
 	officers, err := h.db.AuburnGetOfficerByBadge(badge)
 
