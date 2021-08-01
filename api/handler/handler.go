@@ -24,6 +24,9 @@ type Interface interface {
 	AuburnOfficerMetadata(w http.ResponseWriter, r *http.Request)
 	AuburnStrictMatch(w http.ResponseWriter, r *http.Request)
 	AuburnFuzzySearch(w http.ResponseWriter, r *http.Request)
+	LakewoodOfficerMetadata(w http.ResponseWriter, r *http.Request)
+	LakewoodStrictMatch(w http.ResponseWriter, r *http.Request)
+	LakewoodFuzzySearch(w http.ResponseWriter, r *http.Request)
 }
 
 // Handler is the struct for route handler functions
@@ -53,6 +56,7 @@ func (h *Handler) DescribeDepartments(w http.ResponseWriter, r *http.Request) {
 		h.db.TacomaOfficerMetadata(),
 		h.db.PortlandOfficerMetadata(),
 		h.db.AuburnOfficerMetadata(),
+		h.db.LakewoodOfficerMetadata(),
 	}
 
 	w.WriteHeader(http.StatusOK)
