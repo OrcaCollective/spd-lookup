@@ -32,18 +32,6 @@ type tacomaOfficer struct {
 
 // TacomaOfficerMetadata retrieves metadata describing the TacomaOfficer struct
 func (c *Client) TacomaOfficerMetadata() *DepartmentMetadata {
-	var date time.Time
-	err := c.pool.QueryRow(context.Background(),
-		`
-			SELECT max(date) as date
-			FROM tacoma_officers;
-		`).Scan(&date)
-
-	if err != nil {
-		fmt.Printf("DB Client Error: %s", err)
-		return &DepartmentMetadata{}
-	}
-
 	return &DepartmentMetadata{
 		Fields: []map[string]string{
 			{
@@ -64,10 +52,10 @@ func (c *Client) TacomaOfficerMetadata() *DepartmentMetadata {
 			},
 			{
 				"FieldName": "salary",
-				"Label":     "Salary",
+				"Label":     "Salary 2019",
 			},
 		},
-		LastAvailableRosterDate: date.Format("2006-01-02"),
+		LastAvailableRosterDate: "2019",
 		Name:                    "Tacoma PD",
 		ID:                      "tpd",
 		SearchRoutes: map[string]*SearchRouteMetadata{
