@@ -2,7 +2,6 @@ package data
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/gobuffalo/nulls"
