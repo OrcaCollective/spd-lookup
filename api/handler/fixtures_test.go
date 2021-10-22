@@ -65,8 +65,10 @@ func (m *MockDatabase) SeattleGetOfficerByBadge(badge string) ([]*data.SeattleOf
 	if badge == "db_error" {
 		return nil, fmt.Errorf("get officer by badge db error")
 	} else if badge == "badge_not_found" {
-		return nil, fmt.Errorf("no rows in result set")
-	}
+		return []*data.SeattleOfficer{}, nil
+	} else if badge == "1" {
+	    return []*data.SeattleOfficer{testSeattleOfficer1}, nil
+    }
 	return []*data.SeattleOfficer{testSeattleOfficer1, testSeattleOfficer2, testSeattleOfficer3}, nil
 }
 

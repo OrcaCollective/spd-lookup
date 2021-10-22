@@ -63,7 +63,7 @@ func Test_Handler_SeattleStrictMatch(t *testing.T) {
 			name:           "badge search, officer found",
 			badge:          "1",
 			expectedStatus: http.StatusOK,
-			expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","unit_description":null,"first_name":"first","middle_name":null,"last_name":"sea"}]` + "\n"),
+            expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","first_name":"first","last_name":"sea","is_current":false}]` + "\n"),
 		},
 		{
 			name:           "name search, db error",
@@ -75,7 +75,7 @@ func Test_Handler_SeattleStrictMatch(t *testing.T) {
 			name:           "name search, officers found",
 			lastName:       "test",
 			expectedStatus: http.StatusOK,
-			expectedBody:   []byte(`[{"date":"1889-05-01","badge":"2","unit_description":null,"first_name":"first","middle_name":null,"last_name":"poo"},{"date":"1889-05-01","badge":"3","unit_description":null,"first_name":"test","middle_name":null,"last_name":"poo"},{"date":"1889-05-01","badge":"1","unit_description":null,"first_name":"first","middle_name":null,"last_name":"sea"}]` + "\n"),
+            expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","first_name":"first","last_name":"sea","is_current":false},{"date":"1889-05-01","badge":"2","first_name":"first","last_name":"poo","is_current":false},{"date":"1889-05-01","badge":"3","first_name":"test","last_name":"poo","is_current":false}]` + "\n"),
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -124,7 +124,7 @@ func Test_Handler_SeattleFuzzySearch(t *testing.T) {
 			firstName:      "test",
 			lastName:       "test",
 			expectedStatus: http.StatusOK,
-			expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","unit_description":null,"first_name":"first","middle_name":null,"last_name":"sea"}]` + "\n"),
+            expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","first_name":"first","last_name":"sea","is_current":false}]` + "\n"),
 		},
 		{
 			name:           "first name fuzzy search, db error",
@@ -136,7 +136,7 @@ func Test_Handler_SeattleFuzzySearch(t *testing.T) {
 			name:           "first name fuzzy search, officers found",
 			firstName:      "test",
 			expectedStatus: http.StatusOK,
-			expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","unit_description":null,"first_name":"first","middle_name":null,"last_name":"sea"}]` + "\n"),
+            expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","first_name":"first","last_name":"sea","is_current":false}]` + "\n"),
 		},
 		{
 			name:           "last name fuzzy search, db error",
@@ -148,7 +148,7 @@ func Test_Handler_SeattleFuzzySearch(t *testing.T) {
 			name:           "last name fuzzy search, officers found",
 			lastName:       "test",
 			expectedStatus: http.StatusOK,
-			expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","unit_description":null,"first_name":"first","middle_name":null,"last_name":"sea"}]` + "\n"),
+            expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","first_name":"first","last_name":"sea","is_current":false}]` + "\n"),
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -160,8 +160,8 @@ func Test_Handler_SeattleFuzzySearch(t *testing.T) {
 
 			defer res.Body.Close()
 			resp, _ := ioutil.ReadAll(res.Body)
-			if !bytes.Equal(tt.expectedBody, resp) {
-				t.Errorf("Expected resp %s; got %s", tt.expectedBody, resp)
+			if string(tt.expectedBody) != string(resp) {
+				t.Errorf("Expected resp %q; got %q", tt.expectedBody, resp)
 			}
 		})
 	}
