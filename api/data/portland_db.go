@@ -84,12 +84,12 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 			FROM portland_officers;
 		`).Scan(&cert_revoked_date_string)
 	if err != nil {
-		fmt.Println("DB Client Error: %s", err)
+		fmt.Printf("DB Client Error: %s\n", err)
 		return &DepartmentMetadata{}
 	}
 	cert_revoked_date, err := portlandParseDate(cert_revoked_date_string)
 	if err != nil {
-		fmt.Println("Date Error: %s", err)
+		fmt.Printf("Date Error: %s\n", err)
 		return &DepartmentMetadata{}
 	}
 
@@ -100,13 +100,13 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 			FROM portland_officers;
 		`).Scan(&hire_date_string)
 	if err != nil {
-		fmt.Println("DB Client Error: %s", err)
+		fmt.Printf("DB Client Error: %s\n", err)
 		return &DepartmentMetadata{}
 	}
 
 	hire_date, err := portlandParseDate(hire_date_string)
 	if err != nil {
-		fmt.Println("Date Error: %s", err)
+		fmt.Printf("Date Error: %s\n", err)
 		return &DepartmentMetadata{}
 	}
 
@@ -117,12 +117,12 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 			FROM portland_officers;
 		`).Scan(&cert_date_string)
 	if err != nil {
-		fmt.Println("DB Client Error: %s", err)
+		fmt.Printf("DB Client Error: %s\n", err)
 		return &DepartmentMetadata{}
 	}
 	cert_date, err := portlandParseDate(cert_date_string)
 	if err != nil {
-		fmt.Println("Date Error: %s", err)
+		fmt.Printf("Date Error: %s\n", err)
 		return &DepartmentMetadata{}
 	}
 
@@ -130,7 +130,7 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 	// recent date.
 	manual_date, err := time.Parse("2006-01-02", "2021-03-12")
 	if err != nil {
-		fmt.Println("Date Error: %s", err)
+		fmt.Printf("Date Error: %s\n", err)
 		return &DepartmentMetadata{}
 	}
 	max_date := maxDate(hire_date, cert_revoked_date, cert_date, manual_date)
