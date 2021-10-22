@@ -29,6 +29,19 @@ type MockDatabase struct {
 
 var mayday = "1889-05-01"
 
+func (m *MockDatabase) LakewoodOfficerMetadata() *data.DepartmentMetadata {
+    return nil
+}
+func (m *MockDatabase) OlympiaOfficerMetadata() *data.DepartmentMetadata {
+    return nil
+}
+func (m *MockDatabase) AuburnOfficerMetadata() *data.DepartmentMetadata {
+    return nil
+}
+func (m *MockDatabase) PortlandOfficerMetadata() *data.DepartmentMetadata {
+    return nil
+}
+
 func (m *MockDatabase) SeattleOfficerMetadata() *data.DepartmentMetadata {
 	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},

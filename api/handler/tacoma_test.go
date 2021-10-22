@@ -63,7 +63,7 @@ func Test_Handler_TacomaStrictMatch(t *testing.T) {
 			name:           "name search, officers found",
 			lastName:       "test",
 			expectedStatus: http.StatusOK,
-			expectedBody:   []byte(`[{"date":"1889-05-01T00:00:00Z","first_name":"first","last_name":"poo","salary":null},{"date":"1889-05-01T00:00:00Z","first_name":"test","last_name":"poo","salary":null},{"date":"1889-05-01T00:00:00Z","first_name":"first","last_name":"tac","salary":null}]` + "\n"),
+			expectedBody:   []byte(`[{"date":"1889-05-01","first_name":"first","last_name":"poo","salary":null},{"date":"1889-05-01","first_name":"test","last_name":"poo","salary":null},{"date":"1889-05-01","first_name":"first","last_name":"tac","salary":null}]` + "\n"),
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -112,7 +112,7 @@ func Test_Handler_TacomaFuzzySearch(t *testing.T) {
 			firstName:      "test",
 			lastName:       "test",
 			expectedStatus: http.StatusOK,
-			expectedBody:   []byte(`[{"date":"1889-05-01T00:00:00Z","first_name":"first","last_name":"tac","salary":null}]` + "\n"),
+			expectedBody:   []byte(`[{"date":"1889-05-01","first_name":"first","last_name":"tac","salary":null}]` + "\n"),
 		},
 		{
 			name:           "first name fuzzy search, db error",
@@ -124,7 +124,7 @@ func Test_Handler_TacomaFuzzySearch(t *testing.T) {
 			name:           "first name fuzzy search, officers found",
 			firstName:      "test",
 			expectedStatus: http.StatusOK,
-			expectedBody:   []byte(`[{"date":"1889-05-01T00:00:00Z","first_name":"first","last_name":"tac","salary":null}]` + "\n"),
+			expectedBody:   []byte(`[{"date":"1889-05-01","first_name":"first","last_name":"tac","salary":null}]` + "\n"),
 		},
 		{
 			name:           "last name fuzzy search, db error",
@@ -136,7 +136,7 @@ func Test_Handler_TacomaFuzzySearch(t *testing.T) {
 			name:           "last name fuzzy search, officers found",
 			lastName:       "test",
 			expectedStatus: http.StatusOK,
-			expectedBody:   []byte(`[{"date":"1889-05-01T00:00:00Z","first_name":"first","last_name":"tac","salary":null}]` + "\n"),
+			expectedBody:   []byte(`[{"date":"1889-05-01","first_name":"first","last_name":"tac","salary":null}]` + "\n"),
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
