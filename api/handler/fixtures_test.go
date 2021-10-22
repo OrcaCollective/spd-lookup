@@ -29,6 +29,79 @@ type MockDatabase struct {
 
 var mayday = "1889-05-01"
 
+func (m *MockDatabase) LakewoodOfficerMetadata() *data.DepartmentMetadata {
+    return &data.DepartmentMetadata{
+		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
+		LastAvailableRosterDate: "yesterday",
+		Name:                    "Lakewood PD",
+		ID:                      "lpd",
+		SearchRoutes: map[string]*data.SearchRouteMetadata{
+			"exact": {
+				Path:        "/lakewood/officer",
+				QueryParams: []string{"first_name", "last_name"},
+			},
+			"fuzzy": {
+				Path:        "/lakewood/officer/search",
+				QueryParams: []string{"first_name", "last_name"},
+			},
+		},
+	}
+}
+func (m *MockDatabase) OlympiaOfficerMetadata() *data.DepartmentMetadata {
+    return &data.DepartmentMetadata{
+		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
+		LastAvailableRosterDate: "yesterday",
+		Name:                    "Olympia PD",
+		ID:                      "opd",
+		SearchRoutes: map[string]*data.SearchRouteMetadata{
+			"exact": {
+				Path:        "/olympia/officer",
+				QueryParams: []string{"badge", "first_name", "last_name"},
+			},
+			"fuzzy": {
+				Path:        "/olympia/officer/search",
+				QueryParams: []string{"first_name", "last_name"},
+			},
+		},
+	}
+}
+func (m *MockDatabase) AuburnOfficerMetadata() *data.DepartmentMetadata {
+    return &data.DepartmentMetadata{
+		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
+		LastAvailableRosterDate: "yesterday",
+		Name:                    "Auburn PD",
+		ID:                      "apd",
+		SearchRoutes: map[string]*data.SearchRouteMetadata{
+			"exact": {
+				Path:        "/auburn/officer",
+				QueryParams: []string{"badge", "first_name", "last_name"},
+			},
+			"fuzzy": {
+				Path:        "/auburn/officer/search",
+				QueryParams: []string{"first_name", "last_name"},
+			},
+		},
+	}
+}
+func (m *MockDatabase) PortlandOfficerMetadata() *data.DepartmentMetadata {
+    return &data.DepartmentMetadata{
+		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
+		LastAvailableRosterDate: "today",
+		Name:                    "Portland PB",
+		ID:                      "ppb",
+		SearchRoutes: map[string]*data.SearchRouteMetadata{
+			"exact": {
+				Path:        "/portland/officer",
+				QueryParams: []string{"badge", "first_name", "last_name", "employee_id", "helmet_id", "helmet_id_three_digit"},
+			},
+			"fuzzy": {
+				Path:        "/portland/officer/search",
+				QueryParams: []string{"first_name", "last_name"},
+			},
+		},
+	}
+}
+
 func (m *MockDatabase) SeattleOfficerMetadata() *data.DepartmentMetadata {
 	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
@@ -52,8 +125,10 @@ func (m *MockDatabase) SeattleGetOfficerByBadge(badge string) ([]*data.SeattleOf
 	if badge == "db_error" {
 		return nil, fmt.Errorf("get officer by badge db error")
 	} else if badge == "badge_not_found" {
-		return nil, fmt.Errorf("no rows in result set")
-	}
+		return []*data.SeattleOfficer{}, nil
+	} else if badge == "1" {
+	    return []*data.SeattleOfficer{testSeattleOfficer1}, nil
+    }
 	return []*data.SeattleOfficer{testSeattleOfficer1, testSeattleOfficer2, testSeattleOfficer3}, nil
 }
 

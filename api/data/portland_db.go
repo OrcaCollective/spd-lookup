@@ -2,6 +2,8 @@ package data
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/gobuffalo/nulls"
 	"github.com/jackc/pgx/v4"
@@ -43,8 +45,39 @@ type PortlandOfficer struct {
 	Notes                    nulls.String `json:"notes,omitempty"`
 }
 
+func maxDate(dates ...time.Time) time.Time {
+	t := time.Time{}
+	for _, t2 := range dates {
+		if t2.After(t) {
+			t = t2
+		}
+	}
+	return t
+}
+
 // PortlandOfficerMetadata retrieves metadata describing the PortlandOfficer struct
 func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
+	var hire_date time.Time
+	var cert_revoked_date time.Time
+	var cert_date time.Time
+	err := c.pool.QueryRow(context.Background(),
+		`
+			SELECT max(retired_or_cert_revoked_date) as cert_revoked_date, max(hire_date) as hire_date, max(state_cert_date) as cert_date
+			FROM portland_search_officer_by_employee_p;
+		`).Scan(&cert_revoked_date, &hire_date, &cert_date)
+	if err != nil {
+		fmt.Printf("DB Client Error: %s", err)
+		return &DepartmentMetadata{}
+	}
+	// This is the latest date manually added - if the data catches up / exceeds this date it will automatically use the most
+	// recent date.
+	manual_date, err := time.Parse("2006-01-02", "2021-03-12")
+	if err != nil {
+		fmt.Printf("Date Error: %s", err)
+		return &DepartmentMetadata{}
+	}
+	max_date := maxDate(hire_date, cert_revoked_date, cert_date, manual_date)
+
 	return &DepartmentMetadata{
 		Fields: []map[string]string{
 			{
@@ -176,7 +209,7 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 				"Label":     "Notes",
 			},
 		},
-		LastAvailableRosterDate: "2021-03-12",
+		LastAvailableRosterDate: max_date.Format("2006-01-02"),
 		Name:                    "Portland PB",
 		ID:                      "ppb",
 		SearchRoutes: map[string]*SearchRouteMetadata{
