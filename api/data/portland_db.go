@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gobuffalo/nulls"
@@ -55,25 +56,81 @@ func maxDate(dates ...time.Time) time.Time {
 	return t
 }
 
+func portlandParseDate(s string) (time.Time, error) {
+	date, err := time.Parse("2006-01-02", s)
+	if err == nil {
+		return date, nil
+	}
+	date, err = time.Parse("1/2/06", s)
+	if err == nil {
+		return date, nil
+	}
+	date, err = time.Parse("1/2/2006", s)
+	if err == nil {
+		return date, nil
+	}
+	if strings.ToUpper(s) == "N/A" {
+		return time.Time{}, nil
+	}
+	return time.Time{}, err
+}
+
 // PortlandOfficerMetadata retrieves metadata describing the PortlandOfficer struct
 func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
-	var hire_date time.Time
-	var cert_revoked_date time.Time
-	var cert_date time.Time
+	var cert_revoked_date_string string
 	err := c.pool.QueryRow(context.Background(),
 		`
-			SELECT max(retired_or_cert_revoked_date) as cert_revoked_date, max(hire_date) as hire_date, max(state_cert_date) as cert_date
-			FROM portland_search_officer_by_employee_p;
-		`).Scan(&cert_revoked_date, &hire_date, &cert_date)
+			SELECT max(retired_or_cert_revoked_date) as cert_revoked_date
+			FROM portland_officers;
+		`).Scan(&cert_revoked_date_string)
 	if err != nil {
-		fmt.Printf("DB Client Error: %s", err)
+		fmt.Printf("DB Client Error: %s\n", err)
 		return &DepartmentMetadata{}
 	}
+	cert_revoked_date, err := portlandParseDate(cert_revoked_date_string)
+	if err != nil {
+		fmt.Printf("Date Error: %s\n", err)
+		return &DepartmentMetadata{}
+	}
+
+	var hire_date_string string
+	err = c.pool.QueryRow(context.Background(),
+		`
+			SELECT max(hire_date) as hire_date
+			FROM portland_officers;
+		`).Scan(&hire_date_string)
+	if err != nil {
+		fmt.Printf("DB Client Error: %s\n", err)
+		return &DepartmentMetadata{}
+	}
+
+	hire_date, err := portlandParseDate(hire_date_string)
+	if err != nil {
+		fmt.Printf("Date Error: %s\n", err)
+		return &DepartmentMetadata{}
+	}
+
+	var cert_date_string string
+	err = c.pool.QueryRow(context.Background(),
+		`
+			SELECT max(state_cert_date) as cert_date
+			FROM portland_officers;
+		`).Scan(&cert_date_string)
+	if err != nil {
+		fmt.Printf("DB Client Error: %s\n", err)
+		return &DepartmentMetadata{}
+	}
+	cert_date, err := portlandParseDate(cert_date_string)
+	if err != nil {
+		fmt.Printf("Date Error: %s\n", err)
+		return &DepartmentMetadata{}
+	}
+
 	// This is the latest date manually added - if the data catches up / exceeds this date it will automatically use the most
 	// recent date.
 	manual_date, err := time.Parse("2006-01-02", "2021-03-12")
 	if err != nil {
-		fmt.Printf("Date Error: %s", err)
+		fmt.Printf("Date Error: %s\n", err)
 		return &DepartmentMetadata{}
 	}
 	max_date := maxDate(hire_date, cert_revoked_date, cert_date, manual_date)
