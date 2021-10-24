@@ -20,6 +20,22 @@ func NewRouter(h Interface) http.Handler {
 	router.HandleFunc("/tacoma/metadata", h.TacomaOfficerMetadata).Methods("GET")
 	router.HandleFunc("/tacoma/officer", h.TacomaStrictMatch).Methods("GET")
 	router.HandleFunc("/tacoma/officer/search", h.TacomaFuzzySearch).Methods("GET")
+
+	router.HandleFunc("/portland/metadata", h.PortlandOfficerMetadata).Methods("GET")
+	router.HandleFunc("/portland/officer", h.PortlandStrictMatch).Methods("GET")
+	router.HandleFunc("/portland/officer/search", h.PortlandFuzzySearch).Methods("GET")
+
+	router.HandleFunc("/auburn/metadata", h.AuburnOfficerMetadata).Methods("GET")
+	router.HandleFunc("/auburn/officer", h.AuburnStrictMatch).Methods("GET")
+	router.HandleFunc("/auburn/officer/search", h.AuburnFuzzySearch).Methods("GET")
+
+	router.HandleFunc("/lakewood/metadata", h.LakewoodOfficerMetadata).Methods("GET")
+	router.HandleFunc("/lakewood/officer", h.LakewoodStrictMatch).Methods("GET")
+	router.HandleFunc("/lakewood/officer/search", h.LakewoodFuzzySearch).Methods("GET")
+
+	router.HandleFunc("/olympia/metadata", h.OlympiaOfficerMetadata).Methods("GET")
+	router.HandleFunc("/olympia/officer", h.OlympiaStrictMatch).Methods("GET")
+	router.HandleFunc("/olympia/officer/search", h.OlympiaFuzzySearch).Methods("GET")
 	return router
 }
 
@@ -47,6 +63,39 @@ func (m *MockDatabase) LakewoodOfficerMetadata() *data.DepartmentMetadata {
 		},
 	}
 }
+
+var testLakewoodOfficer1 = &data.LakewoodOfficer{Date: mayday, FirstName: "first", LastName: "lak"}
+var testLakewoodOfficer2 = &data.LakewoodOfficer{Date: mayday, FirstName: "first", LastName: "poo"}
+var testLakewoodOfficer3 = &data.LakewoodOfficer{Date: mayday, FirstName: "test", LastName: "poo"}
+
+func (m *MockDatabase) LakewoodSearchOfficerByName(firstName, lastName string) ([]*data.LakewoodOfficer, error) {
+	if firstName == "db_error" {
+		return nil, fmt.Errorf("get officer by name db error")
+	}
+	return []*data.LakewoodOfficer{testLakewoodOfficer1, testLakewoodOfficer2, testLakewoodOfficer3}, nil
+}
+
+func (m *MockDatabase) LakewoodFuzzySearchByName(name string) ([]*data.LakewoodOfficer, error) {
+	if name == "db_error db_error" {
+		return nil, fmt.Errorf("fuzzy search by name db error")
+	}
+	return []*data.LakewoodOfficer{testLakewoodOfficer1}, nil
+}
+
+func (m *MockDatabase) LakewoodFuzzySearchByFirstName(name string) ([]*data.LakewoodOfficer, error) {
+	if name == "db_error" {
+		return nil, fmt.Errorf("fuzzy search by name db error")
+	}
+	return []*data.LakewoodOfficer{testLakewoodOfficer1}, nil
+}
+
+func (m *MockDatabase) LakewoodFuzzySearchByLastName(name string) ([]*data.LakewoodOfficer, error) {
+	if name == "db_error" {
+		return nil, fmt.Errorf("fuzzy search by name db error")
+	}
+	return []*data.LakewoodOfficer{testLakewoodOfficer1}, nil
+}
+
 func (m *MockDatabase) OlympiaOfficerMetadata() *data.DepartmentMetadata {
     return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
@@ -65,6 +114,7 @@ func (m *MockDatabase) OlympiaOfficerMetadata() *data.DepartmentMetadata {
 		},
 	}
 }
+
 func (m *MockDatabase) AuburnOfficerMetadata() *data.DepartmentMetadata {
     return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
@@ -83,6 +133,7 @@ func (m *MockDatabase) AuburnOfficerMetadata() *data.DepartmentMetadata {
 		},
 	}
 }
+
 func (m *MockDatabase) PortlandOfficerMetadata() *data.DepartmentMetadata {
     return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
