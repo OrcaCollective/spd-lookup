@@ -115,6 +115,48 @@ func (m *MockDatabase) OlympiaOfficerMetadata() *data.DepartmentMetadata {
 	}
 }
 
+var testOlympiaOfficer1 = &data.OlympiaOfficer{Date: mayday, Badge: "1", FirstName: "first", LastName: "oly"}
+var testOlympiaOfficer2 = &data.OlympiaOfficer{Date: mayday, Badge: "2", FirstName: "first", LastName: "poo"}
+var testOlympiaOfficer3 = &data.OlympiaOfficer{Date: mayday, Badge: "3", FirstName: "test", LastName: "poo"}
+
+func (m *MockDatabase) OlympiaGetOfficerByBadge(badge string) ([]*data.OlympiaOfficer, error) {
+	if badge == "db_error" {
+		return nil, fmt.Errorf("get officer by badge db error")
+	} else if badge == "badge_not_found" {
+		return []*data.OlympiaOfficer{}, nil
+	} else if badge == "1" {
+	    return []*data.OlympiaOfficer{testOlympiaOfficer1}, nil
+    }
+	return []*data.OlympiaOfficer{testOlympiaOfficer1, testOlympiaOfficer2, testOlympiaOfficer3}, nil
+}
+
+func (m *MockDatabase) OlympiaSearchOfficerByName(firstName, lastName string) ([]*data.OlympiaOfficer, error) {
+	if firstName == "db_error" {
+		return nil, fmt.Errorf("get officer by name db error")
+	}
+	return []*data.OlympiaOfficer{testOlympiaOfficer1, testOlympiaOfficer2, testOlympiaOfficer3}, nil
+}
+
+func (m *MockDatabase) OlympiaFuzzySearchByName(name string) ([]*data.OlympiaOfficer, error) {
+	if name == "db error" {
+		return nil, fmt.Errorf("fuzzy search by name db error")
+	}
+	return []*data.OlympiaOfficer{testOlympiaOfficer1}, nil
+}
+
+func (m *MockDatabase) OlympiaFuzzySearchByFirstName(firstName string) ([]*data.OlympiaOfficer, error) {
+	if firstName == "db_error" {
+		return nil, fmt.Errorf("fuzzy search by first name db error")
+	}
+	return []*data.OlympiaOfficer{testOlympiaOfficer1}, nil
+}
+
+func (m *MockDatabase) OlympiaFuzzySearchByLastName(lastName string) ([]*data.OlympiaOfficer, error) {
+	if lastName == "db_error" {
+		return nil, fmt.Errorf("fuzzy search by last name db error")
+	}
+	return []*data.OlympiaOfficer{testOlympiaOfficer1}, nil
+}
 
 func (m *MockDatabase) AuburnOfficerMetadata() *data.DepartmentMetadata {
     return &data.DepartmentMetadata{
