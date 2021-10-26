@@ -2,14 +2,14 @@ version: '3'
 
 services:
   db:
-    image: sdsa/spd-lookup-db:latest
+    image: sdsa/spd-lookup-db:${DB_IMAGE_TAG:-latest}
     container_name: spd_lookup_db
     restart: always
     command: "-c config_file=/data/postgresql.conf"
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_USER=${DB_USERNAME:-postgres}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=ACAB_DB
     volumes:
@@ -17,14 +17,14 @@ services:
     networks:
       - postgres-network
   api:
-    image: sdsa/spd-lookup-api:latest
+    image: sdsa/spd-lookup-api:${API_IMAGE_TAG:-latest}
     container_name: spd_lookup_api
     restart: always
     ports:
       - 1312:1312
     environment:
       - PORT=1312
-      - DB_USERNAME=${DB_USERNAME}
+      - DB_USERNAME=${DB_USERNAME:-postgres}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=ACAB_DB
       - DB_HOST=db
