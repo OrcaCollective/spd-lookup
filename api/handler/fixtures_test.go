@@ -6,6 +6,7 @@ import (
 	"spd-lookup/api/data"
 
 	"github.com/gorilla/mux"
+	"github.com/gobuffalo/nulls"
 )
 
 func NewRouter(h Interface) http.Handler {
@@ -237,6 +238,82 @@ func (m *MockDatabase) PortlandOfficerMetadata() *data.DepartmentMetadata {
 			},
 		},
 	}
+}
+
+var testPortlandOfficer1 = &data.PortlandOfficer{Badge: nulls.NewString("1"), EmployeeID: nulls.NewString("1"), HelmetID: nulls.NewString("1"), HelmetIDThreeDigit: nulls.NewString("111"), FirstName: nulls.NewString("first"), LastName: nulls.NewString("ppb")}
+var testPortlandOfficer2 = &data.PortlandOfficer{Badge: nulls.NewString("2"), EmployeeID: nulls.NewString("2"), HelmetID: nulls.NewString("1"), HelmetIDThreeDigit: nulls.NewString("222"), FirstName: nulls.NewString("first"), LastName: nulls.NewString("poo")}
+var testPortlandOfficer3 = &data.PortlandOfficer{Badge: nulls.NewString("3"), EmployeeID: nulls.NewString("3"), HelmetID: nulls.NewString("1"), HelmetIDThreeDigit: nulls.NewString("333"), FirstName: nulls.NewString("test"), LastName: nulls.NewString("poo")}
+
+func (m *MockDatabase) PortlandSearchOfficersByBadge(badge string) ([]*data.PortlandOfficer, error) {
+	if badge == "db_error" {
+		return nil, fmt.Errorf("get officer by badge db error")
+	} else if badge == "badge_not_found" {
+		return []*data.PortlandOfficer{}, nil
+	} else if badge == "1" {
+	    return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+    }
+	return []*data.PortlandOfficer{testPortlandOfficer1, testPortlandOfficer2, testPortlandOfficer3}, nil
+}
+
+func (m *MockDatabase) PortlandSearchOfficersByEmployeeId(employee_id string) ([]*data.PortlandOfficer, error) {
+	if employee_id == "db_error" {
+		return nil, fmt.Errorf("get officer by employee id db error")
+	} else if employee_id == "employee_id_not_found" {
+		return []*data.PortlandOfficer{}, nil
+	} else if employee_id == "1" {
+	    return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+    }
+	return []*data.PortlandOfficer{testPortlandOfficer1, testPortlandOfficer2, testPortlandOfficer3}, nil
+}
+
+func (m *MockDatabase) PortlandSearchOfficersByHelmetId(helmet_id string) ([]*data.PortlandOfficer, error) {
+	if helmet_id == "db_error" {
+		return nil, fmt.Errorf("get officer by helmet id db error")
+	} else if helmet_id == "helmet_id_not_found" {
+		return []*data.PortlandOfficer{}, nil
+	} else if helmet_id == "1" {
+	    return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+    }
+	return []*data.PortlandOfficer{testPortlandOfficer1, testPortlandOfficer2, testPortlandOfficer3}, nil
+}
+
+func (m *MockDatabase) PortlandSearchOfficersByHelmetIdThreeDigit(helmet_id_three_digit string) ([]*data.PortlandOfficer, error) {
+	if helmet_id_three_digit == "db_error" {
+		return nil, fmt.Errorf("get officer by helmet id three digits db error")
+	} else if helmet_id_three_digit == "helmet_id_three_digit_not_found" {
+		return []*data.PortlandOfficer{}, nil
+	} else if helmet_id_three_digit == "111" {
+	    return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+    }
+	return []*data.PortlandOfficer{testPortlandOfficer1, testPortlandOfficer2, testPortlandOfficer3}, nil
+}
+
+func (m *MockDatabase) PortlandSearchOfficersByName(firstName, lastName string) ([]*data.PortlandOfficer, error) {
+	if firstName == "db_error" {
+		return nil, fmt.Errorf("get officer by name db error")
+	}
+	return []*data.PortlandOfficer{testPortlandOfficer1, testPortlandOfficer2, testPortlandOfficer3}, nil
+}
+
+func (m *MockDatabase) PortlandFuzzySearchByName(name string) ([]*data.PortlandOfficer, error) {
+	if name == "db error" {
+		return nil, fmt.Errorf("fuzzy search by name db error")
+	}
+	return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+}
+
+func (m *MockDatabase) PortlandFuzzySearchByFirstName(firstName string) ([]*data.PortlandOfficer, error) {
+	if firstName == "db_error" {
+		return nil, fmt.Errorf("fuzzy search by first name db error")
+	}
+	return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+}
+
+func (m *MockDatabase) PortlandFuzzySearchByLastName(lastName string) ([]*data.PortlandOfficer, error) {
+	if lastName == "db_error" {
+		return nil, fmt.Errorf("fuzzy search by last name db error")
+	}
+	return []*data.PortlandOfficer{testPortlandOfficer1}, nil
 }
 
 func (m *MockDatabase) SeattleOfficerMetadata() *data.DepartmentMetadata {
