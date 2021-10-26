@@ -115,6 +115,7 @@ func (m *MockDatabase) OlympiaOfficerMetadata() *data.DepartmentMetadata {
 	}
 }
 
+
 func (m *MockDatabase) AuburnOfficerMetadata() *data.DepartmentMetadata {
     return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
@@ -132,6 +133,49 @@ func (m *MockDatabase) AuburnOfficerMetadata() *data.DepartmentMetadata {
 			},
 		},
 	}
+}
+
+var testAuburnOfficer1 = &data.AuburnOfficer{Date: mayday, Badge: "1", FirstName: "first", LastName: "aub"}
+var testAuburnOfficer2 = &data.AuburnOfficer{Date: mayday, Badge: "2", FirstName: "first", LastName: "poo"}
+var testAuburnOfficer3 = &data.AuburnOfficer{Date: mayday, Badge: "3", FirstName: "test", LastName: "poo"}
+
+func (m *MockDatabase) AuburnGetOfficerByBadge(badge string) ([]*data.AuburnOfficer, error) {
+	if badge == "db_error" {
+		return nil, fmt.Errorf("get officer by badge db error")
+	} else if badge == "badge_not_found" {
+		return []*data.AuburnOfficer{}, nil
+	} else if badge == "1" {
+	    return []*data.AuburnOfficer{testAuburnOfficer1}, nil
+    }
+	return []*data.AuburnOfficer{testAuburnOfficer1, testAuburnOfficer2, testAuburnOfficer3}, nil
+}
+
+func (m *MockDatabase) AuburnSearchOfficerByName(firstName, lastName string) ([]*data.AuburnOfficer, error) {
+	if firstName == "db_error" {
+		return nil, fmt.Errorf("get officer by name db error")
+	}
+	return []*data.AuburnOfficer{testAuburnOfficer1, testAuburnOfficer2, testAuburnOfficer3}, nil
+}
+
+func (m *MockDatabase) AuburnFuzzySearchByName(name string) ([]*data.AuburnOfficer, error) {
+	if name == "db error" {
+		return nil, fmt.Errorf("fuzzy search by name db error")
+	}
+	return []*data.AuburnOfficer{testAuburnOfficer1}, nil
+}
+
+func (m *MockDatabase) AuburnFuzzySearchByFirstName(firstName string) ([]*data.AuburnOfficer, error) {
+	if firstName == "db_error" {
+		return nil, fmt.Errorf("fuzzy search by first name db error")
+	}
+	return []*data.AuburnOfficer{testAuburnOfficer1}, nil
+}
+
+func (m *MockDatabase) AuburnFuzzySearchByLastName(lastName string) ([]*data.AuburnOfficer, error) {
+	if lastName == "db_error" {
+		return nil, fmt.Errorf("fuzzy search by last name db error")
+	}
+	return []*data.AuburnOfficer{testAuburnOfficer1}, nil
 }
 
 func (m *MockDatabase) PortlandOfficerMetadata() *data.DepartmentMetadata {
