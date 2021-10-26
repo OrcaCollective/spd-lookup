@@ -13,9 +13,9 @@ import (
 type LakewoodOfficer struct {
 	Date            string `json:"date,omitempty"`
 	Title           string `json:"title,omitempty"`
-	LastName           string `json:"last_name,omitempty"`
+	LastName        string `json:"last_name,omitempty"`
 	FirstName       string `json:"first_name,omitempty"`
-	Unit        string `json:"unit,omitempty"`
+	Unit            string `json:"unit,omitempty"`
 	UnitDescription string `json:"unit_description,omitempty"`
 }
 
@@ -24,9 +24,9 @@ type LakewoodOfficer struct {
 type lakewoodOfficer struct {
 	Date            time.Time
 	Title           nulls.String
-	LastName           nulls.String
+	LastName        nulls.String
 	FirstName       nulls.String
-	Unit        nulls.String
+	Unit            nulls.String
 	UnitDescription nulls.String
 }
 
@@ -68,7 +68,7 @@ func (c *Client) LakewoodOfficerMetadata() *DepartmentMetadata {
 			},
 			{
 				"FieldName": "unit_descritpion",
-				"Label": "Unit Description",
+				"Label":     "Unit Description",
 			},
 		},
 		LastAvailableRosterDate: date.Format("2006-01-02"),

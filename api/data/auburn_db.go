@@ -11,21 +11,21 @@ import (
 
 // AuburnOfficer is the object model for LPD officers
 type AuburnOfficer struct {
-	Date            string `json:"date,omitempty"`
-	Badge           string `json:"badge,omitempty"`
-	Title           string `json:"title,omitempty"`
-	FirstName       string `json:"first_name,omitempty"`
-	LastName        string `json:"last_name,omitempty"`
+	Date      string `json:"date,omitempty"`
+	Badge     string `json:"badge,omitempty"`
+	Title     string `json:"title,omitempty"`
+	FirstName string `json:"first_name,omitempty"`
+	LastName  string `json:"last_name,omitempty"`
 }
 
 // auburnOfficer is an internal intermediary between the returned SQL rows data
 // and the actual JSON return itself.
 type auburnOfficer struct {
-	Date            time.Time
-	Badge           nulls.String
-	Title           nulls.String
-	FirstName       nulls.String
-	LastName        nulls.String
+	Date      time.Time
+	Badge     nulls.String
+	Title     nulls.String
+	FirstName nulls.String
+	LastName  nulls.String
 }
 
 // AuburnOfficerMetadata retrieves metadata describing the AuburnOfficer struct

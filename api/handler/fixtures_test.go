@@ -47,7 +47,7 @@ type MockDatabase struct {
 var mayday = "1889-05-01"
 
 func (m *MockDatabase) LakewoodOfficerMetadata() *data.DepartmentMetadata {
-    return &data.DepartmentMetadata{
+	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
 		LastAvailableRosterDate: "yesterday",
 		Name:                    "Lakewood PD",
@@ -98,7 +98,7 @@ func (m *MockDatabase) LakewoodFuzzySearchByLastName(name string) ([]*data.Lakew
 }
 
 func (m *MockDatabase) OlympiaOfficerMetadata() *data.DepartmentMetadata {
-    return &data.DepartmentMetadata{
+	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
 		LastAvailableRosterDate: "yesterday",
 		Name:                    "Olympia PD",
@@ -160,7 +160,7 @@ func (m *MockDatabase) OlympiaFuzzySearchByLastName(lastName string) ([]*data.Ol
 }
 
 func (m *MockDatabase) AuburnOfficerMetadata() *data.DepartmentMetadata {
-    return &data.DepartmentMetadata{
+	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
 		LastAvailableRosterDate: "yesterday",
 		Name:                    "Auburn PD",
@@ -222,7 +222,7 @@ func (m *MockDatabase) AuburnFuzzySearchByLastName(lastName string) ([]*data.Aub
 }
 
 func (m *MockDatabase) PortlandOfficerMetadata() *data.DepartmentMetadata {
-    return &data.DepartmentMetadata{
+	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
 		LastAvailableRosterDate: "today",
 		Name:                    "Portland PB",
@@ -341,8 +341,8 @@ func (m *MockDatabase) SeattleGetOfficerByBadge(badge string) ([]*data.SeattleOf
 	} else if badge == "badge_not_found" {
 		return []*data.SeattleOfficer{}, nil
 	} else if badge == "1" {
-	    return []*data.SeattleOfficer{testSeattleOfficer1}, nil
-    }
+		return []*data.SeattleOfficer{testSeattleOfficer1}, nil
+	}
 	return []*data.SeattleOfficer{testSeattleOfficer1, testSeattleOfficer2, testSeattleOfficer3}, nil
 }
 
