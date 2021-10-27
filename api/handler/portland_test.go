@@ -35,15 +35,15 @@ func Test_Handler_PortlandStrictMatch(t *testing.T) {
 	defer ts.Close()
 
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		badge          string
-		employeeId		string
-		helmetId		string
-		helmetIdThreeDigit	string
-		expectedStatus int
-		expectedBody   []byte
+		name               string
+		firstName          string
+		lastName           string
+		badge              string
+		employeeId         string
+		helmetId           string
+		helmetIdThreeDigit string
+		expectedStatus     int
+		expectedBody       []byte
 	}{
 		{
 			name:           "no params",
@@ -66,7 +66,7 @@ func Test_Handler_PortlandStrictMatch(t *testing.T) {
 			name:           "badge search, officer found",
 			badge:          "1",
 			expectedStatus: http.StatusOK,
-            expectedBody:   []byte(`[{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
+			expectedBody:   []byte(`[{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
 		},
 		{
 			name:           "employee id not found",
@@ -76,51 +76,51 @@ func Test_Handler_PortlandStrictMatch(t *testing.T) {
 		},
 		{
 			name:           "employee id search, db error",
-			employeeId:          "db_error",
+			employeeId:     "db_error",
 			expectedStatus: http.StatusInternalServerError,
 			expectedBody:   []byte("error getting officer: get officer by employee id db error"),
 		},
 		{
 			name:           "employee id search, officer found",
-			employeeId:          "1",
+			employeeId:     "1",
 			expectedStatus: http.StatusOK,
-            expectedBody:   []byte(`[{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
+			expectedBody:   []byte(`[{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
 		},
 		{
 			name:           "helmet id not found",
-			helmetId:          "helmet_id_not_found",
+			helmetId:       "helmet_id_not_found",
 			expectedStatus: http.StatusOK,
 			expectedBody:   []byte("[]\n"),
 		},
 		{
 			name:           "helmet id search, db error",
-			helmetId:          "db_error",
+			helmetId:       "db_error",
 			expectedStatus: http.StatusInternalServerError,
 			expectedBody:   []byte("error getting officer: get officer by helmet id db error"),
 		},
 		{
 			name:           "helmet id search, officer found",
-			helmetId:          "1",
+			helmetId:       "1",
 			expectedStatus: http.StatusOK,
-            expectedBody:   []byte(`[{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
+			expectedBody:   []byte(`[{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
 		},
 		{
-			name:           "helmet id three digits not found",
-			helmetIdThreeDigit:          "helmet_id_three_digit_not_found",
-			expectedStatus: http.StatusOK,
-			expectedBody:   []byte("[]\n"),
+			name:               "helmet id three digits not found",
+			helmetIdThreeDigit: "helmet_id_three_digit_not_found",
+			expectedStatus:     http.StatusOK,
+			expectedBody:       []byte("[]\n"),
 		},
 		{
-			name:           "helmet id three digits search, db error",
-			helmetIdThreeDigit:          "db_error",
-			expectedStatus: http.StatusInternalServerError,
-			expectedBody:   []byte("error getting officer: get officer by helmet id three digits db error"),
+			name:               "helmet id three digits search, db error",
+			helmetIdThreeDigit: "db_error",
+			expectedStatus:     http.StatusInternalServerError,
+			expectedBody:       []byte("error getting officer: get officer by helmet id three digits db error"),
 		},
 		{
-			name:           "helmet id three digits search, officer found",
-			helmetIdThreeDigit:          "111",
-			expectedStatus: http.StatusOK,
-            expectedBody:   []byte(`[{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
+			name:               "helmet id three digits search, officer found",
+			helmetIdThreeDigit: "111",
+			expectedStatus:     http.StatusOK,
+			expectedBody:       []byte(`[{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
 		},
 		{
 			name:           "name search, db error",
@@ -132,7 +132,7 @@ func Test_Handler_PortlandStrictMatch(t *testing.T) {
 			name:           "name search, officers found",
 			lastName:       "test",
 			expectedStatus: http.StatusOK,
-            expectedBody:   []byte(`[{"first_name":"first","last_name":"poo","gender":null,"officer_rank":null,"employee_id":"2","helmet_id":"1","helmet_id_three_digit":"222","salary":null,"badge":"2","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null},{"first_name":"test","last_name":"poo","gender":null,"officer_rank":null,"employee_id":"3","helmet_id":"1","helmet_id_three_digit":"333","salary":null,"badge":"3","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null},{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
+			expectedBody:   []byte(`[{"first_name":"first","last_name":"poo","gender":null,"officer_rank":null,"employee_id":"2","helmet_id":"1","helmet_id_three_digit":"222","salary":null,"badge":"2","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null},{"first_name":"test","last_name":"poo","gender":null,"officer_rank":null,"employee_id":"3","helmet_id":"1","helmet_id_three_digit":"333","salary":null,"badge":"3","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null},{"first_name":"first","last_name":"ppb","gender":null,"officer_rank":null,"employee_id":"1","helmet_id":"1","helmet_id_three_digit":"111","salary":null,"badge":"1","cops_photo_profile_link":null,"cops_photo_has_photo":null,"employed_3_12_21":null,"employed_12_28_20":null,"employed_10_01_20":null,"retired_6_1_20":null,"retired_or_cert_revoked":null,"retired_or_cert_revoked_date":null,"hire_year":null,"hire_date":null,"state_cert_date":null,"state_cert_level":null,"rrt":null,"rrt_2016":null,"rrt_2018_niiya_email":null,"rrt_2018":null,"rrt_2019":null,"rrt_2020":null,"sound_truck_training_2020":null,"instructed_for_dpsst":null,"instructed_for_less_lethal":null,"involved_in_ois_uof":null,"notes":null}]` + "\n"),
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
