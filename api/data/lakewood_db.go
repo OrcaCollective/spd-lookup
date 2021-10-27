@@ -16,7 +16,7 @@ type LakewoodOfficer struct {
 	LastName           string `json:"last_name,omitempty"`
 	FirstName       string `json:"first_name,omitempty"`
 	Unit        string `json:"unit,omitempty"`
-	UnitDescription string `json:"unit_description"`
+	UnitDescription string `json:"unit_description,omitempty"`
 }
 
 // lakeOfficer is an internal intermediary between the returned SQL rows data
