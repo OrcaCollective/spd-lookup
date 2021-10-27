@@ -63,7 +63,7 @@ func Test_Handler_OlympiaStrictMatch(t *testing.T) {
 			name:           "badge search, officer found",
 			badge:          "1",
 			expectedStatus: http.StatusOK,
-            expectedBody:   []byte(`[{"date":"1889-05-01","first_name":"first","last_name":"oly","badge":"1"}]` + "\n"),
+			expectedBody:   []byte(`[{"date":"1889-05-01","first_name":"first","last_name":"oly","badge":"1"}]` + "\n"),
 		},
 		{
 			name:           "name search, db error",
@@ -75,7 +75,7 @@ func Test_Handler_OlympiaStrictMatch(t *testing.T) {
 			name:           "name search, officers found",
 			lastName:       "test",
 			expectedStatus: http.StatusOK,
-            expectedBody:   []byte(`[{"date":"1889-05-01","first_name":"first","last_name":"oly","badge":"1"},{"date":"1889-05-01","first_name":"first","last_name":"poo","badge":"2"},{"date":"1889-05-01","first_name":"test","last_name":"poo","badge":"3"}]` + "\n"),
+			expectedBody:   []byte(`[{"date":"1889-05-01","first_name":"first","last_name":"oly","badge":"1"},{"date":"1889-05-01","first_name":"first","last_name":"poo","badge":"2"},{"date":"1889-05-01","first_name":"test","last_name":"poo","badge":"3"}]` + "\n"),
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {

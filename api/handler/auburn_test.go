@@ -63,7 +63,7 @@ func Test_Handler_AuburnStrictMatch(t *testing.T) {
 			name:           "badge search, officer found",
 			badge:          "1",
 			expectedStatus: http.StatusOK,
-            expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","first_name":"first","last_name":"aub"}]` + "\n"),
+			expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","first_name":"first","last_name":"aub"}]` + "\n"),
 		},
 		{
 			name:           "name search, db error",
@@ -75,7 +75,7 @@ func Test_Handler_AuburnStrictMatch(t *testing.T) {
 			name:           "name search, officers found",
 			lastName:       "test",
 			expectedStatus: http.StatusOK,
-            expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","first_name":"first","last_name":"aub"},{"date":"1889-05-01","badge":"2","first_name":"first","last_name":"poo"},{"date":"1889-05-01","badge":"3","first_name":"test","last_name":"poo"}]` + "\n"),
+			expectedBody:   []byte(`[{"date":"1889-05-01","badge":"1","first_name":"first","last_name":"aub"},{"date":"1889-05-01","badge":"2","first_name":"first","last_name":"poo"},{"date":"1889-05-01","badge":"3","first_name":"test","last_name":"poo"}]` + "\n"),
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {

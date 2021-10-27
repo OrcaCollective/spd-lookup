@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"spd-lookup/api/data"
 
-	"github.com/gorilla/mux"
 	"github.com/gobuffalo/nulls"
+	"github.com/gorilla/mux"
 )
 
 func NewRouter(h Interface) http.Handler {
@@ -47,7 +47,7 @@ type MockDatabase struct {
 var mayday = "1889-05-01"
 
 func (m *MockDatabase) LakewoodOfficerMetadata() *data.DepartmentMetadata {
-    return &data.DepartmentMetadata{
+	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
 		LastAvailableRosterDate: "yesterday",
 		Name:                    "Lakewood PD",
@@ -98,7 +98,7 @@ func (m *MockDatabase) LakewoodFuzzySearchByLastName(name string) ([]*data.Lakew
 }
 
 func (m *MockDatabase) OlympiaOfficerMetadata() *data.DepartmentMetadata {
-    return &data.DepartmentMetadata{
+	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
 		LastAvailableRosterDate: "yesterday",
 		Name:                    "Olympia PD",
@@ -126,8 +126,8 @@ func (m *MockDatabase) OlympiaGetOfficerByBadge(badge string) ([]*data.OlympiaOf
 	} else if badge == "badge_not_found" {
 		return []*data.OlympiaOfficer{}, nil
 	} else if badge == "1" {
-	    return []*data.OlympiaOfficer{testOlympiaOfficer1}, nil
-    }
+		return []*data.OlympiaOfficer{testOlympiaOfficer1}, nil
+	}
 	return []*data.OlympiaOfficer{testOlympiaOfficer1, testOlympiaOfficer2, testOlympiaOfficer3}, nil
 }
 
@@ -160,7 +160,7 @@ func (m *MockDatabase) OlympiaFuzzySearchByLastName(lastName string) ([]*data.Ol
 }
 
 func (m *MockDatabase) AuburnOfficerMetadata() *data.DepartmentMetadata {
-    return &data.DepartmentMetadata{
+	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
 		LastAvailableRosterDate: "yesterday",
 		Name:                    "Auburn PD",
@@ -188,8 +188,8 @@ func (m *MockDatabase) AuburnGetOfficerByBadge(badge string) ([]*data.AuburnOffi
 	} else if badge == "badge_not_found" {
 		return []*data.AuburnOfficer{}, nil
 	} else if badge == "1" {
-	    return []*data.AuburnOfficer{testAuburnOfficer1}, nil
-    }
+		return []*data.AuburnOfficer{testAuburnOfficer1}, nil
+	}
 	return []*data.AuburnOfficer{testAuburnOfficer1, testAuburnOfficer2, testAuburnOfficer3}, nil
 }
 
@@ -222,7 +222,7 @@ func (m *MockDatabase) AuburnFuzzySearchByLastName(lastName string) ([]*data.Aub
 }
 
 func (m *MockDatabase) PortlandOfficerMetadata() *data.DepartmentMetadata {
-    return &data.DepartmentMetadata{
+	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
 		LastAvailableRosterDate: "today",
 		Name:                    "Portland PB",
@@ -250,8 +250,8 @@ func (m *MockDatabase) PortlandSearchOfficersByBadge(badge string) ([]*data.Port
 	} else if badge == "badge_not_found" {
 		return []*data.PortlandOfficer{}, nil
 	} else if badge == "1" {
-	    return []*data.PortlandOfficer{testPortlandOfficer1}, nil
-    }
+		return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+	}
 	return []*data.PortlandOfficer{testPortlandOfficer1, testPortlandOfficer2, testPortlandOfficer3}, nil
 }
 
@@ -261,8 +261,8 @@ func (m *MockDatabase) PortlandSearchOfficersByEmployeeId(employee_id string) ([
 	} else if employee_id == "employee_id_not_found" {
 		return []*data.PortlandOfficer{}, nil
 	} else if employee_id == "1" {
-	    return []*data.PortlandOfficer{testPortlandOfficer1}, nil
-    }
+		return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+	}
 	return []*data.PortlandOfficer{testPortlandOfficer1, testPortlandOfficer2, testPortlandOfficer3}, nil
 }
 
@@ -272,8 +272,8 @@ func (m *MockDatabase) PortlandSearchOfficersByHelmetId(helmet_id string) ([]*da
 	} else if helmet_id == "helmet_id_not_found" {
 		return []*data.PortlandOfficer{}, nil
 	} else if helmet_id == "1" {
-	    return []*data.PortlandOfficer{testPortlandOfficer1}, nil
-    }
+		return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+	}
 	return []*data.PortlandOfficer{testPortlandOfficer1, testPortlandOfficer2, testPortlandOfficer3}, nil
 }
 
@@ -283,8 +283,8 @@ func (m *MockDatabase) PortlandSearchOfficersByHelmetIdThreeDigit(helmet_id_thre
 	} else if helmet_id_three_digit == "helmet_id_three_digit_not_found" {
 		return []*data.PortlandOfficer{}, nil
 	} else if helmet_id_three_digit == "111" {
-	    return []*data.PortlandOfficer{testPortlandOfficer1}, nil
-    }
+		return []*data.PortlandOfficer{testPortlandOfficer1}, nil
+	}
 	return []*data.PortlandOfficer{testPortlandOfficer1, testPortlandOfficer2, testPortlandOfficer3}, nil
 }
 
@@ -341,8 +341,8 @@ func (m *MockDatabase) SeattleGetOfficerByBadge(badge string) ([]*data.SeattleOf
 	} else if badge == "badge_not_found" {
 		return []*data.SeattleOfficer{}, nil
 	} else if badge == "1" {
-	    return []*data.SeattleOfficer{testSeattleOfficer1}, nil
-    }
+		return []*data.SeattleOfficer{testSeattleOfficer1}, nil
+	}
 	return []*data.SeattleOfficer{testSeattleOfficer1, testSeattleOfficer2, testSeattleOfficer3}, nil
 }
 

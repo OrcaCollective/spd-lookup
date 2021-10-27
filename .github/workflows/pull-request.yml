@@ -14,9 +14,24 @@ jobs:
         name: Set up QEMU
         with:
           token: ${{ github.token }}
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
+      - uses: golangci/golangci-lint-action@v2
+        name: golangci-lint
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
           version: v1.29
           working-directory: api
+      - uses: Jerome1337/gofmt-action@v1.0.4
+        name: gofmt
+        with:
+          gofmt-path: './api'
+          gofmt-flags: '-l -d'
+      - uses: actions/setup-go@v2
+        name: Set up Go
+        with:
+          go-version: 1.17
+      - name: Build
+        working-directory: api
+        run: go build -v ./...
+      - name: Test
+        working-directory: api
+        run: go test -v ./...

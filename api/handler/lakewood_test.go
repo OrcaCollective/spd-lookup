@@ -62,7 +62,7 @@ func Test_Handler_LakewoodStrictMatch(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			res, err := http.Get(fmt.Sprintf("%s/lakewood/officer?first_name=%s&last_name=%s", ts.URL, tt.firstName, tt.lastName))
 
-			if err != nil{
+			if err != nil {
 				t.Fatalf("Got unexpected error while testing:\ntest name: %s\nerror: %s", tt.name, err)
 			}
 			if res.StatusCode != tt.expectedStatus {
@@ -99,7 +99,7 @@ func Test_Handler_LakewoodFuzzySearch(t *testing.T) {
 		{
 			name:           "name search, db error",
 			firstName:      "db_error",
-			lastName:		"db_error",
+			lastName:       "db_error",
 			expectedStatus: http.StatusInternalServerError,
 			expectedBody:   []byte("error getting officer: fuzzy search by name db error"),
 		},
@@ -113,7 +113,7 @@ func Test_Handler_LakewoodFuzzySearch(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			res, err := http.Get(fmt.Sprintf("%s/lakewood/officer/search?first_name=%s&last_name=%s", ts.URL, tt.firstName, tt.lastName))
 
-			if err != nil{
+			if err != nil {
 				t.Fatalf("Got unexpected error while testing:\ntest name: %s\nerror: %s", tt.name, err)
 			}
 			if res.StatusCode != tt.expectedStatus {
