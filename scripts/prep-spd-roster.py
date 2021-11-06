@@ -16,9 +16,12 @@ def main(date, in_csv, out_csv):
     column_names = {
         'Name': 'full_name',
         'Badge_Num': 'badge',
+        "Serial": 'badge',
         'Title_Description': 'title',
+        'Title Description': 'title',
         'Unit': 'unit',
-        'Unit_Description': 'unit_description'
+        'Unit Description': 'unit_description',
+        'Unit_Description': 'unit_description',
     }
     df = df.rename(columns=column_names)
 
