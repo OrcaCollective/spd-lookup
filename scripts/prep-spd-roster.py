@@ -61,7 +61,7 @@ def main(date, in_csv, out_csv):
     # Sometimes there some weird "K_Jr" bullshit for the middle name we have to deal with
     # This creates a dataframe with 3 new columns: 1) middle bits, 2) suffix, 3) blank because of the split
     middle_bits = not_last_names[1].str.split(
-        r"((?:Jr|I[iI]|I[iI][iI]|I[vV])\.?$)", expand=True
+        r"(?i)((?:Jr|II|III|IV)\.?$)", expand=True
     )
     # Make all suffixes upper, except for "Jr", and trim periods
     df["suffix"] = middle_bits[1].str.strip(".").str.upper().str.replace("JR", "Jr")
