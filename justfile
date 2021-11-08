@@ -10,12 +10,16 @@ DC := "docker-compose " + COMPOSE_FILE
 default:
   @just --list --unsorted
 
+# Create the .env file from the template
+dotenv:
+    @([ ! -f .env ] && cp .env.example .env) || true
+
 # Build the containers
-build:
+build: dotenv
 	{{ DC }} build
 
 # Spin up all (or one) service
-up service="":
+up service="": dotenv
 	{{ DC }} up -d {{ service }}
 
 # Tear down containers

@@ -9,3 +9,5 @@ workspace.*
 db/db_logs/
 
 act-secrets
+
+*.swp
