@@ -27,6 +27,18 @@ type Interface interface {
 	LakewoodOfficerMetadata(w http.ResponseWriter, r *http.Request)
 	LakewoodStrictMatch(w http.ResponseWriter, r *http.Request)
 	LakewoodFuzzySearch(w http.ResponseWriter, r *http.Request)
+	BellevueOfficerMetadata(w http.ResponseWriter, r *http.Request)
+	BellevueStrictMatch(w http.ResponseWriter, r *http.Request)
+	BellevueFuzzySearch(w http.ResponseWriter, r *http.Request)
+	ThurstonCountyOfficerMetadata(w http.ResponseWriter, r *http.Request)
+	ThurstonCountyStrictMatch(w http.ResponseWriter, r *http.Request)
+	ThurstonCountyFuzzySearch(w http.ResponseWriter, r *http.Request)
+	PortOfSeattleOfficerMetadata(w http.ResponseWriter, r *http.Request)
+	PortOfSeattleStrictMatch(w http.ResponseWriter, r *http.Request)
+	PortOfSeattleFuzzySearch(w http.ResponseWriter, r *http.Request)
+	RentonOfficerMetadata(w http.ResponseWriter, r *http.Request)
+	RentonStrictMatch(w http.ResponseWriter, r *http.Request)
+	RentonFuzzySearch(w http.ResponseWriter, r *http.Request)
 	OlympiaOfficerMetadata(w http.ResponseWriter, r *http.Request)
 	OlympiaStrictMatch(w http.ResponseWriter, r *http.Request)
 	OlympiaFuzzySearch(w http.ResponseWriter, r *http.Request)
@@ -60,6 +72,10 @@ func (h *Handler) DescribeDepartments(w http.ResponseWriter, r *http.Request) {
 		h.db.PortlandOfficerMetadata(),
 		h.db.AuburnOfficerMetadata(),
 		h.db.LakewoodOfficerMetadata(),
+        h.db.RentonOfficerMetadata(),
+        h.db.ThurstonCountyOfficerMetadata(),
+        h.db.BellevueOfficerMetadata(),
+        h.db.PortOfSeattleOfficerMetadata(),
 		h.db.OlympiaOfficerMetadata(),
 	}
 
