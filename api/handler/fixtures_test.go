@@ -46,6 +46,38 @@ type MockDatabase struct {
 
 var mayday = "1889-05-01"
 
+func generateFakeDepartmentMetadata(department_name string) *data.DepartmentMetadata {
+	return &data.DepartmentMetadata{
+		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
+		LastAvailableRosterDate: "yesterday",
+		Name:                    department_name,
+		ID:                      "fakepd",
+		SearchRoutes: map[string]*data.SearchRouteMetadata{
+			"fake": {
+				Path:        "/fake",
+				QueryParams: []string{"fake", "fake2"},
+			},
+		},
+	}
+
+}
+
+func (m *MockDatabase) BellevueOfficerMetadata() *data.DepartmentMetadata {
+	return generateFakeDepartmentMetadata("Bellevue")
+}
+
+func (m *MockDatabase) RentonOfficerMetadata() *data.DepartmentMetadata {
+	return generateFakeDepartmentMetadata("Renton")
+}
+
+func (m *MockDatabase) PortOfSeattleOfficerMetadata() *data.DepartmentMetadata {
+	return generateFakeDepartmentMetadata("Port of Seattle")
+}
+
+func (m *MockDatabase) ThurstonCountyOfficerMetadata() *data.DepartmentMetadata {
+	return generateFakeDepartmentMetadata("Thurston County")
+}
+
 func (m *MockDatabase) LakewoodOfficerMetadata() *data.DepartmentMetadata {
 	return &data.DepartmentMetadata{
 		Fields:                  []map[string]string{{"FieldName": "test", "Label": "Test"}},
