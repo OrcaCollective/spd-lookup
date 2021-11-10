@@ -9,18 +9,18 @@ import (
 
 // PortOfSeattleOfficer is the object model for BPD officers
 type PortOfSeattleOfficer struct {
-	Name string `json:"name,omitempty"`
-	Rank string `json:"rank,omitempty"`
-	Unit string `json:"unit,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Rank  string `json:"rank,omitempty"`
+	Unit  string `json:"unit,omitempty"`
 	Badge string `json:"badge,omitempty"`
 }
 
 // portOfSeattleOfficer is an internal intermediary between the returned SQL rows data
 // and the actual JSON return itself.
 type portOfSeattleOfficer struct {
-	Name nulls.String
-	Rank nulls.String
-	Unit nulls.String
+	Name  nulls.String
+	Rank  nulls.String
+	Unit  nulls.String
 	Badge nulls.String
 }
 

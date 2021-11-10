@@ -9,23 +9,23 @@ import (
 
 // BellevueOfficer is the object model for BPD officers
 type BellevueOfficer struct {
-	LastName           string `json:"last_name,omitempty"`
-	FirstName       string `json:"first_name,omitempty"`
-	Title string `json:"title,omitempty"`
-	Unit string `json:"unit,omitempty"`
-	Notes string `json:"notes,omitempty"`
-	Badge string `json:"badge,omitempty"`
+	LastName  string `json:"last_name,omitempty"`
+	FirstName string `json:"first_name,omitempty"`
+	Title     string `json:"title,omitempty"`
+	Unit      string `json:"unit,omitempty"`
+	Notes     string `json:"notes,omitempty"`
+	Badge     string `json:"badge,omitempty"`
 }
 
 // bellevueOfficer is an internal intermediary between the returned SQL rows data
 // and the actual JSON return itself.
 type bellevueOfficer struct {
-	LastName           nulls.String
-	FirstName       nulls.String
-	Title nulls.String
-	Unit nulls.String
-	Notes nulls.String
-	Badge nulls.String
+	LastName  nulls.String
+	FirstName nulls.String
+	Title     nulls.String
+	Unit      nulls.String
+	Notes     nulls.String
+	Badge     nulls.String
 }
 
 // BellevueOfficerMetadata retrieves metadata describing the BellevueOfficer struct

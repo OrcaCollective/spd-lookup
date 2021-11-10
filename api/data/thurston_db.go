@@ -9,19 +9,19 @@ import (
 
 // ThurstonCountyOfficer is the object model for BPD officers
 type ThurstonCountyOfficer struct {
-	LastName           string `json:"last_name,omitempty"`
-	FirstName       string `json:"first_name,omitempty"`
-	Title string `json:"title,omitempty"`
-	CallSign string `json:"call_sign,omitempty"`
+	LastName  string `json:"last_name,omitempty"`
+	FirstName string `json:"first_name,omitempty"`
+	Title     string `json:"title,omitempty"`
+	CallSign  string `json:"call_sign,omitempty"`
 }
 
 // thurstonCountyOfficer is an internal intermediary between the returned SQL rows data
 // and the actual JSON return itself.
 type thurstonCountyOfficer struct {
-	LastName           nulls.String
-	FirstName       nulls.String
-	Title nulls.String
-	CallSign nulls.String
+	LastName  nulls.String
+	FirstName nulls.String
+	Title     nulls.String
+	CallSign  nulls.String
 }
 
 // ThurstonCountyOfficerMetadata retrieves metadata describing the ThurstonCountyOfficer struct

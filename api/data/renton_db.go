@@ -9,29 +9,29 @@ import (
 
 // RentonOfficer is the object model for LPD officers
 type RentonOfficer struct {
-	LastName           string `json:"last_name,omitempty"`
-	FirstName       string `json:"first_name,omitempty"`
-	MiddleName string `json:"middle_name,omitempty"`
-	Rank string `json:"rank,omitempty"`
-	Department string `json:"department,omitempty"`
-	Division string `json:"division,omitempty"`
-	Shift string `json:"shift,omitempty"`
+	LastName       string `json:"last_name,omitempty"`
+	FirstName      string `json:"first_name,omitempty"`
+	MiddleName     string `json:"middle_name,omitempty"`
+	Rank           string `json:"rank,omitempty"`
+	Department     string `json:"department,omitempty"`
+	Division       string `json:"division,omitempty"`
+	Shift          string `json:"shift,omitempty"`
 	AdditionalInfo string `json:"additional_info,omitempty"`
-	Badge string `json:"badge,omitempty"`
+	Badge          string `json:"badge,omitempty"`
 }
 
 // rentonOfficer is an internal intermediary between the returned SQL rows data
 // and the actual JSON return itself.
 type rentonOfficer struct {
-	LastName           nulls.String
-	FirstName       nulls.String
-	MiddleName nulls.String
-	Rank nulls.String
-	Department nulls.String
-	Division nulls.String
-    Shift nulls.String
+	LastName       nulls.String
+	FirstName      nulls.String
+	MiddleName     nulls.String
+	Rank           nulls.String
+	Department     nulls.String
+	Division       nulls.String
+	Shift          nulls.String
 	AdditionalInfo nulls.String
-	Badge nulls.String
+	Badge          nulls.String
 }
 
 // RentonOfficerMetadata retrieves metadata describing the RentonOfficer struct

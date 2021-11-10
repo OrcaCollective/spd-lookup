@@ -72,10 +72,10 @@ func (h *Handler) DescribeDepartments(w http.ResponseWriter, r *http.Request) {
 		h.db.PortlandOfficerMetadata(),
 		h.db.AuburnOfficerMetadata(),
 		h.db.LakewoodOfficerMetadata(),
-        h.db.RentonOfficerMetadata(),
-        h.db.ThurstonCountyOfficerMetadata(),
-        h.db.BellevueOfficerMetadata(),
-        h.db.PortOfSeattleOfficerMetadata(),
+		h.db.RentonOfficerMetadata(),
+		h.db.ThurstonCountyOfficerMetadata(),
+		h.db.BellevueOfficerMetadata(),
+		h.db.PortOfSeattleOfficerMetadata(),
 		h.db.OlympiaOfficerMetadata(),
 	}
 
