@@ -65,6 +65,8 @@ func (h *Handler) portOfSeattleGetOfficersByName(name string, w http.ResponseWri
 		name = strings.ReplaceAll(name, "*", "%")
 	}
 
+	name = "%" + name + "%"
+
 	officers, err := h.db.PortOfSeattleSearchOfficerByName(name)
 
 	if err != nil {
