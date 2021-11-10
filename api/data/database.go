@@ -63,6 +63,30 @@ type DatabaseInterface interface {
 	LakewoodFuzzySearchByFirstName(firstName string) ([]*LakewoodOfficer, error)
 	LakewoodFuzzySearchByLastName(lastName string) ([]*LakewoodOfficer, error)
 
+	RentonOfficerMetadata() *DepartmentMetadata
+	RentonSearchOfficerByName(firstName, lastName string) ([]*RentonOfficer, error)
+	RentonFuzzySearchByName(name string) ([]*RentonOfficer, error)
+	RentonFuzzySearchByFirstName(firstName string) ([]*RentonOfficer, error)
+	RentonFuzzySearchByLastName(lastName string) ([]*RentonOfficer, error)
+
+	BellevueOfficerMetadata() *DepartmentMetadata
+	BellevueSearchOfficerByBadge(badge string) ([]*BellevueOfficer, error)
+	BellevueSearchOfficerByName(firstName, lastName string) ([]*BellevueOfficer, error)
+	BellevueFuzzySearchByName(name string) ([]*BellevueOfficer, error)
+	BellevueFuzzySearchByFirstName(firstName string) ([]*BellevueOfficer, error)
+	BellevueFuzzySearchByLastName(lastName string) ([]*BellevueOfficer, error)
+
+	PortOfSeattleOfficerMetadata() *DepartmentMetadata
+	PortOfSeattleSearchOfficerByBadge(badge string) ([]*PortOfSeattleOfficer, error)
+	PortOfSeattleSearchOfficerByName(name string) ([]*PortOfSeattleOfficer, error)
+	PortOfSeattleFuzzySearchByName(name string) ([]*PortOfSeattleOfficer, error)
+
+	ThurstonCountyOfficerMetadata() *DepartmentMetadata
+	ThurstonCountySearchOfficerByName(firstName, lastName string) ([]*ThurstonCountyOfficer, error)
+	ThurstonCountyFuzzySearchByName(name string) ([]*ThurstonCountyOfficer, error)
+	ThurstonCountyFuzzySearchByFirstName(firstName string) ([]*ThurstonCountyOfficer, error)
+	ThurstonCountyFuzzySearchByLastName(lastName string) ([]*ThurstonCountyOfficer, error)
+
 	OlympiaOfficerMetadata() *DepartmentMetadata
 	OlympiaGetOfficerByBadge(badge string) ([]*OlympiaOfficer, error)
 	OlympiaSearchOfficerByName(firstName, lastName string) ([]*OlympiaOfficer, error)

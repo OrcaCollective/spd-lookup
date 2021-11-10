@@ -55,6 +55,22 @@ func NewRouter(h handler.Interface) http.Handler {
 	router.HandleFunc("/lakewood/officer", h.LakewoodStrictMatch).Methods("GET")
 	router.HandleFunc("/lakewood/officer/search", h.LakewoodFuzzySearch).Methods("GET")
 
+	router.HandleFunc("/bellevue/metadata", h.BellevueOfficerMetadata).Methods("GET")
+	router.HandleFunc("/bellevue/officer", h.BellevueStrictMatch).Methods("GET")
+	router.HandleFunc("/bellevue/officer/search", h.BellevueFuzzySearch).Methods("GET")
+
+	router.HandleFunc("/port_of_seattle/metadata", h.PortOfSeattleOfficerMetadata).Methods("GET")
+	router.HandleFunc("/port_of_seattle/officer", h.PortOfSeattleStrictMatch).Methods("GET")
+	router.HandleFunc("/port_of_seattle/officer/search", h.PortOfSeattleFuzzySearch).Methods("GET")
+
+	router.HandleFunc("/thurston_county/metadata", h.ThurstonCountyOfficerMetadata).Methods("GET")
+	router.HandleFunc("/thurston_county/officer", h.ThurstonCountyStrictMatch).Methods("GET")
+	router.HandleFunc("/thurston_county/officer/search", h.ThurstonCountyFuzzySearch).Methods("GET")
+
+	router.HandleFunc("/renton/metadata", h.RentonOfficerMetadata).Methods("GET")
+	router.HandleFunc("/renton/officer", h.RentonStrictMatch).Methods("GET")
+	router.HandleFunc("/renton/officer/search", h.RentonFuzzySearch).Methods("GET")
+
 	router.HandleFunc("/olympia/metadata", h.OlympiaOfficerMetadata).Methods("GET")
 	router.HandleFunc("/olympia/officer", h.OlympiaStrictMatch).Methods("GET")
 	router.HandleFunc("/olympia/officer/search", h.OlympiaFuzzySearch).Methods("GET")
