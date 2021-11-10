@@ -51,7 +51,7 @@ func (c *Client) PortOfSeattleOfficerMetadata() *DepartmentMetadata {
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
 				Path:        "/port_of_seattle/officer",
-				QueryParams: []string{"name"},
+				QueryParams: []string{"badge", "name"},
 			},
 			"fuzzy": {
 				Path:        "/port_of_seattle/officer/search",
@@ -59,6 +59,30 @@ func (c *Client) PortOfSeattleOfficerMetadata() *DepartmentMetadata {
 			},
 		},
 	}
+}
+
+// PortOfSeattleSearchOfficerByName returns an officer by their name.
+func (c *Client) PortOfSeattleSearchOfficerByBadge(badge string) ([]*PortOfSeattleOfficer, error) {
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				o.name,
+				o.rank,
+				o.unit,
+                o.badge_number
+			FROM port_of_seattle_officers o
+			WHERE o.badge_number=$1
+			ORDER BY 
+				o.badge_number;
+		`,
+		badge,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return portOfSeattleMarshalOfficerRows(rows)
 }
 
 // PortOfSeattleSearchOfficerByName returns an officer by their name.

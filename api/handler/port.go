@@ -21,8 +21,10 @@ func (h *Handler) PortOfSeattleOfficerMetadata(w http.ResponseWriter, r *http.Re
 
 // PortOfSeattleStrictMatch is the handler function for retrieving PortOfSeattle officers with a strict match
 func (h *Handler) PortOfSeattleStrictMatch(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	if name != "" {
+	badge, name := r.URL.Query().Get("badge"), r.URL.Query().Get("name")
+	if badge != "" {
+		h.portOfSeattleGetOfficersByBadge(badge, w)
+	} else if name != "" {
 		h.portOfSeattleGetOfficersByName(name, w)
 		return
 	} else {
@@ -31,6 +33,28 @@ func (h *Handler) PortOfSeattleStrictMatch(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			return
 		}
+	}
+}
+
+func (h *Handler) portOfSeattleGetOfficersByBadge(badge string, w http.ResponseWriter) {
+	badge = strings.ReplaceAll(badge, "*", "%")
+
+	officers, err := h.db.PortOfSeattleSearchOfficerByBadge(badge)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_, errWrite := w.Write([]byte(fmt.Sprintf("error getting officer: %s", err)))
+		if errWrite != nil {
+			return
+		}
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(&officers)
+	if err != nil {
+		return
 	}
 }
 

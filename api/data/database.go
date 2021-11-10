@@ -77,6 +77,7 @@ type DatabaseInterface interface {
 	BellevueFuzzySearchByLastName(lastName string) ([]*BellevueOfficer, error)
 
 	PortOfSeattleOfficerMetadata() *DepartmentMetadata
+	PortOfSeattleSearchOfficerByBadge(badge string) ([]*PortOfSeattleOfficer, error)
 	PortOfSeattleSearchOfficerByName(name string) ([]*PortOfSeattleOfficer, error)
 	PortOfSeattleFuzzySearchByName(name string) ([]*PortOfSeattleOfficer, error)
 
