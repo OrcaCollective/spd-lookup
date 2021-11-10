@@ -12,8 +12,6 @@ services:
       - POSTGRES_USER=${DB_USERNAME:-postgres}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=ACAB_DB
-    volumes:
-      - ./seed:/seed
     networks:
       - postgres-network
   api:
