@@ -63,7 +63,7 @@ func (c *Client) BellevueOfficerMetadata() *DepartmentMetadata {
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
 				Path:        "/bellevue/officer",
-				QueryParams: []string{"first_name", "last_name"},
+				QueryParams: []string{"badge", "first_name", "last_name"},
 			},
 			"fuzzy": {
 				Path:        "/bellevue/officer/search",
@@ -71,6 +71,33 @@ func (c *Client) BellevueOfficerMetadata() *DepartmentMetadata {
 			},
 		},
 	}
+}
+
+// BellevueSearchOfficerByBadge returns an officer by their first or last name.
+func (c *Client) BellevueSearchOfficerByBadge(badge string) ([]*BellevueOfficer, error) {
+	rows, err := c.pool.Query(context.Background(),
+		`
+			SELECT
+				o.last_name,
+				o.first_name,
+				o.title,
+				o.unit,
+				o.notes,
+                o.badge
+			FROM bellevue_officers o
+			WHERE o.badge LIKE $1
+			ORDER BY 
+				o.last_name,
+				o.first_name;
+		`,
+		badge,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return bellevueMarshalOfficerRows(rows)
 }
 
 // BellevueSearchOfficerByName returns an officer by their first or last name.
