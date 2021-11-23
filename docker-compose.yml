@@ -21,7 +21,6 @@ services:
     ports:
       - 1312:1312
     environment:
-      - PORT=1312
       - DB_USERNAME=${DB_USERNAME:-postgres}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=ACAB_DB

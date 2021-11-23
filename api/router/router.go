@@ -21,6 +21,9 @@ func Start() {
 	)))
 
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "1312"
+	}
 	fmt.Println("starting server on port", port)
 	err := http.ListenAndServe(":"+port, router)
 	if err != nil {
