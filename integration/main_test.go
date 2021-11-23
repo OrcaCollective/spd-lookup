@@ -3,10 +3,14 @@ package integration
 import (
 	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/OrcaCollective/spd-lookup/api/data"
 )
 
 // Default test server
@@ -23,14 +27,15 @@ func TestIntegrations(t *testing.T) {
 	profile := "integration"
 	ctx, _ := context.WithTimeout(context.Background(), ctxTimeout)
 
-	// Serial tests
-	t.Run("serial", func(t *testing.T) {
+	// Parallel tests
+	t.Run("parallel", func(t *testing.T) {
 		tests := []struct {
 			name      string
 			validator validateFunc
 		}{
 			{"TestPing", testPing},
 			{"TestDepartments", testDepartments},
+			{"TestSeattle", testSeattleStrict},
 		}
 		for _, tc := range tests {
 			tc := tc
@@ -46,6 +51,7 @@ func TestIntegrations(t *testing.T) {
 
 // Test ping endpoint
 func testPing(ctx context.Context, t *testing.T, profile string) {
+	t.Parallel()
 	expectedResponse := []byte(`🏓 P O N G 🏓`)
 	resp, err := http.Get(testServer + "/ping")
 	if err != nil {
@@ -62,6 +68,7 @@ func testPing(ctx context.Context, t *testing.T, profile string) {
 
 // Test departments endpoint
 func testDepartments(ctx context.Context, t *testing.T, profile string) {
+	t.Parallel()
 	expectedResponse := []byte(`[{"id":"spd","name":"Seattle PD","last_available_roster_date":"2021-10-26","fields":[{"FieldName":"date","Label":"Roster Date"},{"FieldName":"badge","Label":"Badge"},{"FieldName":"first_name","Label":"First Name"},{"FieldName":"middle_name","Label":"Middle Name"},{"FieldName":"last_name","Label":"Last Name"},{"FieldName":"title","Label":"Title"},{"FieldName":"unit","Label":"Unit"},{"FieldName":"unit_description","Label":"Unit Description"},{"FieldName":"full_name","Label":"Full Name"},{"FieldName":"is_current","Label":"On Current Roster"}],"search_routes":{"exact":{"path":"/seattle/officer","query_params":["badge","first_name","last_name"]},"fuzzy":{"path":"/seattle/officer/search","query_params":["first_name","last_name"]},"historical-exact":{"path":"/seattle/officer/historical","query_params":["badge"]}}},{"id":"tpd","name":"Tacoma PD","last_available_roster_date":"2019","fields":[{"FieldName":"first_name","Label":"First Name"},{"FieldName":"last_name","Label":"Last Name"},{"FieldName":"title","Label":"Title"},{"FieldName":"department","Label":"Department"},{"FieldName":"salary","Label":"Salary 2019"}],"search_routes":{"exact":{"path":"/tacoma/officer","query_params":["first_name","last_name"]},"fuzzy":{"path":"/tacoma/officer/search","query_params":["first_name","last_name"]}}},{"id":"ppb","name":"Portland PB","last_available_roster_date":"2021-03-12","fields":[{"FieldName":"first_name","Label":"First Name"},{"FieldName":"last_name","Label":"Last Name"},{"FieldName":"gender","Label":"Gender"},{"FieldName":"officer_rank","Label":"Rank"},{"FieldName":"employee_id","Label":"Employee (Chest) ID"},{"FieldName":"helmet_id","Label":"Helmet #"},{"FieldName":"helmet_id_three_digit","Label":"3-Digit Helmet #"},{"FieldName":"salary","Label":"Fiscal Earnings 2019"},{"FieldName":"badge","Label":"Badge/DPSST Number"},{"FieldName":"cops_photo_profile_link","Label":"Cops.Photo Profile Link"},{"FieldName":"cops_photo_has_photo","Label":"Pic on Cops.photo (y/n)"},{"FieldName":"employed_3_12_21","Label":"Employed as of 3/12/21"},{"FieldName":"employed_12_28_20","Label":"Employed as of 12/28/20"},{"FieldName":"employed_10_01_20","Label":"Employed as of 10/01/20"},{"FieldName":"retired_6_1_20","Label":"Retired/Resigned as of 6/1/20"},{"FieldName":"retired_or_cert_revoked","Label":"Retired/Resigned as of 6/1/20 OR Cert Revoked (ever)"},{"FieldName":"retired_or_cert_revoked_date","Label":"Date of Cert Revoke"},{"FieldName":"hire_year","Label":"Hire Year"},{"FieldName":"hire_date","Label":"Hire Date"},{"FieldName":"state_cert_date","Label":"State Certification Date"},{"FieldName":"state_cert_level","Label":"State Certification Level"},{"FieldName":"rrt","Label":"RRT (Rapid Response Team) Member"},{"FieldName":"rrt_2016","Label":"RRT member as of 2016 via 2017 PPB AR"},{"FieldName":"rrt_2018_niiya_email","Label":"RRT member as of 2018 via Niiya Email"},{"FieldName":"rrt_2018","Label":"RRT Specific Training 2018"},{"FieldName":"rrt_2019","Label":"RRT Specific Training 2019"},{"FieldName":"rrt_2020","Label":"RRT Specific Training 2020"},{"FieldName":"sound_truck_training_2020","Label":"Sound Truck Training 2020"},{"FieldName":"instructed_for_dpsst","Label":"Has Instructed Course for DPSST 2017+"},{"FieldName":"instructed_for_less_lethal","Label":"Instructor for Less Lethal/Chemical Weapons Courses"},{"FieldName":"involved_in_ois_uof","Label":"Has Been Involved in OIS/Significant UoF Incident"},{"FieldName":"notes","Label":"Notes"}],"search_routes":{"exact":{"path":"/portland/officer","query_params":["badge","first_name","last_name","employee_id","helmet_id","helmet_id_three_digit"]},"fuzzy":{"path":"/portland/officer/search","query_params":["first_name","last_name"]}}},{"id":"apd","name":"Auburn PD","last_available_roster_date":"2021-06-07","fields":[{"FieldName":"date","Label":"Roster Date"},{"FieldName":"badge","Label":"Badge"},{"FieldName":"first_name","Label":"First Name"},{"FieldName":"last_name","Label":"Last Name"},{"FieldName":"title","Label":"Title"}],"search_routes":{"exact":{"path":"/auburn/officer","query_params":["badge","first_name","last_name"]},"fuzzy":{"path":"/auburn/officer/search","query_params":["first_name","last_name"]}}},{"id":"lpd","name":"Lakewood PD","last_available_roster_date":"2021-05-01","fields":[{"FieldName":"date","Label":"Roster Date"},{"FieldName":"title","Label":"Title"},{"FieldName":"last_name","Label":"Last Name"},{"FieldName":"first_name","Label":"First Name"},{"FieldName":"unit","Label":"Unit"},{"FieldName":"unit_descritpion","Label":"Unit Description"}],"search_routes":{"exact":{"path":"/lakewood/officer","query_params":["first_name","last_name"]},"fuzzy":{"path":"/lakewood/officer/search","query_params":["first_name","last_name"]}}},{"id":"rpd","name":"Renton PD","last_available_roster_date":"2021-05-01","fields":[{"FieldName":"last_name","Label":"Last Name"},{"FieldName":"first_name","Label":"First Name"},{"FieldName":"middle_name","Label":"Middle Name"},{"FieldName":"rank","Label":"Officer Rank"},{"FieldName":"department","Label":"Officer Department"},{"FieldName":"division","Label":"Officer Division"},{"FieldName":"shift","Label":"Shift"},{"FieldName":"additional_info","Label":"additional information (including retirement date)"},{"FieldName":"badge","Label":"Badge number"}],"search_routes":{"exact":{"path":"/renton/officer","query_params":["first_name","last_name"]},"fuzzy":{"path":"/renton/officer/search","query_params":["first_name","last_name"]}}},{"id":"tcsd","name":"Thurston County Sheriff's Department","last_available_roster_date":"2021-05-01","fields":[{"FieldName":"last_name","Label":"Last Name"},{"FieldName":"first_name","Label":"First Name"},{"FieldName":"title","Label":"Officer Title"},{"FieldName":"call_sign","Label":"Call Sign"}],"search_routes":{"exact":{"path":"/thurston_county/officer","query_params":["first_name","last_name"]},"fuzzy":{"path":"/thurston_county/officer/search","query_params":["first_name","last_name"]}}},{"id":"bpd","name":"Bellevue PD","last_available_roster_date":"2021-05-01","fields":[{"FieldName":"last_name","Label":"Last Name"},{"FieldName":"first_name","Label":"First Name"},{"FieldName":"title","Label":"Officer Title"},{"FieldName":"unit","Label":"Officer unit"},{"FieldName":"notes","Label":"additional information (including retirement date)"},{"FieldName":"badge","Label":"Badge number"}],"search_routes":{"exact":{"path":"/bellevue/officer","query_params":["badge","first_name","last_name"]},"fuzzy":{"path":"/bellevue/officer/search","query_params":["first_name","last_name"]}}},{"id":"pospd","name":"Port Of Seattle PD","last_available_roster_date":"2021-05-01","fields":[{"FieldName":"name","Label":"Full Name"},{"FieldName":"rank","Label":"Officer Title"},{"FieldName":"unit","Label":"Officer unit"},{"FieldName":"badge","Label":"Badge number"}],"search_routes":{"exact":{"path":"/port_of_seattle/officer","query_params":["badge","name"]},"fuzzy":{"path":"/port_of_seattle/officer/search","query_params":["name"]}}},{"id":"opd","name":"Olympia PD","last_available_roster_date":"2021-05-01","fields":[{"FieldName":"date","Label":"Roster Date"},{"FieldName":"first_name","Label":"First Name"},{"FieldName":"last_name","Label":"Last Name"},{"FieldName":"title","Label":"Title"},{"FieldName":"unit","Label":"Unit"},{"FieldName":"badge","Label":"Badge"}],"search_routes":{"exact":{"path":"/olympia/officer","query_params":["badge","first_name","last_name"]},"fuzzy":{"path":"/olympia/officer/search","query_params":["first_name","last_name"]}}}]` + "\n")
 	resp, err := http.Get(testServer + "/departments")
 	if err != nil {
@@ -75,5 +82,93 @@ func testDepartments(ctx context.Context, t *testing.T, profile string) {
 		t.Logf("Length expected: %d", len(expectedResponse))
 		t.Logf("Length received: %d", len(body))
 		t.Errorf("Departments failed, got:%s, want:%s", body, expectedResponse)
+	}
+}
+
+// Test Seattle endpoint
+func testSeattleStrict(ctx context.Context, t *testing.T, profile string) {
+	t.Parallel()
+	for _, tt := range [...]struct {
+		name           string
+		firstName      string
+		lastName       string
+		badge          string
+		expectedStatus int
+		expectedBody   []byte
+		expectedBodyCheck string
+		expectedBodyLength int
+	}{
+		{
+			name:           "NoParams",
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   []byte("at least one of the following parameters must be provided: badge, first_name, last_name"),
+			expectedBodyCheck: "EqualsBytes",
+		},
+		{
+			name:           "BadgeStrictSearch",
+			badge:          "5669",
+			expectedStatus: http.StatusOK,
+			expectedBodyCheck: "EqualsLength",
+			expectedBodyLength: 1,
+		},
+		{
+			name: "FirstNameStrictSearch",
+			firstName: "James",
+			expectedStatus: http.StatusOK,
+			expectedBodyCheck: "GreaterThanLength",
+			expectedBodyLength: 1,
+		},
+		{
+			name:           "LastNameStrictSearch",
+			lastName:       "Kelly",
+			expectedStatus: http.StatusOK,
+			expectedBodyCheck: "GreaterThanLength",
+			expectedBodyLength: 1,
+		},
+		{
+			name: "FirstAndLastNameStrictSearch",
+			firstName: "James",
+			lastName: "Kelly",
+			expectedStatus: http.StatusOK,
+			expectedBodyCheck: "EqualsLength",
+			expectedBodyLength: 1,
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			res, _ := http.Get(fmt.Sprintf("%s/seattle/officer?badge=%s&first_name=%s&last_name=%s", testServer, tt.badge, tt.firstName, tt.lastName))
+
+			if res.StatusCode != tt.expectedStatus {
+				t.Fatalf("Expected status %d, got %d", tt.expectedStatus, res.StatusCode)
+			}
+
+			defer res.Body.Close()
+			resp, _ := ioutil.ReadAll(res.Body)
+
+			if tt.expectedBodyCheck == "EqualsBytes" {
+				if !bytes.Equal(tt.expectedBody, resp) {
+					t.Errorf("\nTest: %s\nExpected resp %s; got %s", tt.name, tt.expectedBody, resp)
+				}
+			} else if tt.expectedBodyCheck == "EqualsLength" {
+				var respJson []data.SeattleOfficer
+				err := json.Unmarshal(resp, &respJson)
+				if err != nil {
+					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
+				}
+				if len(respJson) != tt.expectedBodyLength {
+					t.Errorf("\nTest: %s\nExpected body length %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
+				}
+			} else if tt.expectedBodyCheck == "GreaterThanLength" {
+				var respJson []data.SeattleOfficer
+				err := json.Unmarshal(resp, &respJson)
+				if err != nil {
+					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
+				}
+				if len(respJson) <= tt.expectedBodyLength {
+					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
+				}	
+			} else {
+				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
+			}
+		})
 	}
 }
