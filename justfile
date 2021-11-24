@@ -37,7 +37,7 @@ pull:
     ( while [ "$(docker logs -n 1 $(docker ps | grep spd_lookup_api | awk -F ' ' '{print $1}'))" != "starting server on port 1312" ] ; do sleep 1s; done ) &> /dev/null
     echo "spd-lookup services started, beginning integration testing"
     echo "***************************************"
-    go test -v -tags=integrations ./integration -count=1 -run={{ test_path }}
+    go test -v -tags=integrations {{ INTEGRATION_TEST_PATH }} -count=1 -run={{ test_path }}
     echo "spd-lookup integration testing completed, removing services"
     echo "***************************************"
     {{ DC }} down &> /dev/null
