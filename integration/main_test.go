@@ -33,6 +33,7 @@ func TestIntegrations(t *testing.T) {
 			{"TestDepartments", testDepartments},
 			{"TestSeattleStrict", testSeattleStrict},
 			{"TestSeattleFuzzy", testSeattleFuzzy},
+			{"TestSeattleHistorical", testSeattleHistorical},
 		}
 		for _, tc := range tests {
 			tc := tc
