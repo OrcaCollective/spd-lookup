@@ -47,6 +47,8 @@ func TestIntegrations(t *testing.T) {
 			{"TestPortOfSeattleFuzzy", testPortOfSeattleFuzzy},
 			{"TestRentonStrict", testRentonStrict},
 			{"TestRentonFuzzy", testRentonFuzzy},
+			{"TestTacomaStrict", testTacomaStrict},
+			{"TestTacomaFuzzy", testTacomaFuzzy},
 		}
 		for _, tc := range tests {
 			tc := tc
