@@ -21,7 +21,8 @@ const ctxTimeout = 30 * time.Second
 // Main integration test runner
 func TestIntegrations(t *testing.T) {
 	profile := "integration"
-	ctx, _ := context.WithTimeout(context.Background(), ctxTimeout)
+	ctx, cancel := context.WithTimeout(context.Background(), ctxTimeout)
+	defer cancel()
 
 	// Parallel tests
 	t.Run("parallel", func(t *testing.T) {
@@ -34,6 +35,8 @@ func TestIntegrations(t *testing.T) {
 			{"TestSeattleStrict", testSeattleStrict},
 			{"TestSeattleFuzzy", testSeattleFuzzy},
 			{"TestSeattleHistorical", testSeattleHistorical},
+			{"TestAuburnStrict", testAuburnStrict},
+			{"TestAuburnFuzzy", testAuburnFuzzy},
 		}
 		for _, tc := range tests {
 			tc := tc
