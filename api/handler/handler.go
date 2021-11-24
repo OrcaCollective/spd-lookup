@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"spd-lookup/api/data"
+	"github.com/OrcaCollective/spd-lookup/api/data"
 )
 
 // Interface describes handler methods

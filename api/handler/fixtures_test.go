@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"spd-lookup/api/data"
+	"github.com/OrcaCollective/spd-lookup/api/data"
 
 	"github.com/gobuffalo/nulls"
 	"github.com/gorilla/mux"

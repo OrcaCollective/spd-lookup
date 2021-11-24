@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"spd-lookup/api/data"
+	"github.com/OrcaCollective/spd-lookup/api/data"
 )
 
 // TacomaOfficerMetadata is the handler function for retrieving Tacoma metadata

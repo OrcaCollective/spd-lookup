@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"spd-lookup/api/data"
+	"github.com/OrcaCollective/spd-lookup/api/data"
 )
 
 // OlympiaOfficerMetadata is the handler function for retrieving SPD metadata

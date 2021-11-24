@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"spd-lookup/api/data"
-	"spd-lookup/api/handler"
+	"github.com/OrcaCollective/spd-lookup/api/data"
+	"github.com/OrcaCollective/spd-lookup/api/handler"
 
 	"github.com/gorilla/mux"
 )
