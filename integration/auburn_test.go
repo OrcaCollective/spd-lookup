@@ -16,48 +16,48 @@ import (
 func testAuburnStrict(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		badge          string
-		expectedStatus int
-		expectedBody   []byte
-		expectedBodyCheck string
+		name               string
+		firstName          string
+		lastName           string
+		badge              string
+		expectedStatus     int
+		expectedBody       []byte
+		expectedBodyCheck  string
 		expectedBodyLength int
 	}{
 		{
-			name:           "NoParams",
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   []byte("at least one of the following parameters must be provided: badge, first_name, last_name"),
+			name:              "NoParams",
+			expectedStatus:    http.StatusBadRequest,
+			expectedBody:      []byte("at least one of the following parameters must be provided: badge, first_name, last_name"),
 			expectedBodyCheck: "EqualsBytes",
 		},
 		{
-			name:           "BadgeStrictSearch",
-			badge:          "9831",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "BadgeStrictSearch",
+			badge:              "9831",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstNameStrictSearch",
-			firstName: "Cristian",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "FirstNameStrictSearch",
+			firstName:          "Cristian",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name:           "LastNameStrictSearch",
-			lastName:       "Adams",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "LastNameStrictSearch",
+			lastName:           "Adams",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstAndLastNameStrictSearch",
-			firstName: "Cristian",
-			lastName: "Adams",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "FirstAndLastNameStrictSearch",
+			firstName:          "Cristian",
+			lastName:           "Adams",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 	} {
@@ -92,7 +92,7 @@ func testAuburnStrict(ctx context.Context, t *testing.T, profile string) {
 				}
 				if len(respJson) <= tt.expectedBodyLength {
 					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}	
+				}
 			} else {
 				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
 			}
@@ -104,41 +104,41 @@ func testAuburnStrict(ctx context.Context, t *testing.T, profile string) {
 func testAuburnFuzzy(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		badge          string
-		expectedStatus int
-		expectedBody   []byte
-		expectedBodyCheck string
+		name               string
+		firstName          string
+		lastName           string
+		badge              string
+		expectedStatus     int
+		expectedBody       []byte
+		expectedBodyCheck  string
 		expectedBodyLength int
 	}{
 		{
-			name:           "NoParams",
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   []byte("at least one of the following parameters must be provided: first_name, last_name"),
+			name:              "NoParams",
+			expectedStatus:    http.StatusBadRequest,
+			expectedBody:      []byte("at least one of the following parameters must be provided: first_name, last_name"),
 			expectedBodyCheck: "EqualsBytes",
 		},
 		{
-			name: "FirstNameFuzzySearch",
-			firstName: "Chrisitan",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "FirstNameFuzzySearch",
+			firstName:          "Chrisitan",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name:           "LastNameFuzzySearch",
-			lastName:       "Adams",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "LastNameFuzzySearch",
+			lastName:           "Adams",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstAndLastNameFuzzySearch",
-			firstName: "Christian",
-			lastName: "Adams",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "FirstAndLastNameFuzzySearch",
+			firstName:          "Christian",
+			lastName:           "Adams",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 	} {
@@ -173,7 +173,7 @@ func testAuburnFuzzy(ctx context.Context, t *testing.T, profile string) {
 				}
 				if len(respJson) <= tt.expectedBodyLength {
 					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}	
+				}
 			} else {
 				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
 			}

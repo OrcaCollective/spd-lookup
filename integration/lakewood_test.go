@@ -16,41 +16,41 @@ import (
 func testLakewoodStrict(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		badge          string
-		expectedStatus int
-		expectedBody   []byte
-		expectedBodyCheck string
+		name               string
+		firstName          string
+		lastName           string
+		badge              string
+		expectedStatus     int
+		expectedBody       []byte
+		expectedBodyCheck  string
 		expectedBodyLength int
 	}{
 		{
-			name:           "NoParams",
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   []byte("at least one of the following parameters must be provided: first_name, last_name"),
+			name:              "NoParams",
+			expectedStatus:    http.StatusBadRequest,
+			expectedBody:      []byte("at least one of the following parameters must be provided: first_name, last_name"),
 			expectedBodyCheck: "EqualsBytes",
 		},
 		{
-			name: "FirstNameStrictSearch",
-			firstName: "Mike",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "FirstNameStrictSearch",
+			firstName:          "Mike",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name:           "LastNameStrictSearch",
-			lastName:       "Zaro",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "LastNameStrictSearch",
+			lastName:           "Zaro",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstAndLastNameStrictSearch",
-			firstName: "Mike",
-			lastName: "Zaro",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "FirstAndLastNameStrictSearch",
+			firstName:          "Mike",
+			lastName:           "Zaro",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 	} {
@@ -85,7 +85,7 @@ func testLakewoodStrict(ctx context.Context, t *testing.T, profile string) {
 				}
 				if len(respJson) <= tt.expectedBodyLength {
 					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}	
+				}
 			} else {
 				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
 			}
@@ -97,41 +97,41 @@ func testLakewoodStrict(ctx context.Context, t *testing.T, profile string) {
 func testLakewoodFuzzy(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		badge          string
-		expectedStatus int
-		expectedBody   []byte
-		expectedBodyCheck string
+		name               string
+		firstName          string
+		lastName           string
+		badge              string
+		expectedStatus     int
+		expectedBody       []byte
+		expectedBodyCheck  string
 		expectedBodyLength int
 	}{
 		{
-			name:           "NoParams",
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   []byte("at least one of the following parameters must be provided: first_name, last_name"),
+			name:              "NoParams",
+			expectedStatus:    http.StatusBadRequest,
+			expectedBody:      []byte("at least one of the following parameters must be provided: first_name, last_name"),
 			expectedBodyCheck: "EqualsBytes",
 		},
 		{
-			name: "FirstNameFuzzySearch",
-			firstName: "Mike",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "FirstNameFuzzySearch",
+			firstName:          "Mike",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name:           "LastNameFuzzySearch",
-			lastName:       "Zaro",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "LastNameFuzzySearch",
+			lastName:           "Zaro",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstAndLastNameFuzzySearch",
-			firstName: "Mike",
-			lastName: "Zaro",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "FirstAndLastNameFuzzySearch",
+			firstName:          "Mike",
+			lastName:           "Zaro",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 	} {
@@ -166,7 +166,7 @@ func testLakewoodFuzzy(ctx context.Context, t *testing.T, profile string) {
 				}
 				if len(respJson) <= tt.expectedBodyLength {
 					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}	
+				}
 			} else {
 				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
 			}

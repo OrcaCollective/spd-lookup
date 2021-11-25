@@ -16,40 +16,40 @@ import (
 func testRentonStrict(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		expectedStatus int
-		expectedBody   []byte
-		expectedBodyCheck string
+		name               string
+		firstName          string
+		lastName           string
+		expectedStatus     int
+		expectedBody       []byte
+		expectedBodyCheck  string
 		expectedBodyLength int
 	}{
 		{
-			name:           "NoParams",
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   []byte("at least one of the following parameters must be provided: first_name, last_name"),
+			name:              "NoParams",
+			expectedStatus:    http.StatusBadRequest,
+			expectedBody:      []byte("at least one of the following parameters must be provided: first_name, last_name"),
 			expectedBodyCheck: "EqualsBytes",
 		},
 		{
-			name: "FirstNameStrictSearch",
-			firstName: "Augustine",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "FirstNameStrictSearch",
+			firstName:          "Augustine",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name:           "LastNameStrictSearch",
-			lastName:       "Abram",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "LastNameStrictSearch",
+			lastName:           "Abram",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstAndLastNameStrictSearch",
-			firstName: "Augustine",
-			lastName: "Abram",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "FirstAndLastNameStrictSearch",
+			firstName:          "Augustine",
+			lastName:           "Abram",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 	} {
@@ -84,7 +84,7 @@ func testRentonStrict(ctx context.Context, t *testing.T, profile string) {
 				}
 				if len(respJson) <= tt.expectedBodyLength {
 					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}	
+				}
 			} else {
 				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
 			}
@@ -96,40 +96,40 @@ func testRentonStrict(ctx context.Context, t *testing.T, profile string) {
 func testRentonFuzzy(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		expectedStatus int
-		expectedBody   []byte
-		expectedBodyCheck string
+		name               string
+		firstName          string
+		lastName           string
+		expectedStatus     int
+		expectedBody       []byte
+		expectedBodyCheck  string
 		expectedBodyLength int
 	}{
 		{
-			name:           "NoParams",
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   []byte("at least one of the following parameters must be provided: first_name, last_name"),
+			name:              "NoParams",
+			expectedStatus:    http.StatusBadRequest,
+			expectedBody:      []byte("at least one of the following parameters must be provided: first_name, last_name"),
 			expectedBodyCheck: "EqualsBytes",
 		},
 		{
-			name: "FirstNameFuzzySearch",
-			firstName: "Augustine",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "FirstNameFuzzySearch",
+			firstName:          "Augustine",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name:           "LastNameFuzzySearch",
-			lastName:       "Abram",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "LastNameFuzzySearch",
+			lastName:           "Abram",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstAndLastNameFuzzySearch",
-			firstName: "Augustine",
-			lastName: "Abram",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "FirstAndLastNameFuzzySearch",
+			firstName:          "Augustine",
+			lastName:           "Abram",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 	} {
@@ -164,7 +164,7 @@ func testRentonFuzzy(ctx context.Context, t *testing.T, profile string) {
 				}
 				if len(respJson) <= tt.expectedBodyLength {
 					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}	
+				}
 			} else {
 				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
 			}

@@ -16,48 +16,48 @@ import (
 func testSeattleStrict(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		badge          string
-		expectedStatus int
-		expectedBody   []byte
-		expectedBodyCheck string
+		name               string
+		firstName          string
+		lastName           string
+		badge              string
+		expectedStatus     int
+		expectedBody       []byte
+		expectedBodyCheck  string
 		expectedBodyLength int
 	}{
 		{
-			name:           "NoParams",
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   []byte("at least one of the following parameters must be provided: badge, first_name, last_name"),
+			name:              "NoParams",
+			expectedStatus:    http.StatusBadRequest,
+			expectedBody:      []byte("at least one of the following parameters must be provided: badge, first_name, last_name"),
 			expectedBodyCheck: "EqualsBytes",
 		},
 		{
-			name:           "BadgeStrictSearch",
-			badge:          "5669",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "BadgeStrictSearch",
+			badge:              "5669",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstNameStrictSearch",
-			firstName: "James",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "FirstNameStrictSearch",
+			firstName:          "James",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name:           "LastNameStrictSearch",
-			lastName:       "Kelly",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "LastNameStrictSearch",
+			lastName:           "Kelly",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstAndLastNameStrictSearch",
-			firstName: "James",
-			lastName: "Kelly",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "EqualsLength",
+			name:               "FirstAndLastNameStrictSearch",
+			firstName:          "James",
+			lastName:           "Kelly",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "EqualsLength",
 			expectedBodyLength: 1,
 		},
 	} {
@@ -92,7 +92,7 @@ func testSeattleStrict(ctx context.Context, t *testing.T, profile string) {
 				}
 				if len(respJson) <= tt.expectedBodyLength {
 					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}	
+				}
 			} else {
 				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
 			}
@@ -104,41 +104,41 @@ func testSeattleStrict(ctx context.Context, t *testing.T, profile string) {
 func testSeattleFuzzy(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		badge          string
-		expectedStatus int
-		expectedBody   []byte
-		expectedBodyCheck string
+		name               string
+		firstName          string
+		lastName           string
+		badge              string
+		expectedStatus     int
+		expectedBody       []byte
+		expectedBodyCheck  string
 		expectedBodyLength int
 	}{
 		{
-			name:           "NoParams",
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   []byte("at least one of the following parameters must be provided: first_name, last_name"),
+			name:              "NoParams",
+			expectedStatus:    http.StatusBadRequest,
+			expectedBody:      []byte("at least one of the following parameters must be provided: first_name, last_name"),
 			expectedBodyCheck: "EqualsBytes",
 		},
 		{
-			name: "FirstNameStrictSearch",
-			firstName: "James",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "FirstNameStrictSearch",
+			firstName:          "James",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name:           "LastNameStrictSearch",
-			lastName:       "Kelly",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "LastNameStrictSearch",
+			lastName:           "Kelly",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 		{
-			name: "FirstAndLastNameStrictSearch",
-			firstName: "James",
-			lastName: "Kelly",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "FirstAndLastNameStrictSearch",
+			firstName:          "James",
+			lastName:           "Kelly",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 	} {
@@ -173,7 +173,7 @@ func testSeattleFuzzy(ctx context.Context, t *testing.T, profile string) {
 				}
 				if len(respJson) <= tt.expectedBodyLength {
 					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}	
+				}
 			} else {
 				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
 			}
@@ -185,26 +185,26 @@ func testSeattleFuzzy(ctx context.Context, t *testing.T, profile string) {
 func testSeattleHistorical(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
 	for _, tt := range [...]struct {
-		name           string
-		firstName      string
-		lastName       string
-		badge          string
-		expectedStatus int
-		expectedBody   []byte
-		expectedBodyCheck string
+		name               string
+		firstName          string
+		lastName           string
+		badge              string
+		expectedStatus     int
+		expectedBody       []byte
+		expectedBodyCheck  string
 		expectedBodyLength int
 	}{
 		{
-			name:           "NoParams",
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   []byte("at least one of the following parameters must be provided: badge"),
+			name:              "NoParams",
+			expectedStatus:    http.StatusBadRequest,
+			expectedBody:      []byte("at least one of the following parameters must be provided: badge"),
 			expectedBodyCheck: "EqualsBytes",
 		},
 		{
-			name: "BadgeHistoricalSearch",
-			badge: "5669",
-			expectedStatus: http.StatusOK,
-			expectedBodyCheck: "GreaterThanLength",
+			name:               "BadgeHistoricalSearch",
+			badge:              "5669",
+			expectedStatus:     http.StatusOK,
+			expectedBodyCheck:  "GreaterThanLength",
 			expectedBodyLength: 1,
 		},
 	} {
@@ -239,7 +239,7 @@ func testSeattleHistorical(ctx context.Context, t *testing.T, profile string) {
 				}
 				if len(respJson) <= tt.expectedBodyLength {
 					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}	
+				}
 			} else {
 				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
 			}
