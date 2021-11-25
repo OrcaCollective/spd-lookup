@@ -25,13 +25,18 @@ jobs:
         with:
           gofmt-path: './api'
           gofmt-flags: '-l -d'
-      - uses: actions/setup-go@v2
-        name: Set up Go
-        with:
-          go-version: 1.17
-      - name: Build
-        working-directory: api
-        run: go build -v ./...
-      - name: Test
-        working-directory: api
-        run: go test -v ./...
+  integration-test:
+      name: integration test
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+          name: Set up QEMU
+          with:
+            token: ${{ github.token }}
+        - name: integration-tests
+          run: |
+            curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ./
+            export DB_USERNAME='postgres'
+            export DB_PASSWORD='postgres'
+            ./just build
+            ./just test-int
