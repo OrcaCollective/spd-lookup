@@ -23,7 +23,7 @@ jobs:
       - uses: Jerome1337/gofmt-action@v1.0.4
         name: gofmt
         with:
-          gofmt-path: './api'
+          gofmt-path: './'
           gofmt-flags: '-l -d'
   integration-test:
       name: integration test
