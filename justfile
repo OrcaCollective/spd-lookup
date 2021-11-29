@@ -34,7 +34,7 @@ pull:
 @test-int test_path="":
     echo "Starting up spd-lookup services for integration testing"
     {{ DC }} up -d &> /dev/null
-    ( while [ "$(docker logs -n 1 $(docker ps | grep spd_lookup_api | awk -F ' ' '{print $1}'))" != "starting server on port 1312" ] ; do sleep 1s; done ) &> /dev/null
+    re='starting server on port [0-9]{1,6}' && ( while ! [[ "$({{ DC }} logs --tail 1 api)" =~ $re ]] ; do sleep 1s; done ) &> /dev/null
     echo "spd-lookup services started, beginning integration testing"
     echo "***************************************"
     -go test -v -tags=integrations {{ INTEGRATION_TEST_PATH }} -count=1 -run={{ test_path }}
