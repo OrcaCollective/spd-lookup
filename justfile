@@ -33,11 +33,11 @@ pull:
 
 @test-int test_path="":
     echo "Starting up spd-lookup services for integration testing"
-    {{ DC }} up -d &> /dev/null
-    re='starting server on port [0-9]{1,6}' && ( while ! [[ "$({{ DC }} logs --tail 1 api)" =~ $re ]] ; do sleep 1s; done ) &> /dev/null
+    {{ DC }} up -d >/dev/null 2>&1
+    ( while ! {{ DC }} logs --tail 1 api | grep -E 'starting server on port [0-9]{1,6}' ; do sleep 1s; done ) >/dev/null 2>&1
     echo "spd-lookup services started, beginning integration testing"
     echo "***************************************"
     -go test -v -tags=integrations {{ INTEGRATION_TEST_PATH }} -count=1 -run={{ test_path }}
     echo "spd-lookup integration testing completed, removing services"
     echo "***************************************"
-    {{ DC }} down &> /dev/null
+    {{ DC }} down >/dev/null 2>&1
