@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pathlib import Path
 import pandas as pd
 import click
@@ -5,7 +6,7 @@ import click
 from pandas import DataFrame
 
 DEFAULT_HISTORICAL = (
-    Path(__file__).parents[1] / "seed" / "Seattle-WA-Police-Department_Historical.csv"
+    Path(__file__).parents[1] / "db" / "seed" / "Seattle-WA-Police-Department_Historical.csv"
 )
 COLUMNS = [
     "badge",
