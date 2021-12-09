@@ -103,6 +103,7 @@ func testDepartments(ctx context.Context, t *testing.T, profile string) {
 
 // Constants to make testing lenths etc easier to diagnose so we aren't relying on string matching
 type BodyCheck int
+
 const (
 	EqualsLength BodyCheck = iota
 	EqualsBytes
@@ -114,7 +115,7 @@ type genericTestOptions struct {
 	name               string
 	firstName          string
 	lastName           string
-	searchName		   string
+	searchName         string
 	badge              string
 	expectedStatus     int
 	expectedBody       []byte
