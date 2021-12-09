@@ -3,6 +3,7 @@ package integration
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -97,5 +98,56 @@ func testDepartments(ctx context.Context, t *testing.T, profile string) {
 		t.Logf("Length expected: %d", len(expectedResponse))
 		t.Logf("Length received: %d", len(body))
 		t.Errorf("Departments failed, got:%s, want:%s", body, expectedResponse)
+	}
+}
+
+// Constants to make testing lenths etc easier to diagnose so we aren't relying on string matching
+type BodyCheck int
+const (
+	EqualsLength BodyCheck = iota
+	EqualsBytes
+	EqualsWhateverElse
+	GreaterThanLength
+)
+
+type genericTestOptions struct {
+	name               string
+	firstName          string
+	lastName           string
+	searchName		   string
+	badge              string
+	expectedStatus     int
+	expectedBody       []byte
+	expectedBodyCheck  BodyCheck
+	expectedBodyLength int
+}
+
+// Generic response checking function for testing
+func checkBody(body []byte, testOptions genericTestOptions, t *testing.T) {
+	switch testOptions.expectedBodyCheck {
+	case EqualsBytes:
+		if !bytes.Equal(testOptions.expectedBody, body) {
+			t.Errorf("\nTest: %s\nExpected resp %s; got %s", testOptions.name, testOptions.expectedBody, body)
+		}
+	case EqualsLength:
+		var unmarshalTarget []interface{}
+		err := json.Unmarshal(body, &unmarshalTarget)
+		if err != nil {
+			t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", testOptions.name, err)
+		}
+		if len(unmarshalTarget) != testOptions.expectedBodyLength {
+			t.Errorf("\nTest: %s\nExpected body length %d; go %d", testOptions.name, testOptions.expectedBodyLength, len(unmarshalTarget))
+		}
+	case GreaterThanLength:
+		var unmarshalTarget []interface{}
+		err := json.Unmarshal(body, &unmarshalTarget)
+		if err != nil {
+			t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", testOptions.name, err)
+		}
+		if len(unmarshalTarget) <= testOptions.expectedBodyLength {
+			t.Errorf("\nTest: %s\nExpected body length > %d; go %d", testOptions.name, testOptions.expectedBodyLength, len(unmarshalTarget))
+		}
+	default:
+		t.Errorf("\nTest: %s\nUnknown body check passed", testOptions.name)
 	}
 }

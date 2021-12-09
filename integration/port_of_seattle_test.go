@@ -1,61 +1,49 @@
 package integration
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"testing"
-
-	"github.com/OrcaCollective/spd-lookup/api/data"
 )
 
 // Test PortOfSeattle strict match endpoint
 func testPortOfSeattleStrict(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
-	for _, tt := range [...]struct {
-		name               string
-		badge              string
-		searchName         string
-		expectedStatus     int
-		expectedBody       []byte
-		expectedBodyCheck  string
-		expectedBodyLength int
-	}{
+	for _, tt := range [...]genericTestOptions{
 		{
 			name:              "StrictNoParams",
 			expectedStatus:    http.StatusBadRequest,
 			expectedBody:      []byte("name must be provided"),
-			expectedBodyCheck: "EqualsBytes",
+			expectedBodyCheck: EqualsBytes,
 		},
 		{
 			name:               "BadgeStrictSearch",
 			badge:              "10197",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 		{
 			name:               "FirstNameStrictSearch",
 			searchName:         "Patrick",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "GreaterThanLength",
+			expectedBodyCheck:  GreaterThanLength,
 			expectedBodyLength: 1,
 		},
 		{
 			name:               "LastNameStrictSearch",
 			searchName:         "Addison",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 		{
 			name:               "FirstAndLastNameStrictSearch",
 			searchName:         "Addison%2C%20Patrick",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 	} {
@@ -69,31 +57,7 @@ func testPortOfSeattleStrict(ctx context.Context, t *testing.T, profile string) 
 			defer res.Body.Close()
 			resp, _ := ioutil.ReadAll(res.Body)
 
-			if tt.expectedBodyCheck == "EqualsBytes" {
-				if !bytes.Equal(tt.expectedBody, resp) {
-					t.Errorf("\nTest: %s\nExpected resp %s; got %s", tt.name, tt.expectedBody, resp)
-				}
-			} else if tt.expectedBodyCheck == "EqualsLength" {
-				var respJson []data.PortOfSeattleOfficer
-				err := json.Unmarshal(resp, &respJson)
-				if err != nil {
-					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
-				}
-				if len(respJson) != tt.expectedBodyLength {
-					t.Errorf("\nTest: %s\nExpected body length %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}
-			} else if tt.expectedBodyCheck == "GreaterThanLength" {
-				var respJson []data.PortOfSeattleOfficer
-				err := json.Unmarshal(resp, &respJson)
-				if err != nil {
-					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
-				}
-				if len(respJson) <= tt.expectedBodyLength {
-					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}
-			} else {
-				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
-			}
+			checkBody(resp, tt, t)
 		})
 	}
 }
@@ -101,40 +65,32 @@ func testPortOfSeattleStrict(ctx context.Context, t *testing.T, profile string) 
 // Test PortOfSeattle fuzzy endpoint
 func testPortOfSeattleFuzzy(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
-	for _, tt := range [...]struct {
-		name               string
-		searchName         string
-		badge              string
-		expectedStatus     int
-		expectedBody       []byte
-		expectedBodyCheck  string
-		expectedBodyLength int
-	}{
+	for _, tt := range [...]genericTestOptions{
 		{
 			name:              "FuzzyNoParams",
 			expectedStatus:    http.StatusBadRequest,
 			expectedBody:      []byte("provided name must not be empty"),
-			expectedBodyCheck: "EqualsBytes",
+			expectedBodyCheck: EqualsBytes,
 		},
 		{
 			name:               "FirstNameFuzzySearch",
 			searchName:         "Patrick",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "GreaterThanLength",
+			expectedBodyCheck:  GreaterThanLength,
 			expectedBodyLength: 1,
 		},
 		{
 			name:               "LastNameFuzzySearch",
 			searchName:         "Addison",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 		{
 			name:               "FirstAndLastNameFuzzySearch",
 			searchName:         "Patrick%20Addison",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 	} {
@@ -148,31 +104,7 @@ func testPortOfSeattleFuzzy(ctx context.Context, t *testing.T, profile string) {
 			defer res.Body.Close()
 			resp, _ := ioutil.ReadAll(res.Body)
 
-			if tt.expectedBodyCheck == "EqualsBytes" {
-				if !bytes.Equal(tt.expectedBody, resp) {
-					t.Errorf("\nTest: %s\nExpected resp %s; got %s", tt.name, tt.expectedBody, resp)
-				}
-			} else if tt.expectedBodyCheck == "EqualsLength" {
-				var respJson []data.PortOfSeattleOfficer
-				err := json.Unmarshal(resp, &respJson)
-				if err != nil {
-					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
-				}
-				if len(respJson) != tt.expectedBodyLength {
-					t.Errorf("\nTest: %s\nExpected body length %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}
-			} else if tt.expectedBodyCheck == "GreaterThanLength" {
-				var respJson []data.PortOfSeattleOfficer
-				err := json.Unmarshal(resp, &respJson)
-				if err != nil {
-					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
-				}
-				if len(respJson) <= tt.expectedBodyLength {
-					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}
-			} else {
-				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
-			}
+			checkBody(resp, tt, t)
 		})
 	}
 }

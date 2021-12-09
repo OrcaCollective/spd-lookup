@@ -1,47 +1,35 @@
 package integration
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"testing"
-
-	"github.com/OrcaCollective/spd-lookup/api/data"
 )
 
 // Test Thurston strict match endpoint
 func testThurstonStrict(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
-	for _, tt := range [...]struct {
-		name               string
-		firstName          string
-		lastName           string
-		expectedStatus     int
-		expectedBody       []byte
-		expectedBodyCheck  string
-		expectedBodyLength int
-	}{
+	for _, tt := range [...]genericTestOptions{
 		{
 			name:              "NoParams",
 			expectedStatus:    http.StatusBadRequest,
 			expectedBody:      []byte("at least one of the following parameters must be provided: first_name, last_name"),
-			expectedBodyCheck: "EqualsBytes",
+			expectedBodyCheck: EqualsBytes,
 		},
 		{
 			name:               "FirstNameStrictSearch",
 			firstName:          "Jennifer",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 		{
 			name:               "LastNameStrictSearch",
 			lastName:           "Mcaneney",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 		{
@@ -49,7 +37,7 @@ func testThurstonStrict(ctx context.Context, t *testing.T, profile string) {
 			firstName:          "Jennifer",
 			lastName:           "Mcaneney",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 	} {
@@ -63,31 +51,7 @@ func testThurstonStrict(ctx context.Context, t *testing.T, profile string) {
 			defer res.Body.Close()
 			resp, _ := ioutil.ReadAll(res.Body)
 
-			if tt.expectedBodyCheck == "EqualsBytes" {
-				if !bytes.Equal(tt.expectedBody, resp) {
-					t.Errorf("\nTest: %s\nExpected resp %s; got %s", tt.name, tt.expectedBody, resp)
-				}
-			} else if tt.expectedBodyCheck == "EqualsLength" {
-				var respJson []data.ThurstonCountyOfficer
-				err := json.Unmarshal(resp, &respJson)
-				if err != nil {
-					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
-				}
-				if len(respJson) != tt.expectedBodyLength {
-					t.Errorf("\nTest: %s\nExpected body length %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}
-			} else if tt.expectedBodyCheck == "GreaterThanLength" {
-				var respJson []data.ThurstonCountyOfficer
-				err := json.Unmarshal(resp, &respJson)
-				if err != nil {
-					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
-				}
-				if len(respJson) <= tt.expectedBodyLength {
-					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}
-			} else {
-				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
-			}
+			checkBody(resp, tt, t)
 		})
 	}
 }
@@ -95,34 +59,25 @@ func testThurstonStrict(ctx context.Context, t *testing.T, profile string) {
 // Test Thurston fuzzy endpoint
 func testThurstonFuzzy(ctx context.Context, t *testing.T, profile string) {
 	t.Parallel()
-	for _, tt := range [...]struct {
-		name               string
-		firstName          string
-		lastName           string
-		badge              string
-		expectedStatus     int
-		expectedBody       []byte
-		expectedBodyCheck  string
-		expectedBodyLength int
-	}{
+	for _, tt := range [...]genericTestOptions{
 		{
 			name:              "NoParams",
 			expectedStatus:    http.StatusBadRequest,
 			expectedBody:      []byte("at least one of the following parameters must be provided: first_name, last_name"),
-			expectedBodyCheck: "EqualsBytes",
+			expectedBodyCheck: EqualsBytes,
 		},
 		{
 			name:               "FirstNameFuzzySearch",
 			firstName:          "Jennifer",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "GreaterThanLength",
+			expectedBodyCheck:  GreaterThanLength,
 			expectedBodyLength: 1,
 		},
 		{
 			name:               "LastNameFuzzySearch",
 			lastName:           "Mcaneney",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 		{
@@ -130,7 +85,7 @@ func testThurstonFuzzy(ctx context.Context, t *testing.T, profile string) {
 			firstName:          "Jennifer",
 			lastName:           "Mcaneney",
 			expectedStatus:     http.StatusOK,
-			expectedBodyCheck:  "EqualsLength",
+			expectedBodyCheck:  EqualsLength,
 			expectedBodyLength: 1,
 		},
 	} {
@@ -144,31 +99,7 @@ func testThurstonFuzzy(ctx context.Context, t *testing.T, profile string) {
 			defer res.Body.Close()
 			resp, _ := ioutil.ReadAll(res.Body)
 
-			if tt.expectedBodyCheck == "EqualsBytes" {
-				if !bytes.Equal(tt.expectedBody, resp) {
-					t.Errorf("\nTest: %s\nExpected resp %s; got %s", tt.name, tt.expectedBody, resp)
-				}
-			} else if tt.expectedBodyCheck == "EqualsLength" {
-				var respJson []data.ThurstonCountyOfficer
-				err := json.Unmarshal(resp, &respJson)
-				if err != nil {
-					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
-				}
-				if len(respJson) != tt.expectedBodyLength {
-					t.Errorf("\nTest: %s\nExpected body length %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}
-			} else if tt.expectedBodyCheck == "GreaterThanLength" {
-				var respJson []data.ThurstonCountyOfficer
-				err := json.Unmarshal(resp, &respJson)
-				if err != nil {
-					t.Errorf("\nTest: %s\nUnexpected error unmarsheling JSON response: %v", tt.name, err)
-				}
-				if len(respJson) <= tt.expectedBodyLength {
-					t.Errorf("\nTest: %s\nExpected body length > %d; go %d", tt.name, tt.expectedBodyLength, len(respJson))
-				}
-			} else {
-				t.Errorf("\nTest: %s\nInvalid body check passed: %s", tt.name, tt.expectedBodyCheck)
-			}
+			checkBody(resp, tt, t)
 		})
 	}
 }
