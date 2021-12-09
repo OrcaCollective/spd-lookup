@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"spd-lookup/api/data"
+	"github.com/OrcaCollective/spd-lookup/api/data"
 )
 
 // PortOfSeattleOfficerMetadata is the handler function for retrieving PortOfSeattle metadata

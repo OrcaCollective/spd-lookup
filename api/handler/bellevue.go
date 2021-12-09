@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"spd-lookup/api/data"
+	"github.com/OrcaCollective/spd-lookup/api/data"
 )
 
 // BellevueOfficerMetadata is the handler function for retrieving Bellevue metadata

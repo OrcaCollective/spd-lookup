@@ -1,6 +1,6 @@
 package main
 
-import "spd-lookup/api/router"
+import "github.com/OrcaCollective/spd-lookup/api/router"
 
 func main() {
 	router.Start()
