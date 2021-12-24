@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: sdsa/spd-lookup-db:${DB_IMAGE_TAG:-latest}
+    image: ghcr.io/orcacollective/spd-lookup-db:${DB_IMAGE_TAG:-latest}
     container_name: spd_lookup_db
     restart: always
     command: "-c config_file=/data/postgresql.conf"
@@ -15,7 +15,7 @@ services:
     networks:
       - postgres-network
   api:
-    image: sdsa/spd-lookup-api:${API_IMAGE_TAG:-latest}
+    image: ghcr.io/orcacollective/spd-lookup-api:${API_IMAGE_TAG:-latest}
     container_name: spd_lookup_api
     restart: always
     ports:
