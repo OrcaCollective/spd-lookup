@@ -31,6 +31,12 @@ down:
 pull:
     {{ DC }} pull
 
+# Pull and deploy all images
+deploy:
+    -git pull
+    @just pull
+    @just up
+
 test-int test_path="":
     @echo "Starting up spd-lookup services for integration testing"
     {{ DC }} up -d
