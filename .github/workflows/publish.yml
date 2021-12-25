@@ -3,9 +3,9 @@ name: Publish Docker image
 on:
   release:
     types: [published]
-  push:
+  pull_request:
     branches:
-      - 'ci/*'
+      - ci/*
 
 env:
   image_name: orcacollective/spd-lookup
@@ -18,7 +18,8 @@ jobs:
       packages: write
       contents: read
     strategy:
-      service: [db, api]
+      matrix:
+          service: [db, api]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
