@@ -11,9 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        name: Set up QEMU
-        with:
-          token: ${{ github.token }}
       - uses: golangci/golangci-lint-action@v2
         name: golangci-lint
         with:
@@ -30,13 +27,11 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2
-          name: Set up QEMU
-          with:
-            token: ${{ github.token }}
+        - uses: extractions/setup-just@v1
         - name: integration-tests
+          env:
+            DB_USERNAME: postgres
+            DB_PASSWORD: postgres
           run: |
-            curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ./
-            export DB_USERNAME='postgres'
-            export DB_PASSWORD='postgres'
-            ./just build
-            ./just test-int
+            just build
+            just test-int
