@@ -1,9 +1,9 @@
 FROM postgres:alpine
 
-COPY *.conf /data/
+COPY ./db/*.conf /data/
 
-COPY sql/* /docker-entrypoint-initdb.d/
+COPY ./db/sql/* /docker-entrypoint-initdb.d/
 
-COPY seed/* /seed/
+COPY ./db/seed/* /seed/
 
 EXPOSE 5432

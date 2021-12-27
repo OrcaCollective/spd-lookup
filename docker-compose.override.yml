@@ -1,8 +1,10 @@
 version: '3'
 services:
   db:
-    build: ./db
+    build:
+      context: .
+      dockerfile: ./db/Dockerfile
   api:
     build:
-      context: ./
+      context: .
       dockerfile: ./api/Dockerfile
