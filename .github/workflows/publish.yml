@@ -1,0 +1,39 @@
+name: Publish Docker image
+
+on:
+  release:
+    types: [published]
+  push:
+    branches:
+      - ci-*
+
+env:
+  image_name: orcacollective/spd-lookup
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    strategy:
+      matrix:
+          service: [db, api]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Log in to GitHub Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push ${{ matrix.service }} image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: |
+            ghcr.io/${{ env.image_name }}-${{ matrix.service }}:${{ github.sha }}
+            ghcr.io/${{ env.image_name }}-${{ matrix.service }}:${{ github.ref_name }}
+            ghcr.io/${{ env.image_name }}-${{ matrix.service }}:latest
