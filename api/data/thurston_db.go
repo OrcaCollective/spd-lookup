@@ -47,14 +47,14 @@ func (c *Client) ThurstonCountyOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: "2021-05-01",
 		Name:                    "Thurston County Sheriff's Department",
-		ID:                      "tcsd",
+		ID:                      "thurston_county-wa",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/thurston_county/officer",
+				Path:        "/thurston_county-wa/officer",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 			"fuzzy": {
-				Path:        "/thurston_county/officer/search",
+				Path:        "/thurston_county-wa/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},

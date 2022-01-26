@@ -268,14 +268,14 @@ func (c *Client) PortlandOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: max_date.Format("2006-01-02"),
 		Name:                    "Portland PB",
-		ID:                      "ppb",
+		ID:                      "portland-or",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/portland/officer",
+				Path:        "/portland-or/officer",
 				QueryParams: []string{"badge", "first_name", "last_name", "employee_id", "helmet_id", "helmet_id_three_digit"},
 			},
 			"fuzzy": {
-				Path:        "/portland/officer/search",
+				Path:        "/portland-or/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},
