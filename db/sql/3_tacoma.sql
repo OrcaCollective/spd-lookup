@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS tacoma_officers (
 );
 
 COPY tacoma_officers (last_name,first_name,title,department,salary,date)
-FROM '/seed/Tacoma-WA-Police-Department_1-24-21.csv' DELIMITER ',' CSV HEADER;
+FROM PROGRAM 'curl "https://techblocsea.sfo3.digitaloceanspaces.com/spd-lookup/Tacoma-WA-Police-Department_1-24-21.csv"' DELIMITER ',' CSV HEADER;
 
 CREATE OR REPLACE FUNCTION tacoma_search_officer_by_name_p(
     first_name  VARCHAR(100),

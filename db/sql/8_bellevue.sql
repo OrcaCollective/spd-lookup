@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS bellevue_officers (
 );
 
 COPY bellevue_officers (first_name,last_name,title,badge,unit,notes)
-FROM '/seed/Bellevue-WA-Police-Department_05-01-21.csv' DELIMITER ',' CSV HEADER;
+FROM PROGRAM 'curl "https://techblocsea.sfo3.digitaloceanspaces.com/spd-lookup/Bellevue-WA-Police-Department_05-01-21.csv"' DELIMITER ',' CSV HEADER;
