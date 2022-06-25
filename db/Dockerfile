@@ -1,6 +1,6 @@
 FROM postgres:alpine
 
-RUN apk --update add curl
+RUN apk --update add curl --no-cache
 
 COPY ./db/*.conf /data/
 
