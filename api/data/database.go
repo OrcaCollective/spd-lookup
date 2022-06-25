@@ -106,7 +106,7 @@ func NewClient(username, password, host, dbName string) *Client {
 
 	pgxConfig, err := pgxpool.ParseConfig(fmt.Sprintf("postgresql://%s", host))
 	if err != nil {
-		log.Panic(fmt.Sprintf("Unable to create postgres connection config: %v", err))
+		log.Panicf("Unable to create postgres connection config: %v", err)
 	}
 
 	pgxConfig.ConnConfig.Port = 5432
@@ -116,7 +116,7 @@ func NewClient(username, password, host, dbName string) *Client {
 
 	pool, err = pgxpool.ConnectConfig(context.Background(), pgxConfig)
 	if err != nil {
-		log.Panic(fmt.Sprintf("Unable to create db connection: %v", err))
+		log.Panicf("Unable to create db connection: %v", err)
 	}
 
 	return &Client{pool: pool}
