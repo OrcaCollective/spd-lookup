@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS auburn_officers (
 );
 
 COPY auburn_officers (date,last_name,first_name,badge,title)
-FROM PROGRAM 'curl "https://techblocsea.sfo3.digitaloceanspaces.com/spd-lookup/Auburn-WA-Police-Department_06-07-21.csv"' DELIMITER ',' CSV HEADER;
+FROM '/tmp/auburn.csv' DELIMITER ',' CSV HEADER;

@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS thurston_officers (
 );
 
 COPY thurston_officers (title,last_name,first_name,call_sign,call_sign_2)
-FROM PROGRAM 'curl "https://techblocsea.sfo3.digitaloceanspaces.com/spd-lookup/ThurstonCounty-WA-Sheriffs-Office_05-01-21.csv"' DELIMITER ',' CSV HEADER;
+FROM '/tmp/thurston_co.csv' DELIMITER ',' CSV HEADER;

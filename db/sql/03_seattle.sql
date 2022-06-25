@@ -12,4 +12,4 @@ CREATE TABLE IF NOT EXISTS seattle_officers (
 );
 
 COPY seattle_officers (badge,full_name,title,unit,unit_description,first_name,middle_name,last_name,date)
-FROM PROGRAM 'curl "https://techblocsea.sfo3.digitaloceanspaces.com/spd-lookup/Seattle-WA-Police-Department_Historical.csv"' DELIMITER ',' CSV HEADER;
+FROM '/tmp/seattle.csv' DELIMITER ',' CSV HEADER;

@@ -68,7 +68,7 @@ COPY portland_officers (
     notes,
     salary
 )
-FROM PROGRAM 'curl "https://techblocsea.sfo3.digitaloceanspaces.com/spd-lookup/Portland-OR-Police-Bureau_3-20-21.csv"' DELIMITER ',' CSV HEADER;
+FROM '/tmp/portland.csv' DELIMITER ',' CSV HEADER;
 
 --------------------------------------------------------------------------------
 -- Strict search
