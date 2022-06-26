@@ -10,6 +10,7 @@ services:
       - POSTGRES_USER=${DB_USERNAME:-postgres}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=ACAB_DB
+      - ROSTER_SOURCE=${ROSTER_SOURCE:-https://techblocsea.sfo3.digitaloceanspaces.com/spd-lookup/latest}
   api:
     image: ghcr.io/orcacollective/spd-lookup-api:${API_IMAGE_TAG:-latest}
     container_name: spd_lookup_api

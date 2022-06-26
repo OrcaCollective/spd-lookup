@@ -12,4 +12,4 @@ CREATE TABLE IF NOT EXISTS renton_officers (
 );
 
 COPY renton_officers (last_name,first_name,middle_name,rank,department,division,shift,additional_info,badge_number)
-FROM '/seed/Renton-WA-Police-Department_05-01-21.csv' DELIMITER ',' CSV HEADER;
+FROM '/tmp/renton.csv' DELIMITER ',' CSV HEADER;
