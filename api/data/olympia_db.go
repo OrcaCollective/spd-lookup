@@ -73,14 +73,14 @@ func (c *Client) OlympiaOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: date.Format("2006-01-02"),
 		Name:                    "Olympia PD",
-		ID:                      "opd",
+		ID:                      "olympia-wa",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/olympia/officer",
+				Path:        "/olympia-wa/officer",
 				QueryParams: []string{"badge", "first_name", "last_name"},
 			},
 			"fuzzy": {
-				Path:        "/olympia/officer/search",
+				Path:        "/olympia-wa/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},

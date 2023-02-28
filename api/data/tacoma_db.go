@@ -56,14 +56,14 @@ func (c *Client) TacomaOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: "2019",
 		Name:                    "Tacoma PD",
-		ID:                      "tpd",
+		ID:                      "tacoma-wa",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/tacoma/officer",
+				Path:        "/tacoma-wa/officer",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 			"fuzzy": {
-				Path:        "/tacoma/officer/search",
+				Path:        "/tacoma-wa/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},

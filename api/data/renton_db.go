@@ -77,14 +77,14 @@ func (c *Client) RentonOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: "2021-05-01",
 		Name:                    "Renton PD",
-		ID:                      "rpd",
+		ID:                      "renton-wa",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/renton/officer",
+				Path:        "/renton-wa/officer",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 			"fuzzy": {
-				Path:        "/renton/officer/search",
+				Path:        "/renton-wa/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},
