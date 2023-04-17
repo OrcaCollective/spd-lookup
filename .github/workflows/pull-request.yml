@@ -10,14 +10,14 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: golangci/golangci-lint-action@v2
         name: golangci-lint
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
-          version: v1.46
+          version: v1.52
           working-directory: api
-      - uses: Jerome1337/gofmt-action@v1.0.4
+      - uses: Jerome1337/gofmt-action@v1.0.5
         name: gofmt
         with:
           gofmt-path: './'
