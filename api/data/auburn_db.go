@@ -67,14 +67,14 @@ func (c *Client) AuburnOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: date.Format("2006-01-02"),
 		Name:                    "Auburn PD",
-		ID:                      "apd",
+		ID:                      "auburn-wa",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/auburn/officer",
+				Path:        "/auburn-wa/officer",
 				QueryParams: []string{"badge", "first_name", "last_name"},
 			},
 			"fuzzy": {
-				Path:        "/auburn/officer/search",
+				Path:        "/auburn-wa/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},

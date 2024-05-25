@@ -97,18 +97,18 @@ func (c *Client) SeattleOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: date.Format("2006-01-02"),
 		Name:                    "Seattle PD",
-		ID:                      "spd",
+		ID:                      "seattle-wa",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/seattle/officer",
+				Path:        "/seattle-wa/officer",
 				QueryParams: []string{"badge", "first_name", "last_name"},
 			},
 			"fuzzy": {
-				Path:        "/seattle/officer/search",
+				Path:        "/seattle-wa/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 			"historical-exact": {
-				Path:        "/seattle/officer/historical",
+				Path:        "/seattle-wa/officer/historical",
 				QueryParams: []string{"badge"},
 			},
 		},

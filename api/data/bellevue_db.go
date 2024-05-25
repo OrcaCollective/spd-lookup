@@ -59,14 +59,14 @@ func (c *Client) BellevueOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: "2021-05-01",
 		Name:                    "Bellevue PD",
-		ID:                      "bpd",
+		ID:                      "bellevue-wa",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/bellevue/officer",
+				Path:        "/bellevue-wa/officer",
 				QueryParams: []string{"badge", "first_name", "last_name"},
 			},
 			"fuzzy": {
-				Path:        "/bellevue/officer/search",
+				Path:        "/bellevue-wa/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},

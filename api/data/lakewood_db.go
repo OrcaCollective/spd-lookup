@@ -73,14 +73,14 @@ func (c *Client) LakewoodOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: date.Format("2006-01-02"),
 		Name:                    "Lakewood PD",
-		ID:                      "lpd",
+		ID:                      "lakewood-wa",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/lakewood/officer",
+				Path:        "/lakewood-wa/officer",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 			"fuzzy": {
-				Path:        "/lakewood/officer/search",
+				Path:        "/lakewood-wa/officer/search",
 				QueryParams: []string{"first_name", "last_name"},
 			},
 		},

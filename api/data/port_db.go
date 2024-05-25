@@ -47,14 +47,14 @@ func (c *Client) PortOfSeattleOfficerMetadata() *DepartmentMetadata {
 		},
 		LastAvailableRosterDate: "2021-05-01",
 		Name:                    "Port Of Seattle PD",
-		ID:                      "pospd",
+		ID:                      "port_of_seattle-wa",
 		SearchRoutes: map[string]*SearchRouteMetadata{
 			"exact": {
-				Path:        "/port_of_seattle/officer",
+				Path:        "/port_of_seattle-wa/officer",
 				QueryParams: []string{"badge", "name"},
 			},
 			"fuzzy": {
-				Path:        "/port_of_seattle/officer/search",
+				Path:        "/port_of_seattle-wa/officer/search",
 				QueryParams: []string{"name"},
 			},
 		},
